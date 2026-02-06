@@ -1,0 +1,7 @@
+[submodule "rtmMC/external/pico-sdk"]
+	path = rtmMC/external/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git
+[submodule "rtmMC/external/picotool"]
+	path = rtmMC/external/picotool
+	url = https://github.com/raspberrypi/picotool.git
+

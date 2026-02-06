@@ -1,0 +1,14 @@
+#generated vivado files
+project_1.cache/
+project_1.gen/
+project_1.hw/
+
+project_1.ip_user_files/
+project_1.runs/
+project_1.sim/
+psu*
+main.xsa
+
+.Xil/
+vivado*.jou
+vivado*.log
