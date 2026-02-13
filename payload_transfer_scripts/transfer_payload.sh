@@ -1,4 +1,4 @@
-varname="rtm_prod"
+varname="rtm_prod2"
 
 ssh -T kria << EOF
   mkdir -p payload

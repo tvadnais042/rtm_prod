@@ -2,7 +2,7 @@
 
 v0.1.1
 
-- **project_1** Vivado project (160MHz PL fabric -> 160.3071MHz)
+- **project_1** Vivado project Firmware
 - **rtmMC** rp2040 microcontroller tools and binary
 - **acq_software** Data Acquisition software
 - **payload_transfer_scripts** Build .bin and load them onto the Kria for testing.
@@ -32,5 +32,3 @@ Build the project after edits. Inside **build/**
 Production testing payloads:
 - ibert - IBERT for MEZZ1 GTH testing
 - rtm_prod -  MEZZ 2,3 GPIO testing, MEZZ4 DDMTD testing
-
-

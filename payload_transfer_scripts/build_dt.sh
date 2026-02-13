@@ -4,7 +4,7 @@
 # echo Payload name?
 # read varname
 
-varname="rtm_prod"
+varname="rtm_prod2"
 mkdir -p bram_dts
 mkdir -p payloads
 mkdir -p ./device-tree-xlnx

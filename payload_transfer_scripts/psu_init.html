@@ -132,7 +132,7 @@ sclk_out
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -141,7 +141,7 @@ pullup
 out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -158,7 +158,7 @@ miso_mo1
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -167,7 +167,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -184,7 +184,7 @@ mo2
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -193,7 +193,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -210,7 +210,7 @@ mo3
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -219,7 +219,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -236,7 +236,7 @@ mosi_mi0
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -245,7 +245,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -262,7 +262,7 @@ n_ss_out
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -271,7 +271,7 @@ pullup
 out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -279,25 +279,25 @@ out
 MIO 6
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-SPI 1
+Feedback Clk
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-sclk_out
+clk_for_lpbk
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-inout
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -305,25 +305,25 @@ inout
 MIO 7
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+Quad SPI Flash
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[7]
+n_ss_out_upper
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-inout
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -331,16 +331,16 @@ inout
 MIO 8
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+Quad SPI Flash
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[8]
+mo_upper[0]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -349,7 +349,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -357,10 +357,10 @@ inout
 MIO 9
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-SPI 1
+Quad SPI Flash
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-n_ss_out[0]
+mo_upper[1]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -383,10 +383,10 @@ inout
 MIO 10
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-SPI 1
+Quad SPI Flash
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-miso
+mo_upper[2]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -409,10 +409,10 @@ inout
 MIO 11
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-SPI 1
+Quad SPI Flash
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-mosi
+mo_upper[3]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -435,25 +435,25 @@ inout
 MIO 12
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+Quad SPI Flash
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[12]
+sclk_out_upper
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-inout
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -461,16 +461,16 @@ inout
 MIO 13
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[13]
+sdio0_data_out[0]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -479,7 +479,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -487,16 +487,16 @@ inout
 MIO 14
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[14]
+sdio0_data_out[1]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -505,7 +505,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -513,16 +513,16 @@ inout
 MIO 15
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[15]
+sdio0_data_out[2]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -531,7 +531,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -539,16 +539,16 @@ inout
 MIO 16
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[16]
+sdio0_data_out[3]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -557,7 +557,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -565,16 +565,16 @@ inout
 MIO 17
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[17]
+sdio0_data_out[4]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -583,7 +583,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -591,16 +591,16 @@ inout
 MIO 18
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[18]
+sdio0_data_out[5]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -609,7 +609,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -617,16 +617,16 @@ inout
 MIO 19
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[19]
+sdio0_data_out[6]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -635,7 +635,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -643,16 +643,16 @@ inout
 MIO 20
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[20]
+sdio0_data_out[7]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -661,7 +661,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -669,16 +669,16 @@ inout
 MIO 21
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[21]
+sdio0_cmd_out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -687,7 +687,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -695,25 +695,25 @@ inout
 MIO 22
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[22]
+sdio0_clk_out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-inout
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -721,25 +721,25 @@ inout
 MIO 23
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+SD 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[23]
+sdio0_bus_pow
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-inout
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -756,7 +756,7 @@ gpio0[24]
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -765,7 +765,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -773,16 +773,16 @@ inout
 MIO 25
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO0 MIO
+USB0 Reset
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio0[25]
+reset
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -791,7 +791,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -799,10 +799,10 @@ inout
 MIO 26
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-PMU GPI 0
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpi[0]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -825,10 +825,10 @@ in
 MIO 27
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-DPAUX
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-dp_aux_data_out
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -851,10 +851,10 @@ out
 MIO 28
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-DPAUX
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-dp_hot_plug_detect
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -877,10 +877,10 @@ in
 MIO 29
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-DPAUX
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-dp_aux_data_oe
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -903,10 +903,10 @@ out
 MIO 30
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-DPAUX
+UART 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-dp_aux_data_in
+rxd
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -929,10 +929,10 @@ in
 MIO 31
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-PMU GPI 5
+UART 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpi[5]
+txd
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -944,7 +944,7 @@ fast
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-in
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 12
@@ -955,10 +955,10 @@ in
 MIO 32
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-PMU GPO 0
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpo[0]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -981,10 +981,10 @@ out
 MIO 33
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-PMU GPO 1
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpo[1]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1007,10 +1007,10 @@ out
 MIO 34
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-PMU GPO 2
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpo[2]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1033,10 +1033,10 @@ out
 MIO 35
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-PMU GPO 3
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpo[3]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1059,10 +1059,10 @@ out
 MIO 36
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[36]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1085,10 +1085,10 @@ inout
 MIO 37
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[37]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1111,16 +1111,16 @@ inout
 MIO 38
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+I2C 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[38]
+scl_out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -1129,7 +1129,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1137,16 +1137,16 @@ inout
 MIO 39
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+I2C 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[39]
+sda_out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
@@ -1155,7 +1155,7 @@ pullup
 inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1163,10 +1163,10 @@ inout
 MIO 40
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[40]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1189,10 +1189,10 @@ inout
 MIO 41
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[41]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1215,10 +1215,10 @@ inout
 MIO 42
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[42]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1241,10 +1241,10 @@ inout
 MIO 43
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[43]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1267,10 +1267,10 @@ inout
 MIO 44
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[44]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1293,10 +1293,10 @@ inout
 MIO 45
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[45]
+
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1319,166 +1319,10 @@ inout
 MIO 46
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
+SD 1
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-gpio1[46]
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-cmos
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-slow
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-pullup
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-inout
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-4
-</TD>
-</TR>
-<TR valign="top">
-<TD width=10% BGCOLOR=#FBF5EF>
-MIO 47
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-gpio1[47]
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-cmos
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-slow
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-pullup
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-inout
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-4
-</TD>
-</TR>
-<TR valign="top">
-<TD width=10% BGCOLOR=#FBF5EF>
-MIO 48
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-gpio1[48]
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-cmos
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-slow
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-pullup
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-inout
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-4
-</TD>
-</TR>
-<TR valign="top">
-<TD width=10% BGCOLOR=#FBF5EF>
-MIO 49
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-gpio1[49]
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-cmos
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-slow
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-pullup
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-inout
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-4
-</TD>
-</TR>
-<TR valign="top">
-<TD width=10% BGCOLOR=#FBF5EF>
-MIO 50
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-gpio1[50]
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-cmos
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-slow
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-pullup
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-inout
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-4
-</TD>
-</TR>
-<TR valign="top">
-<TD width=10% BGCOLOR=#FBF5EF>
-MIO 51
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-GPIO1 MIO
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-gpio1[51]
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-cmos
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-slow
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-pullup
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-inout
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-4
-</TD>
-</TR>
-<TR valign="top">
-<TD width=10% BGCOLOR=#FBF5EF>
-MIO 52
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-
+sdio1_data_out[0]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1490,7 +1334,163 @@ fast
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+inout
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+12
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+MIO 47
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+SD 1
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+sdio1_data_out[1]
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+cmos
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+fast
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+pullup
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+inout
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+12
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+MIO 48
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+SD 1
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+sdio1_data_out[2]
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+cmos
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+fast
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+pullup
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+inout
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+12
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+MIO 49
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+SD 1
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+sdio1_data_out[3]
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+cmos
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+fast
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+pullup
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+inout
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+12
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+MIO 50
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+SD 1
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+sdio1_cmd_out
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+cmos
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+fast
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+pullup
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+inout
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+12
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+MIO 51
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+SD 1
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+sdio1_clk_out
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+cmos
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+fast
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+pullup
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+out
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+12
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+MIO 52
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+USB 0
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+ulpi_clk_in
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+cmos
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+fast
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+pullup
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+in
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 12
@@ -1501,10 +1501,10 @@ pullup
 MIO 53
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+USB 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+ulpi_dir
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1516,7 +1516,7 @@ fast
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+in
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 12
@@ -1527,36 +1527,10 @@ pullup
 MIO 54
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+USB 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-cmos
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-slow
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-pullup
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-4
-</TD>
-</TR>
-<TR valign="top">
-<TD width=10% BGCOLOR=#FBF5EF>
-MIO 55
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-
+ulpi_tx_data[2]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
@@ -1568,7 +1542,33 @@ fast
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+inout
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+12
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+MIO 55
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+USB 0
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+ulpi_nxt
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+cmos
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+fast
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+pullup
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+in
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 12
@@ -1579,25 +1579,25 @@ pullup
 MIO 56
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+USB 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+ulpi_tx_data[0]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1605,25 +1605,25 @@ pullup
 MIO 57
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+USB 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+ulpi_tx_data[1]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1631,25 +1631,25 @@ pullup
 MIO 58
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+USB 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+ulpi_stp
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1657,25 +1657,25 @@ pullup
 MIO 59
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+USB 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+ulpi_tx_data[3]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1683,25 +1683,25 @@ pullup
 MIO 60
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+USB 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+ulpi_tx_data[4]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1709,25 +1709,25 @@ pullup
 MIO 61
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+USB 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+ulpi_tx_data[5]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1735,25 +1735,25 @@ pullup
 MIO 62
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+USB 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+ulpi_tx_data[6]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1761,25 +1761,25 @@ pullup
 MIO 63
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+USB 0
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+ulpi_tx_data[7]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1787,25 +1787,25 @@ pullup
 MIO 64
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_tx_clk
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1813,25 +1813,25 @@ pullup
 MIO 65
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_txd[0]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1839,25 +1839,25 @@ pullup
 MIO 66
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_txd[1]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1865,25 +1865,25 @@ pullup
 MIO 67
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_txd[2]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1891,25 +1891,25 @@ pullup
 MIO 68
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_txd[3]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1917,25 +1917,25 @@ pullup
 MIO 69
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_tx_ctl
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1943,25 +1943,25 @@ pullup
 MIO 70
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_rx_clk
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+in
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1969,25 +1969,25 @@ pullup
 MIO 71
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_rxd[0]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+in
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -1995,25 +1995,25 @@ pullup
 MIO 72
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_rxd[1]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+in
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -2021,25 +2021,25 @@ pullup
 MIO 73
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_rxd[2]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+in
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -2047,25 +2047,25 @@ pullup
 MIO 74
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_rxd[3]
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+in
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -2073,25 +2073,25 @@ pullup
 MIO 75
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+Gem 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+rgmii_rx_ctl
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+in
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -2099,25 +2099,25 @@ pullup
 MIO 76
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+MDIO 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+gem3_mdc
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 <TR valign="top">
@@ -2125,25 +2125,25 @@ pullup
 MIO 77
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+MDIO 3
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+gem3_mdio_out
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 cmos
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-slow
+fast
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 pullup
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-
+inout
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-4
+12
 </TD>
 </TR>
 </TABLE>
@@ -2170,7 +2170,7 @@ APLL
 PSS_REF_CLK
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-2666.640
+2400.000
 </TD>
 </TR>
 <TR valign="top">
@@ -2181,7 +2181,7 @@ DPLL
 PSS_REF_CLK
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-2133.312
+2400.000
 </TD>
 </TR>
 <TR valign="top">
@@ -2192,7 +2192,7 @@ VPLL
 PSS_REF_CLK
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-2999.970
+3000.000
 </TD>
 </TR>
 <TR valign="top">
@@ -2203,7 +2203,7 @@ RPLL
 PSS_REF_CLK
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-2133.312
+2800.000
 </TD>
 </TR>
 <TR valign="top">
@@ -2214,7 +2214,7 @@ IOPLL
 PSS_REF_CLK
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-1999.980
+3000.000
 </TD>
 </TR>
 </TABLE>
@@ -2236,7 +2236,7 @@ PSS_REF_CLK
 </TR>
 <TR valign="top">
 <TD width=10% BGCOLOR=#FBF5EF>
-QSPI freq (MHz)
+GEM3 freq (MHz)
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 125
@@ -2245,21 +2245,91 @@ QSPI freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-124.998749
+125.000000
 </TD>
 </TR>
 <TR valign="top">
 <TD width=10% BGCOLOR=#FBF5EF>
-SPI1 freq (MHz)
+USB0 freq (MHz)
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-200
+250
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-199.998001
+250.000000
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+QSPI freq (MHz)
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+300
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+IOPLL
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+300.000000
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+SDIO0 freq (MHz)
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+200
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+RPLL
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+200.000000
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+SDIO1 freq (MHz)
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+200
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+RPLL
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+200.000000
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+UART0 freq (MHz)
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+100
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+IOPLL
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+100.000000
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+I2C0 freq (MHz)
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+100
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+IOPLL
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+100.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2267,13 +2337,13 @@ IOPLL
 CPU_R5 freq (MHz)
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-533.333
+500
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-RPLL
+IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-533.328003
+500.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2287,7 +2357,7 @@ IOU_SWITCH freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-249.997498
+250.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2301,7 +2371,7 @@ LPD_SWITCH freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-499.994995
+500.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2315,7 +2385,21 @@ LPD_LSBUS freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-99.999001
+100.000000
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+GEM_TSU freq (MHz)
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+250
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+IOPLL
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+250.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2326,10 +2410,24 @@ TIMESTAMP freq (MHz)
 100
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
+PSS_REF_CLK
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+33.333332
+</TD>
+</TR>
+<TR valign="top">
+<TD width=10% BGCOLOR=#FBF5EF>
+PSU__CRL_APB__USB3_REF_CTRL__freqmhz
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
+20
+</TD>
+<TD width=10% BGCOLOR=#FBF5EF>
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-99.999001
+20.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2343,7 +2441,7 @@ PCAP freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-199.998001
+187.500000
 </TD>
 </TR>
 <TR valign="top">
@@ -2357,7 +2455,7 @@ DBG_LPD freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-249.997498
+250.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2371,7 +2469,7 @@ ADMA freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-499.994995
+500.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2382,10 +2480,10 @@ PL0 freq (MHz)
 100
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-IOPLL
+DPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-99.999001
+100.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2399,7 +2497,7 @@ AMS freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-49.999500
+50.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2407,13 +2505,13 @@ IOPLL
 ACPU freq (MHz)
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-1333.333
+1200
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 APLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-1333.333008
+1200.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2427,49 +2525,7 @@ DBG FPD freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-249.997498
-</TD>
-</TR>
-<TR valign="top">
-<TD width=10% BGCOLOR=#FBF5EF>
-DP VIDEO freq (MHz)
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-300
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-VPLL
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-299.997009
-</TD>
-</TR>
-<TR valign="top">
-<TD width=10% BGCOLOR=#FBF5EF>
-DP AUDIO freq (MHz)
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-25
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-RPLL
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-24.242182
-</TD>
-</TR>
-<TR valign="top">
-<TD width=10% BGCOLOR=#FBF5EF>
-DP STC freq (MHz)
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-27
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-RPLL
-</TD>
-<TD width=10% BGCOLOR=#FBF5EF>
-26.666401
+250.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2483,7 +2539,7 @@ DDR_CTRL freq MHz)
 DPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-533.328003
+600.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2497,7 +2553,7 @@ GPU freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-499.994995
+500.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2511,7 +2567,7 @@ GDMA freq (MHz)
 DPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-533.328003
+600.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2522,10 +2578,10 @@ DPDMA freq (MHz)
 600
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-APLL
+DPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-444.444336
+600.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2539,7 +2595,7 @@ TOPSW_MAIN freq (MHz)
 DPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-533.328003
+400.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2553,7 +2609,7 @@ TOPSW_LSBUS freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-99.999001
+100.000000
 </TD>
 </TR>
 <TR valign="top">
@@ -2567,7 +2623,7 @@ DBG TSTMP freq (MHz)
 IOPLL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-249.997498
+250.000000
 </TD>
 </TR>
 </TABLE>
@@ -2633,7 +2689,7 @@ Components
 BUS WIDTH
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-64 Bit
+32 Bit
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 Data width of DDR interface, not including ECC data width
@@ -2655,7 +2711,7 @@ Enables error correction code support
 SPEED BIN
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-DDR4_2400R
+DDR4_2400P
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 Speed Bin
@@ -2666,7 +2722,7 @@ Speed Bin
 CL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-16
+17
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 Column Access Strobe (CAS) latency in memory clock cycles. It refers to the amount of time it takes for data to appear on the pins of the memory module
@@ -2677,7 +2733,7 @@ Column Access Strobe (CAS) latency in memory clock cycles. It refers to the amou
 CWL
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-14
+12
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 CAS write latency setting in memory clock cycles
@@ -2699,7 +2755,7 @@ Additive Latency (ns). Increases the efficiency of the command and data bus for 
 T RCD
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-16
+17
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 tRCD. Row address to column address delay time. It is the time required between the memory controller asserting a row address strobe (RAS), and then asserting the column address strobe (CAS)
@@ -2710,7 +2766,7 @@ tRCD. Row address to column address delay time. It is the time required between 
 T RP
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-16
+17
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 Precharge Time is the number of clock cycles needed to terminate access to an open row of memory and open access to the next row
@@ -2732,7 +2788,7 @@ Row cycle time (ns)
 T RAS MIN
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-33
+32
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 Minimum number of memory clock cycles required between an Active and Precharge command
@@ -2831,7 +2887,7 @@ Number of column address bits
 C_DDR_RAM_HIGHADDR
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
-0xFFFFFFFF
+0x7FFFFFFF
 </TD>
 <TD width=10% BGCOLOR=#FBF5EF>
 --

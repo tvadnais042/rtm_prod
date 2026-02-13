@@ -107,7 +107,7 @@ module main(
     
     ); 
     
-    reg [7:0] FIRMWARE_VER = 8'd30 ; // divide by 10 to get the firmware version
+    reg [7:0] FIRMWARE_VER = 8'd31 ; // divide by 10 to get the firmware version
 
 //     Bypassing SPI to DCPS
 //    OBUFDS OBUFDS_MEZZ_PAGE0(.I(DAT0),.O(MEZZ_PAGE0_P),.OB(MEZZ_PAGE0_N));
@@ -151,16 +151,16 @@ module main(
 //    wire D1,D2,D3,D4;
 //    wire D1_out,D2_out,D3_out,D4_out;
     
-    OBUFDS OBUFDS_D1 (.I(CLK_QUAD), .O(DDMTD_DP1), .OB(DDMTD_DN1)); //good
+    OBUFDS OBUFDS_D1 (.I(MEZZ4_RX2), .O(DDMTD_DP1), .OB(DDMTD_DN1)); //good
 //    sync_ddr sync_D1(.clk(clk_ref),.D(D1_out),.Q(D1));
 
-    OBUFDS OBUFDS_D2 (.I(CLK_QUAD), .O(DDMTD_DP2), .OB(DDMTD_DN2)); //good
+    OBUFDS OBUFDS_D2 (.I(MEZZ4_RX2), .O(DDMTD_DP2), .OB(DDMTD_DN2)); //good
 //    sync_ddr sync_D2(.clk(clk_ref),.D(D2_out),.Q(D2));
     
-    OBUFDS OBUFDS_D3 (.I(CLK_QUAD), .O(DDMTD_DP3), .OB(DDMTD_DN3)); //good
+    OBUFDS OBUFDS_D3 (.I(MEZZ4_RX2), .O(DDMTD_DP3), .OB(DDMTD_DN3)); //good
 //    sync_ddr sync_D3(.clk(clk_ref),.D(D3_out),.Q(D3));
 
-    OBUFDS OBUFDS_D4 (.I(CLK_QUAD), .O(DDMTD_DP4), .OB(DDMTD_DN4)); //good
+    OBUFDS OBUFDS_D4 (.I(MEZZ4_RX2), .O(DDMTD_DP4), .OB(DDMTD_DN4)); //good
 //    sync_ddr sync_D4(.clk(clk_ref),.D(D4_out),.Q(D4));
 
 
@@ -355,7 +355,7 @@ module main(
   end
     
     
-    assign BRAM_PORTB_0_clk = CLK_QUAD;
+    //assign BRAM_PORTB_0_clk = CLK;
     
     //Test Counter...
     reg [31:0] clk_counter = 0;
@@ -417,31 +417,113 @@ design_1_wrapper desing_ins
     .BRAM_PORTB_2_en(1),
     .BRAM_PORTB_2_we(we_byte_sync),
 
-    .CLK_QUAD(CLK_QUAD),
     .CLK_OUT(CLK),
     .gpio_rtl_tri_o(GPIO)
 
     );
     
-    // // Mark signals for debug
-    // reg [31:0] counter = 0;
-    // wire test_signal;
+    //--------------------------------------------		
+    // PRBS Implementation
+    //--------------------------------------------		
+    
+    // Get fast clock to avoid AC coupling low frequency cutoff
+//    clk_wiz_0 clk_wiz_inst (
+//        .clk_in1(CLK),
+//        .clk_out1(CLK_2X)
+//    );
+    
+//    wire CLK_2X;
+//    assign CLK_2X = CLK;
+//    wire error_inject;
+//    wire [0:0] prbs_data;
+//    wire prbs_reset;
+    
+//    PRBS_ANY #(
+//        .CHK_MODE(0),
+//        .INV_PATTERN(0))
+//    prbs_gen (
+//        .RST(prbs_reset),
+//        .CLK(CLK_2X),
+//        .DATA_IN(error_inject),
+//        .EN(1'b1),
+//        .DATA_OUT(prbs_data)
+//    );
+    
+//    PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(0)) 
+//    prbs_mezz2_1 (.RST(prbs_reset),.CLK(CLK_2X),.DATA_IN(MEZZ2_RX1),.EN(1'b1),.DATA_OUT(check_MEZZ2[0]));
+    
+//    PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(0))
+//    prbs_mezz2_2 (.RST(prbs_reset),.CLK(CLK_2X),.DATA_IN(MEZZ2_RX2),.EN(1'b1),.DATA_OUT(check_MEZZ2[1]));
+    
+//    PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(0))
+//    prbs_mezz2_3 (.RST(prbs_reset),.CLK(CLK_2X),.DATA_IN(MEZZ2_RX3),.EN(1'b1),.DATA_OUT(check_MEZZ2[2]));
+    
+//    PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(0))
+//    prbs_mezz2_4 (.RST(prbs_reset),.CLK(CLK_2X),.DATA_IN(MEZZ2_RX4),.EN(1'b1),.DATA_OUT(check_MEZZ2[3]));
 
-    // always @(posedge CLK_QUAD) begin
-    //     counter <= counter + 1;
-    // end
 
-    // assign test_signal = counter[24];
+//    PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(1)) 
+//    prbs_mezz2_1_INV (.RST(prbs_reset),.CLK(CLK_2X),.DATA_IN(MEZZ2_RX1),.EN(1'b1),.DATA_OUT(check_MEZZ2_INV[0]));
     
-    // ila_0 ILADebugger(
-    //     .clk(CLK_QUAD),
-    //     .probe0(test_signal)
-    // );
+//    PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(1))
+//    prbs_mezz2_2_INV (.RST(prbs_reset),.CLK(CLK_2X),.DATA_IN(MEZZ2_RX2),.EN(1'b1),.DATA_OUT(check_MEZZ2_INV[1]));
     
+//    PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(1))
+//    prbs_mezz2_3_INV (.RST(prbs_reset),.CLK(CLK_2X),.DATA_IN(MEZZ2_RX3),.EN(1'b1),.DATA_OUT(check_MEZZ2_INV[2]));
     
-    // // PRBS implementation
-    // wire prbs_out;
-    // prbs prbs_inst(.CLK(CLK_QUAD),.prbs_out(prbs_out));
+//    PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(1))
+//    prbs_mezz2_4_INV (.RST(prbs_reset),.CLK(CLK_2X),.DATA_IN(MEZZ2_RX4),.EN(1'b1),.DATA_OUT(check_MEZZ2_INV[3]));
+
+
+    
+//    reg [31:0] count_MEZZ2 [3:0];
+//    reg [31:0] count_MEZZ2_INV [3:0];
+//    wire check_MEZZ2 [3:0];
+//    wire check_MEZZ2_INV [3:0];
+    
+//    always @(posedge CLK_2X) begin
+//        if (check_MEZZ2[0]) begin
+//            count_MEZZ2[0] <= count_MEZZ2[0] + 1;
+//        end
+//        if (check_MEZZ2[1]) begin
+//            count_MEZZ2[1] <= count_MEZZ2[1] + 1;
+//        end
+//        if (check_MEZZ2[2]) begin
+//            count_MEZZ2[2] <= count_MEZZ2[2] + 1;
+//        end
+//        if (check_MEZZ2[3]) begin
+//            count_MEZZ2[3] <= count_MEZZ2[3] + 1;
+//        end
+//        if (check_MEZZ2_INV[0]) begin
+//            count_MEZZ2_INV[0] <= count_MEZZ2_INV[0] + 1;
+//        end
+//        if (check_MEZZ2_INV[1]) begin
+//            count_MEZZ2_INV[1] <= count_MEZZ2_INV[1] + 1;
+//        end
+//        if (check_MEZZ2_INV[2]) begin
+//            count_MEZZ2_INV[2] <= count_MEZZ2_INV[2] + 1;
+//        end
+//        if (check_MEZZ2_INV[3]) begin
+//            count_MEZZ2_INV[3] <= count_MEZZ2_INV[3] + 1;
+//        end
+        
+//    end
+    
+////    ila_0 ila_inst ()
+//    vio_0 vio_inst(
+//        .clk(CLK_2X),
+//        .probe_in0(count_MEZZ2[0]),
+//        .probe_in1(count_MEZZ2[1]),
+//        .probe_in2(count_MEZZ2[2]),
+//        .probe_in3(count_MEZZ2[3]),
+//        .probe_in4(count_MEZZ2_INV[0]),
+//        .probe_in5(count_MEZZ2_INV[1]),
+//        .probe_in6(count_MEZZ2_INV[2]),
+//        .probe_in7(count_MEZZ2_INV[3]),
+//        .probe_out0(error_inject),
+//        .probe_out1(prbs_reset)
+        
+//    );    
     
 
 //=====================================================================
@@ -472,20 +554,20 @@ IBUFDS IBUFDS_MEZZ4_RX4(.O(MEZZ4_RX4), .I(MEZZ4_RX4_P), .IB(MEZZ4_RX4_N));
 //  Assigning TX outputs
 //=====================================================================
 
-OBUFDS OBUFDS_MEZZ2_TX1(.I(MEZZ4_RX1),.O(MEZZ2_TX1_P),.OB(MEZZ2_TX1_N));
-OBUFDS OBUFDS_MEZZ2_TX2(.I(MEZZ4_RX2),.O(MEZZ2_TX2_P),.OB(MEZZ2_TX2_N));
-OBUFDS OBUFDS_MEZZ2_TX3(.I(MEZZ4_RX3),.O(MEZZ2_TX3_P),.OB(MEZZ2_TX3_N));
+OBUFDS OBUFDS_MEZZ2_TX1(.I(CLK),.O(MEZZ2_TX1_P),.OB(MEZZ2_TX1_N));
+OBUFDS OBUFDS_MEZZ2_TX2(.I(CLK),.O(MEZZ2_TX2_P),.OB(MEZZ2_TX2_N));
+OBUFDS OBUFDS_MEZZ2_TX3(.I(CLK),.O(MEZZ2_TX3_P),.OB(MEZZ2_TX3_N));
 OBUFDS OBUFDS_MEZZ2_TX4(.I(CLK),.O(MEZZ2_TX4_P),.OB(MEZZ2_TX4_N));
 
-OBUFDS OBUFDS_MEZZ3_TX1(.I(CLK_QUAD)        ,.O(MEZZ3_TX1_P),.OB(MEZZ3_TX1_N));
-OBUFDS OBUFDS_MEZZ3_TX2(.I(MEZZ4_RX2)       ,.O(MEZZ3_TX2_P),.OB(MEZZ3_TX2_N));
-OBUFDS OBUFDS_MEZZ3_TX3(.I(Q1)              ,.O(MEZZ3_TX3_P),.OB(MEZZ3_TX3_N));
-OBUFDS OBUFDS_MEZZ3_TX4(.I(Q2)              ,.O(MEZZ3_TX4_P),.OB(MEZZ3_TX4_N));
+OBUFDS OBUFDS_MEZZ3_TX1(.I(MEZZ4_RX1),.O(MEZZ3_TX1_P),.OB(MEZZ3_TX1_N));
+OBUFDS OBUFDS_MEZZ3_TX2(.I(MEZZ4_RX2),.O(MEZZ3_TX2_P),.OB(MEZZ3_TX2_N));
+OBUFDS OBUFDS_MEZZ3_TX3(.I(CLK),.O(MEZZ3_TX3_P),.OB(MEZZ3_TX3_N));
+OBUFDS OBUFDS_MEZZ3_TX4(.I(CLK),.O(MEZZ3_TX4_P),.OB(MEZZ3_TX4_N));
 
-OBUFDS OBUFDS_MEZZ4_TX1(.I(CLK_QUAD),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
-OBUFDS OBUFDS_MEZZ4_TX2(.I(CLK_QUAD),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
-OBUFDS OBUFDS_MEZZ4_TX3(.I(CLK_QUAD),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
-OBUFDS OBUFDS_MEZZ4_TX4(.I(CLK_QUAD),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
+OBUFDS OBUFDS_MEZZ4_TX1(.I(CLK),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
+OBUFDS OBUFDS_MEZZ4_TX2(.I(CLK),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
+OBUFDS OBUFDS_MEZZ4_TX3(.I(CLK),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
+OBUFDS OBUFDS_MEZZ4_TX4(.I(CLK),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
 
 // CLK is running at 160 -> D inputs IF IT WORKED -> Use CLK_QUAD instead. It'll either work at 256MHZ or 160 if the board plays nice
 // clk_ref is running at 159.9984 -> reference clock / offset clock
