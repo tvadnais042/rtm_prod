@@ -15,7 +15,17 @@
 #define D7_PIN 7
 #define D9_PIN 9
 #define LED_PIN 11
+
+// 0x20?
+// 0x21?
+//#define ADC_ADDR 0x40
+//#define SMA_ADDR 0x50
+//#define MMC_ADDR 0x51
 #define PLL_ADDR 0x68 // address of PLL on RTMV2
+#define DATA_BUS_SELECT 0x70
+#define MEZZ_SELECT 0x72
+#define SFP_SELECT 0x73
+
 
 #define MAIN_SCREED "(R)e(B)oot, (S)hift_1s, (s)hift_20ms, (c)heck LED, (l)os check, (t)alk\n"
 
@@ -23,22 +33,26 @@ void config_pll();
 bool scan_bus();
 void check_los();
 uint32_t step_fs(uint32_t us);
+void inspect_EEPROM();
+void expose_PLL_path();
+void flash_LED(uint32_t ms);
+void pulse_LED(uint32_t ms);
 
 void main()
 {
-    set_sys_clock_khz(250000,true);
-
     stdio_init_all(); //init USB serial
     sleep_ms(3000); // slow to allow for screen connecting in time - debugging
     
-    if (watchdog_caused_reboot()){
+    set_sys_clock_khz(125000,true);
+    
+    printf("USB Connected\n");
+
+        if (watchdog_caused_reboot()){
         printf("Watchdog Caused Reboot :(\n");
     }
 
-    printf("Setup pins.......\n");
-
     // Init I2C pins
-    i2c_init(i2c_default,100000);
+    i2c_init(i2c1,100000);
     gpio_set_function(SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(SCL_PIN, GPIO_FUNC_I2C);
     gpio_pull_up(SDA_PIN);
@@ -56,27 +70,28 @@ void main()
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
-    i2c_write_blocking_until(i2c_default,0x70,(uint8_t []){0x1},1,false, make_timeout_time_ms(50)); // opens 0x72 mezz mux
-    i2c_write_blocking_until(i2c_default,0x72,(uint8_t []){0x8},1,false, make_timeout_time_ms(50)); // selects mezz4 (0x68)
+    inspect_EEPROM();
+    // i2c_write_blocking_until(i2c1,0x70,(uint8_t []){0x1},1,false,make_timeout_time_ms(50)); // opens 0x72 mezz mux
+    // scan_bus();
+    // i2c_write_blocking_until(i2c1,0x72,(uint8_t []){0x8},1,false,make_timeout_time_ms(50)); // selects mezz4 (0x68)
+
+    // scan_bus();
+
+
+    // bool pllFlag = scan_bus();
+    // if (!pllFlag){
+    //     printf("Cannot configure PLL at 0x68. Exiting\n");
+    //     for (int i=0; i < 20; i++){
+    //         pulse_LED(30);
+    //     }
+    // }
+    // else {
+    //     config_pll();
+    //     flash_LED(1000);
+    // }
+    // printf("Inspect_EEPROM\n");
+    // inspect_EEPROM();
     
-
-    bool pllFlag = scan_bus();
-    if (!pllFlag){
-        printf("Cannot configure PLL at 0x68. Exiting\n");
-        for (int i=0; i < 20; i++){
-            gpio_put(LED_PIN,true);
-            sleep_ms(30);
-            gpio_put(LED_PIN,false);
-            sleep_ms(30);
-        }
-    }
-    else {
-        gpio_put(LED_PIN, true); //held LED when successful
-        config_pll();
-        sleep_ms(1000);
-        gpio_put(LED_PIN, false);
-    }
-
     printf(MAIN_SCREED);
     while (true) {
         int c = stdio_getchar_timeout_us(0);
@@ -115,7 +130,7 @@ void main()
 
         sleep_ms(5);
     }
-    
+   
     reset_usb_boot(0,0); // enable BOOTSEL // BANG!
 }
 
@@ -124,7 +139,7 @@ bool scan_bus() {
     bool pllFlag = false;
     for (uint8_t addr; addr < 128; addr++) {
         uint8_t rxdata;
-        int ret = i2c_read_blocking_until(i2c_default,addr, &rxdata, 1, false, make_timeout_time_ms(10)); //using i2c1 for pin 2,3
+        int ret = i2c_read_blocking_until(i2c1,addr, &rxdata, 1, false, make_timeout_time_ms(10)); //using i2c1 for pin 2,3
         if (ret >= 0) {
             printf("Found at 0x%02x\n",addr);
             if (addr==PLL_ADDR){
@@ -151,9 +166,9 @@ void config_pll() {
     
         uint8_t page[2] = {0x01,si5344h_revd_registers[i].address >> 8};
         uint8_t data[2] = {si5344h_revd_registers[i].address & 0xff, si5344h_revd_registers[i].value}; 
-        i2c_write_blocking(i2c_default,PLL_ADDR,page,2,false);
+        i2c_write_blocking(i2c1,PLL_ADDR,page,2,false);
         page_now = page[1];
-        i2c_write_blocking(i2c_default,PLL_ADDR,data,2,false);
+        i2c_write_blocking(i2c1,PLL_ADDR,data,2,false);
     }
 
     sleep_ms(300);
@@ -163,16 +178,16 @@ void config_pll() {
         // printf("|%04X %02X",si5345_revd_registers[i].address, si5345_revd_registers[i].value);
         uint8_t page[2] = {0x01,si5344h_revd_registers[i].address >> 8};
         if (page_now != page[1]) {
-            i2c_write_blocking(i2c_default,PLL_ADDR,page,2,false);
+            i2c_write_blocking(i2c1,PLL_ADDR,page,2,false);
             page_now = page[1];
         }
         uint8_t data[2] = {si5344h_revd_registers[i].address & 0xff, si5344h_revd_registers[i].value}; 
-        i2c_write_blocking(i2c_default,PLL_ADDR,data,2,false);
+        i2c_write_blocking(i2c1,PLL_ADDR,data,2,false);
 
         // Check writes
         uint8_t readout;
-        i2c_write_blocking(i2c_default,PLL_ADDR,&data[0],1,true);
-        i2c_read_blocking(i2c_default,PLL_ADDR,&readout,1,false);
+        i2c_write_blocking(i2c1,PLL_ADDR,&data[0],1,true);
+        i2c_read_blocking(i2c1,PLL_ADDR,&readout,1,false);
         if (readout != data[1] && i < SI5344H_REVD_REG_CONFIG_NUM_REGS-5) {
             printf("\nERROR! (%d) Reg %04X Val %02X != %02X\n",i, si5344h_revd_registers[i].address, data[1], readout);
         }
@@ -182,21 +197,21 @@ void config_pll() {
 }
 
 void check_los(){
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x01,0x00},2,false); // Write page
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x1C, 0x01},2,false);
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x12, 0x00},2,false);
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x01,0x00},2,false); // Write page
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x1C, 0x01},2,false);
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x12, 0x00},2,false);
     for (int i=0; i < 20; i++){
         uint8_t input_loc;
         uint8_t dspll_loc;
         uint8_t dspll_loc_sticky;
-        i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x0D},1,true);
-        i2c_read_blocking(i2c_default,PLL_ADDR,&input_loc,1,false);
+        i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x0D},1,true);
+        i2c_read_blocking(i2c1,PLL_ADDR,&input_loc,1,false);
 
-        i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x0E},1,true);
-        i2c_read_blocking(i2c_default,PLL_ADDR,&dspll_loc,1,false);
+        i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x0E},1,true);
+        i2c_read_blocking(i2c1,PLL_ADDR,&dspll_loc,1,false);
 
-        i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x12},1,true);
-        i2c_read_blocking(i2c_default,PLL_ADDR,&dspll_loc_sticky,1,false);
+        i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x12},1,true);
+        i2c_read_blocking(i2c1,PLL_ADDR,&dspll_loc_sticky,1,false);
         input_loc = input_loc & 0x0F;
         dspll_loc = dspll_loc & 0x01;
         dspll_loc_sticky = dspll_loc_sticky & 0x01;
@@ -211,22 +226,73 @@ void check_los(){
 }
 
 uint32_t step_fs(uint32_t us) {
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x01,0x03},2,false); // write page
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x39,0b1011},2,false); // set mask
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x01,0x03},2,false); // write page
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x39,0b1011},2,false); // set mask
 
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x47,0x64},2,false); // set the change high baby
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x47,0x64},2,false); // set the change high baby
     
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x01,0x00},2,false); // write page
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x01,0x00},2,false); // write page
     uint32_t t0 = time_us_32();
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x1D,0b01},2,false); // lets go shifting!!
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x1D,0b01},2,false); // lets go shifting!!
     sleep_us(us);
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x1D,0b10},2,false); // lets go shifting!!
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x1D,0b10},2,false); // lets go shifting!!
     uint32_t dt = time_us_32() - t0;
 
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x01,0x03},2,false); // write page
-    i2c_write_blocking(i2c_default,PLL_ADDR,(uint8_t[]){0x47,0x00},2,false); // get rid of that change baby
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x01,0x03},2,false); // write page2
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x47,0x00},2,false); // get rid of that change baby
     
     return dt;
+}
+
+void expose_PLL_path() {
+    i2c_write_blocking_until(i2c1,0x70,(uint8_t []){0x1},1,false, make_timeout_time_ms(50)); // opens 0x72 mezz mux
+    i2c_write_blocking_until(i2c1,0x72,(uint8_t []){0x8},1,false, make_timeout_time_ms(50)); // selects mezz4 (0x68)
+    return;
+}
+
+void inspect_EEPROM() {
+    i2c_write_blocking_until(i2c1,DATA_BUS_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50)); // select Data0/1
+    i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50)); // Select Mezzanine
+    i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){0x8},1,false,make_timeout_time_ms(50)); // Select SFP
+    
+    //attempt to read
+    uint8_t buffer[16];
+    
+    printf("PRODUCT_ID: ");
+    for (int i=0; i<16; i++){
+        buffer[i] = 0;
+        printf("%d",buffer[i]);
+    }
+    printf("\n");
+
+    for (int i=0; i<16; i++){
+        i2c_write_blocking(i2c1,0xA0,(uint8_t []){i+20},1,true);
+        i2c_read_blocking(i2c1,0xA0,buffer + i,1,false);
+    }
+    
+    printf("PRODUCT_ID: ");
+    for (int i=0; i<16; i++){
+        printf("%d",buffer[i]);
+    }
+    printf("\n");
+    
+    scan_bus();
+    return;
+}
+
+void pulse_LED(uint32_t ms) {
+    gpio_put(LED_PIN,true);
+    sleep_ms(ms);
+    gpio_put(LED_PIN,false);
+    sleep_ms(ms);
+    return;
+}
+
+void flash_LED(uint32_t ms) {
+    gpio_put(LED_PIN,true);
+    sleep_ms(ms);
+    gpio_put(LED_PIN,false);
+    return;
 }
     
     
