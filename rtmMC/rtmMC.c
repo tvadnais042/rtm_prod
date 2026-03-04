@@ -19,7 +19,7 @@
 // 0x20?
 // 0x21?
 //#define ADC_ADDR 0x40
-//#define SMA_ADDR 0x50
+// #define SMA_ADDR 0x50
 //#define MMC_ADDR 0x51
 #define PLL_ADDR 0x68 // address of PLL on RTMV2
 #define DATA_BUS_SELECT 0x70
@@ -256,27 +256,28 @@ void inspect_EEPROM() {
     i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){0x8},1,false,make_timeout_time_ms(50)); // Select SFP
     
     //attempt to read
-    uint8_t buffer[16];
-    
+    uint8_t buf_productID[16];
+    for (int i=0; i<16; i++){
+        buf_productID[i] = 0;
+    }
+    for (int i=0; i<16; i++){
+        i2c_write_blocking(i2c1,0x50,(uint8_t []){i+20},1,true);
+        i2c_read_blocking(i2c1,0x50,buf_productID + i,1,false);
+    }
     printf("PRODUCT_ID: ");
     for (int i=0; i<16; i++){
-        buffer[i] = 0;
-        printf("%d",buffer[i]);
+        printf("%c",buf_productID[i]);
     }
     printf("\n");
 
-    for (int i=0; i<16; i++){
-        i2c_write_blocking(i2c1,0xA0,(uint8_t []){i+20},1,true);
-        i2c_read_blocking(i2c1,0xA0,buffer + i,1,false);
-    }
+    uint8_t buf_identifier[1];
+    i2c_write_blocking(i2c1,0x50,(uint8_t []){0x00},1,true);
+    i2c_read_blocking(i2c1,0x50,buf_productID,1,false);
+    printf("Identifier: %d\n",buf_identifier[0]);
+
+
     
-    printf("PRODUCT_ID: ");
-    for (int i=0; i<16; i++){
-        printf("%d",buffer[i]);
-    }
-    printf("\n");
-    
-    scan_bus();
+    // scan_bus();
     return;
 }
 
