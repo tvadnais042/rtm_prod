@@ -19,13 +19,14 @@ set(sdkVersion 2.2.0)
 set(toolchainVersion 14_2_Rel1)
 set(picotoolVersion 2.2.0-a4)
 set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-#set(picoVscode ${CMAKE_SOURCE_DIR}/external/pico-sdk)
 if (EXISTS ${picoVscode})
-	#include(${picoVscode})
+	include(${picoVscode})
 endif()
 # ====================================================================================
 set(PICO_BOARD pico CACHE STRING "Board type")
-set(PICO_SDK_PATH "${CMAKE_SOURCE_DIR}/external/pico-sdk")
+# set(PICO_SDK_PATH "${CMAKE_SOURCE_DIR}/external/pico-sdk")
+# set(PICO_TOOLCHAIN_PATH "${CMAKE_SOURCE_DIR}/external/arm-none-eabi")
+
 #set(picotool_DIR "${CMAKE_SOURCE_DIR}/external/picotool/build")
 #set(PICOTOOL "${CMAKE_SOURCE_DIR}/external/picotool/build/picotool")
 
