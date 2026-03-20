@@ -125,7 +125,7 @@ module PRBS_ANY(RST, CLK, DATA_IN, EN, DATA_OUT);
    input CLK;
    input [NBITS - 1:0] DATA_IN;
    input EN;
-   output reg [NBITS - 1:0] DATA_OUT = {NBITS{1'b1}};;
+   output reg [NBITS - 1:0] DATA_OUT = {NBITS{1'b1}};
 
   //--------------------------------------------		
   // Internal variables

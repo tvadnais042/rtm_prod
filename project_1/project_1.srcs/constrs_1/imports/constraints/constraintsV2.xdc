@@ -129,6 +129,8 @@
 #set_property PACKAGE_PIN L3 [get_ports CLK_REF_P]
 #create_clock -period 6.250 -name PLLOUT_P -waveform {0.000 3.125} [get_ports PLLOUT_P]
 
+#Constrain the clk_wiz_out pin to 400Mhz
+#create_clock -period 2.5 -name CLK_400 [get_pins clk_wiz_inst/clk_out1]
 
 #-----------------------------------------------------------------------
 # MEZZ2_TX1
@@ -137,6 +139,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ2_TX1_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ2_TX1_N]
 set_property PACKAGE_PIN H9 [get_ports MEZZ2_TX1_P]
 set_property PACKAGE_PIN H8 [get_ports MEZZ2_TX1_N]
+#set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_TX1_P]
+#set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_TX1_P]
 #set_property PACKAGE_PIN H9 [get_ports "som240_2_a26"] ;# Bank  65 VCCO - som240_2_a44 - IO_L24P_T3U_N10_PERSTN1_I2C_SDA_65
 #set_property PACKAGE_PIN H8 [get_ports "som240_2_a27"] ;# Bank  65 VCCO - som240_2_a44 - IO_L24N_T3U_N11_PERSTN0_65
 
@@ -147,6 +151,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ2_TX2_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ2_TX2_N]
 set_property PACKAGE_PIN AB2 [get_ports MEZZ2_TX2_P]
 set_property PACKAGE_PIN AC2 [get_ports MEZZ2_TX2_N]
+#set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_TX2_P]
+#set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_TX2_P]
 #set_property PACKAGE_PIN AB2 [get_ports "som240_2_a35"] ;# Bank  64 VCCO - som240_2_c44 - IO_L17P_T2U_N8_AD10P_64
 #set_property PACKAGE_PIN AC2 [get_ports "som240_2_a36"] ;# Bank  64 VCCO - som240_2_c44 - IO_L17N_T2U_N9_AD10N_64
 
@@ -157,6 +163,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ2_TX3_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ2_TX3_N]
 set_property PACKAGE_PIN AH8 [get_ports MEZZ2_TX3_P]
 set_property PACKAGE_PIN AH7 [get_ports MEZZ2_TX3_N]
+#set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_TX3_P]
+#set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_TX3_P]
 #set_property PACKAGE_PIN AH8 [get_ports "som240_2_b36"] ;# Bank  64 VCCO - som240_2_c44 - IO_L9P_T1L_N4_AD12P_64
 #set_property PACKAGE_PIN AH7 [get_ports "som240_2_b37"] ;# Bank  64 VCCO - som240_2_c44 - IO_L9N_T1L_N5_AD12N_64
 
@@ -167,6 +175,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ2_TX4_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ2_TX4_N]
 set_property PACKAGE_PIN AB7 [get_ports MEZZ2_TX4_P]
 set_property PACKAGE_PIN AC7 [get_ports MEZZ2_TX4_N]
+#set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_TX4_P]
+#set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_TX4_P]
 #set_property PACKAGE_PIN AB7 [get_ports "som240_2_d39"] ;# Bank  64 VCCO - som240_2_c44 - IO_L5P_T0U_N8_AD14P_64
 #set_property PACKAGE_PIN AC7 [get_ports "som240_2_d40"] ;# Bank  64 VCCO - som240_2_c44 - IO_L5N_T0U_N9_AD14N_64
 
@@ -177,6 +187,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ2_RX1_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ2_RX1_N]
 set_property PACKAGE_PIN AD5 [get_ports MEZZ2_RX1_P]
 set_property PACKAGE_PIN AD4 [get_ports MEZZ2_RX1_N]
+#set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_RX1_P]
+#set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_RX1_P]
 #set_property PACKAGE_PIN AD5 [get_ports "som240_2_c29"] ;# Bank  64 VCCO - som240_2_c44 - IO_L13P_T2L_N0_GC_QBC_64
 #set_property PACKAGE_PIN AD4 [get_ports "som240_2_c30"] ;# Bank  64 VCCO - som240_2_c44 - IO_L13N_T2L_N1_GC_QBC_64
 
@@ -187,6 +199,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ2_RX2_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ2_RX2_N]
 set_property PACKAGE_PIN AH2 [get_ports MEZZ2_RX2_P]
 set_property PACKAGE_PIN AH1 [get_ports MEZZ2_RX2_N]
+#set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_RX2_P]
+#set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_RX2_P]
 #set_property PACKAGE_PIN AH2 [get_ports "som240_2_a32"] ;# Bank  64 VCCO - som240_2_c44 - IO_L23P_T3U_N8_64
 #set_property PACKAGE_PIN AH1 [get_ports "som240_2_a33"] ;# Bank  64 VCCO - som240_2_c44 - IO_L23N_T3U_N9_64
 
@@ -197,6 +211,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ2_RX3_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ2_RX3_N]
 set_property PACKAGE_PIN AG3 [get_ports MEZZ2_RX3_P]
 set_property PACKAGE_PIN AH3 [get_ports MEZZ2_RX3_N]
+#set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_RX3_P]
+#set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_RX3_P]
 #set_property PACKAGE_PIN AG3 [get_ports "som240_2_b33"] ;# Bank  64 VCCO - som240_2_c44 - IO_L20P_T3L_N2_AD1P_64
 #set_property PACKAGE_PIN AH3 [get_ports "som240_2_b34"] ;# Bank  64 VCCO - som240_2_c44 - IO_L20N_T3L_N3_AD1N_64
 
@@ -207,6 +223,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ2_RX4_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ2_RX4_N]
 set_property PACKAGE_PIN AD7 [get_ports MEZZ2_RX4_P]
 set_property PACKAGE_PIN AE7 [get_ports MEZZ2_RX4_N]
+#set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_RX4_P]
+#set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_RX4_P]
 #set_property PACKAGE_PIN AD7 [get_ports "som240_2_a41"] ;# Bank  64 VCCO - som240_2_c44 - IO_L4P_T0U_N6_DBC_AD7P_64
 #set_property PACKAGE_PIN AE7 [get_ports "som240_2_a42"] ;# Bank  64 VCCO - som240_2_c44 - IO_L4N_T0U_N7_DBC_AD7N_64
 
@@ -217,6 +235,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ3_TX1_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ3_TX1_N]
 set_property PACKAGE_PIN AB8 [get_ports MEZZ3_TX1_P]
 set_property PACKAGE_PIN AC8 [get_ports MEZZ3_TX1_N]
+#set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_TX1_P]
+#set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_TX1_P]
 #set_property PACKAGE_PIN AB8 [get_ports "som240_2_d36"] ;# Bank  64 VCCO - som240_2_c44 - IO_L3P_T0L_N4_AD15P_64
 #set_property PACKAGE_PIN AC8 [get_ports "som240_2_d37"] ;# Bank  64 VCCO - som240_2_c44 - IO_L3N_T0L_N5_AD15N_64
 
@@ -227,6 +247,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ3_TX2_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ3_TX2_N]
 set_property PACKAGE_PIN AD2 [get_ports MEZZ3_TX2_P]
 set_property PACKAGE_PIN AD1 [get_ports MEZZ3_TX2_N]
+#set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_TX2_P]
+#set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_TX2_P]
 #set_property PACKAGE_PIN AD2 [get_ports "som240_2_b30"] ;# Bank  64 VCCO - som240_2_c44 - IO_L16P_T2U_N6_QBC_AD3P_64
 #set_property PACKAGE_PIN AD1 [get_ports "som240_2_b31"] ;# Bank  64 VCCO - som240_2_c44 - IO_L16N_T2U_N7_QBC_AD3N_64
 
@@ -237,6 +259,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ3_TX3_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ3_TX3_N]
 set_property PACKAGE_PIN AF8 [get_ports MEZZ3_TX3_P]
 set_property PACKAGE_PIN AG8 [get_ports MEZZ3_TX3_N]
+#set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_TX3_P]
+#set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_TX3_P]
 #set_property PACKAGE_PIN AF8 [get_ports "som240_2_b27"] ;# Bank  64 VCCO - som240_2_c44 - IO_L8P_T1L_N2_AD5P_64
 #set_property PACKAGE_PIN AG8 [get_ports "som240_2_b28"] ;# Bank  64 VCCO - som240_2_c44 - IO_L8N_T1L_N3_AD5N_64
 
@@ -247,6 +271,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ3_TX4_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ3_TX4_N]
 set_property PACKAGE_PIN M6 [get_ports MEZZ3_TX4_P]
 set_property PACKAGE_PIN L5 [get_ports MEZZ3_TX4_N]
+#set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_TX4_P]
+#set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_TX4_P]
 #set_property PACKAGE_PIN M6 [get_ports "som240_2_b21"] ;# Bank  65 VCCO - som240_2_a44 - IO_L14P_T2L_N2_GC_65
 #set_property PACKAGE_PIN L5 [get_ports "som240_2_b22"] ;# Bank  65 VCCO - som240_2_a44 - IO_L14N_T2L_N3_GC_65
 
@@ -257,6 +283,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ3_RX1_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ3_RX1_N]
 set_property PACKAGE_PIN D7 [get_ports MEZZ3_RX1_P]
 set_property PACKAGE_PIN D6 [get_ports MEZZ3_RX1_N]
+#set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_RX1_P]
+#set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_RX1_P]
 #set_property PACKAGE_PIN D7 [get_ports "som240_1_c12"] ;# Bank  66 VCCO - som240_1_d1 - IO_L13P_T2L_N0_GC_QBC_66
 #set_property PACKAGE_PIN D6 [get_ports "som240_1_c13"] ;# Bank  66 VCCO - som240_1_d1 - IO_L13N_T2L_N1_GC_QBC_66
 
@@ -267,6 +295,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ3_RX2_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ3_RX2_N]
 set_property PACKAGE_PIN E5 [get_ports MEZZ3_RX2_P]
 set_property PACKAGE_PIN D5 [get_ports MEZZ3_RX2_N]
+#set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_RX2_P]
+#set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_RX2_P]
 #set_property PACKAGE_PIN E5 [get_ports "som240_1_b10"] ;# Bank  66 VCCO - som240_1_d1 - IO_L14P_T2L_N2_GC_66
 #set_property PACKAGE_PIN D5 [get_ports "som240_1_b11"] ;# Bank  66 VCCO - som240_1_d1 - IO_L14N_T2L_N3_GC_66
 
@@ -277,6 +307,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ3_RX3_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ3_RX3_N]
 set_property PACKAGE_PIN F8 [get_ports MEZZ3_RX3_P]
 set_property PACKAGE_PIN E8 [get_ports MEZZ3_RX3_N]
+#set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_RX3_P]
+#set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_RX3_P]
 #set_property PACKAGE_PIN F8 [get_ports "som240_1_d13"] ;# Bank  66 VCCO - som240_1_d1 - IO_L17P_T2U_N8_AD10P_66
 #set_property PACKAGE_PIN E8 [get_ports "som240_1_d14"] ;# Bank  66 VCCO - som240_1_d1 - IO_L17N_T2U_N9_AD10N_66
 
@@ -287,6 +319,8 @@ set_property IOSTANDARD LVDS [get_ports MEZZ3_RX4_P]
 set_property IOSTANDARD LVDS [get_ports MEZZ3_RX4_N]
 set_property PACKAGE_PIN G6 [get_ports MEZZ3_RX4_P]
 set_property PACKAGE_PIN F6 [get_ports MEZZ3_RX4_N]
+#set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_RX4_P]
+#set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_RX4_P]
 #set_property PACKAGE_PIN G6 [get_ports "som240_1_a9"] ;# Bank  66 VCCO - som240_1_d1 - IO_L15P_T2L_N4_AD11P_66
 #set_property PACKAGE_PIN F6 [get_ports "som240_1_a10"] ;# Bank  66 VCCO - som240_1_d1 - IO_L15N_T2L_N5_AD11N_66
 
@@ -340,7 +374,7 @@ set_property PACKAGE_PIN AF5 [get_ports MEZZ4_RX1_N]
 #set_property PACKAGE_PIN AE5 [get_ports "som240_2_c41"] ;# Bank  64 VCCO - som240_2_c44 - IO_L12P_T1U_N10_GC_64
 #set_property PACKAGE_PIN AF5 [get_ports "som240_2_c42"] ;# Bank  64 VCCO - som240_2_c44 - IO_L12N_T1U_N11_GC_64
 
-create_clock -period 6.250 -name MEZZ4_RX1_P -waveform {0.000 3.125} [get_ports MEZZ4_RX1_P]
+#create_clock -period 6.250 -name MEZZ4_RX1_P -waveform {0.000 3.125} [get_ports MEZZ4_RX1_P]
 
 #-----------------------------------------------------------------------
 # MEZZ4_RX2 (PLLOUT2)
