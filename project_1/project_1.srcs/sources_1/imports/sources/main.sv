@@ -606,24 +606,33 @@ generate
     end
 endgenerate
 
-reg [31:0] count_MEZZ2 [3:0];
-reg [31:0] count_MEZZ3 [3:0];
-reg [31:0] count_MEZZ4 [3:0];
+reg [47:0] count_MEZZ2 [3:0];
+reg [47:0] count_MEZZ3 [3:0];
+reg [47:0] count_MEZZ4 [3:0];
+reg [47:0] count_total = 1;
+reg [9:0] count_delay = 1;
 
 always @(posedge CLK_prbs) begin
     if (prbs_reset) begin
         for (int i = 0; i < 4; i++) begin
-            count_MEZZ2[i] <= 32'd0;    
-            count_MEZZ3[i] <= 32'd0;
-            count_MEZZ4[i] <= 32'd0;
+            count_MEZZ2[i] <= 48'd0;    
+            count_MEZZ3[i] <= 48'd0;
+            count_MEZZ4[i] <= 48'd0;
+            count_total <= 48'd1;
+	    count_delay <= 1;
         end
-    end else begin
+    end 
+    else if (count_delay != 0) begin
+	count_delay <= count_delay + 1;
+    end
+    else begin
         if (clk_wiz_locked) begin
             for (int i = 0; i < 4; i++) begin
                 if (check_MEZZ2[i]) count_MEZZ2[i] <= count_MEZZ2[i] + 1;
                 if (check_MEZZ3[i]) count_MEZZ3[i] <= count_MEZZ3[i] + 1;
                 if (check_MEZZ4[i]) count_MEZZ4[i] <= count_MEZZ4[i] + 1;
             end
+            count_total <= count_total + 1;
         end
     end
 end
@@ -645,6 +654,8 @@ vio_0 vio_inst(
     .probe_in10(count_MEZZ4[2]),
     .probe_in11(count_MEZZ4[3]),
     .probe_in12(clk_wiz_locked),
+    .probe_in13(count_delay),
+    .probe_in14(count_total),
     .probe_out0(error_inject),
     .probe_out1(prbs_reset)
 );    

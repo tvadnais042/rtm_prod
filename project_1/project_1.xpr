@@ -65,13 +65,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="31"/>
-    <Option Name="WTModelSimExportSim" Val="31"/>
-    <Option Name="WTQuestaExportSim" Val="31"/>
+    <Option Name="WTXSimExportSim" Val="35"/>
+    <Option Name="WTModelSimExportSim" Val="35"/>
+    <Option Name="WTQuestaExportSim" Val="35"/>
     <Option Name="WTIesExportSim" Val="0"/>
-    <Option Name="WTVcsExportSim" Val="31"/>
-    <Option Name="WTRivieraExportSim" Val="31"/>
-    <Option Name="WTActivehdlExportSim" Val="31"/>
+    <Option Name="WTVcsExportSim" Val="35"/>
+    <Option Name="WTRivieraExportSim" Val="35"/>
+    <Option Name="WTActivehdlExportSim" Val="35"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -109,12 +109,6 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_axi_bram_ctrl_1_0/design_1_axi_bram_ctrl_1_0.xci">
-          <Proxy FileSetName="design_1_axi_bram_ctrl_1_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_blk_mem_gen_1_1/design_1_blk_mem_gen_1_1.xci">
-          <Proxy FileSetName="design_1_blk_mem_gen_1_1"/>
-        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_zynq_ultra_ps_e_0_1/design_1_zynq_ultra_ps_e_0_1.xci">
           <Proxy FileSetName="design_1_zynq_ultra_ps_e_0_1"/>
         </CompFileExtendedInfo>
@@ -135,6 +129,12 @@
         </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_blk_mem_gen_0_12/design_1_blk_mem_gen_0_12.xci">
           <Proxy FileSetName="design_1_blk_mem_gen_0_12"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_axi_bram_ctrl_1_0/design_1_axi_bram_ctrl_1_0.xci">
+          <Proxy FileSetName="design_1_axi_bram_ctrl_1_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_blk_mem_gen_1_1/design_1_blk_mem_gen_1_1.xci">
+          <Proxy FileSetName="design_1_blk_mem_gen_1_1"/>
         </CompFileExtendedInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fifo_generator_0/fifo_generator_0.xci">
