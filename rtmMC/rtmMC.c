@@ -19,7 +19,7 @@
 // 0x20?
 // 0x21?
 //#define ADC_ADDR 0x40
-// #define SMA_ADDR 0x50
+#define SFPA0H 0x50 
 //#define MMC_ADDR 0x51
 #define PLL_ADDR 0x68 // address of PLL on RTMV2
 #define DATA_BUS_SELECT 0x70
@@ -27,13 +27,13 @@
 #define SFP_SELECT 0x73
 
 
-#define MAIN_SCREED "(R)e(B)oot, (S)hift_1s, (s)hift_20ms, (c)heck LED, (l)os check, (t)alk\n"
+#define MAIN_SCREED "MAIN: (R)e(B)oot, (S)hift_1s, (s)hift_20ms, (c)onfig pll, (l)os check, (t)alk, (a)ddress scan, (E)EPROMS\n"
 
 void config_pll();
 bool scan_bus();
 void check_los();
 uint32_t step_fs(uint32_t us);
-void inspect_EEPROM();
+void inspect_EEPROM(uint8_t mezz, uint8_t link);
 void expose_PLL_path();
 void flash_LED(uint32_t ms);
 void pulse_LED(uint32_t ms);
@@ -42,12 +42,10 @@ void main()
 {
     stdio_init_all(); //init USB serial
     sleep_ms(3000); // slow to allow for screen connecting in time - debugging
-    
     set_sys_clock_khz(125000,true);
     
     printf("USB Connected\n");
-
-        if (watchdog_caused_reboot()){
+    if (watchdog_caused_reboot()){
         printf("Watchdog Caused Reboot :(\n");
     }
 
@@ -70,13 +68,7 @@ void main()
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
-    inspect_EEPROM();
-    // i2c_write_blocking_until(i2c1,0x70,(uint8_t []){0x1},1,false,make_timeout_time_ms(50)); // opens 0x72 mezz mux
-    // scan_bus();
-    // i2c_write_blocking_until(i2c1,0x72,(uint8_t []){0x8},1,false,make_timeout_time_ms(50)); // selects mezz4 (0x68)
-
-    // scan_bus();
-
+    
 
     // bool pllFlag = scan_bus();
     // if (!pllFlag){
@@ -103,14 +95,10 @@ void main()
         }
         if (c == 's') {
             uint32_t dt = step_fs(20000);
-            printf("STEP Function Time = %li.%.6li s\n", dt/1000000, dt%1000000);
-            sleep_ms(5);
             printf(MAIN_SCREED);
         }
         if (c == 'S') {
             uint32_t dt = step_fs(1000000);
-            printf("STEP Function Time = %li.%.6li s\n", dt/1000000, dt%1000000);
-            sleep_ms(5);
             printf(MAIN_SCREED);
         }
         if (c == 't') {
@@ -119,14 +107,22 @@ void main()
         if (c == 'l') {
             check_los();
         }
-        if (c == 'c') {
-            // config_pll();
-            gpio_put(LED_PIN,true);
-            sleep_ms(30);
-            gpio_put(LED_PIN,false);
-            sleep_ms(30);
+        if (c == 'a') {
+            scan_bus();
         }
-
+        if (c == 'c') {
+            expose_PLL_path();
+            config_pll();
+            pulse_LED(30);
+        }
+        if (c == 'E') {
+            for (int mezz=0; mezz<4; mezz++) {
+                for (int link=0; link<4; link++) {
+                    inspect_EEPROM(mezz,link);
+                }
+            }
+            printf(MAIN_SCREED);
+        }
 
         sleep_ms(5);
     }
@@ -157,6 +153,10 @@ void config_pll() {
     // password for the windows laptop in lab: intel123
 
     printf("Configuring PLLs\n");
+    
+
+    i2c_write_blocking_until(i2c1,DATA_BUS_SELECT,(uint8_t []){0x1},1,false, make_timeout_time_ms(50)); // opens 0x72 mezz mux
+    i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x8},1,false, make_timeout_time_ms(50)); // selects mezz4 (0x68)
     
     uint8_t page_now; // Wont know until first write
 
@@ -241,46 +241,74 @@ uint32_t step_fs(uint32_t us) {
     i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x01,0x03},2,false); // write page2
     i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x47,0x00},2,false); // get rid of that change baby
     
+
+    printf("STEP Function Time = %li.%.6li s\n", dt/1000000, dt%1000000);
+    sleep_ms(2);
     return dt;
 }
 
 void expose_PLL_path() {
-    i2c_write_blocking_until(i2c1,0x70,(uint8_t []){0x1},1,false, make_timeout_time_ms(50)); // opens 0x72 mezz mux
-    i2c_write_blocking_until(i2c1,0x72,(uint8_t []){0x8},1,false, make_timeout_time_ms(50)); // selects mezz4 (0x68)
     return;
 }
 
-void inspect_EEPROM() {
+void inspect_EEPROM(uint8_t mezz, uint8_t link) {
+    // Mezzanine and links are 0 indexed
     i2c_write_blocking_until(i2c1,DATA_BUS_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50)); // select Data0/1
-    i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50)); // Select Mezzanine
-    i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){0x8},1,false,make_timeout_time_ms(50)); // Select SFP
+    i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){1<<mezz},1,false,make_timeout_time_ms(50)); // Select Mezzanine
+    i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){1<<link},1,false,make_timeout_time_ms(50)); // Select SFP
+
+    printf("mezz,%d,link,%d,",mezz,link);
+    uint8_t buf[16];
+    for (int i=0; i<16; i++){
+        buf[i] = 0;
+    }
     
-    //attempt to read
-    uint8_t buf_productID[16];
+    // Vendor Name
     for (int i=0; i<16; i++){
-        buf_productID[i] = 0;
+        i2c_write_blocking_until(i2c1,SFPA0H,(uint8_t []){i+20},1,true,make_timeout_time_ms(50));
+        i2c_read_blocking_until(i2c1,SFPA0H,buf+i,1,false,make_timeout_time_ms(50));
     }
+    printf("vendor,");
     for (int i=0; i<16; i++){
-        i2c_write_blocking(i2c1,0x50,(uint8_t []){i+20},1,true);
-        i2c_read_blocking(i2c1,0x50,buf_productID + i,1,false);
+        printf("%c",buf[i]);
     }
-    printf("PRODUCT_ID: ");
-    for (int i=0; i<16; i++){
-        printf("%c",buf_productID[i]);
-    }
-    printf("\n");
-
-    uint8_t buf_identifier[1];
-    i2c_write_blocking(i2c1,0x50,(uint8_t []){0x00},1,true);
-    i2c_read_blocking(i2c1,0x50,buf_productID,1,false);
-    printf("Identifier: %d\n",buf_identifier[0]);
-
-
+    printf(",");
     
-    // scan_bus();
+    // Part Number
+    for (int i=0; i<16; i++){
+        i2c_write_blocking_until(i2c1,SFPA0H,(uint8_t []){i+40},1,true,make_timeout_time_ms(50));
+        i2c_read_blocking_until(i2c1,SFPA0H,buf+i,1,false,make_timeout_time_ms(50));
+    }
+    printf("part,");
+    for (int i=0; i<16; i++){
+        printf("%c",buf[i]);
+    }
+    printf(",");
+
+    // Vendor Rev
+    for (int i=0; i<4; i++){
+        i2c_write_blocking_until(i2c1,SFPA0H,(uint8_t []){i+56},1,true,make_timeout_time_ms(50));
+        i2c_read_blocking_until(i2c1,SFPA0H,buf+i,1,false,make_timeout_time_ms(50));
+    }
+    printf("rev,");
+    for (int i=0; i<4; i++){
+        printf("%c",buf[i]);
+    }
+    printf(",");
+
+    // Vendor SN
+    for (int i=0; i<16; i++){
+        i2c_write_blocking_until(i2c1,SFPA0H,(uint8_t []){i+68},1,true,make_timeout_time_ms(50));
+        i2c_read_blocking_until(i2c1,SFPA0H,buf+i,1,false,make_timeout_time_ms(50));
+    }
+    printf("SN,");
+    for (int i=0; i<16; i++){
+        printf("%c",buf[i]);
+    }
+    printf(",\n");
+
     return;
 }
-
 void pulse_LED(uint32_t ms) {
     gpio_put(LED_PIN,true);
     sleep_ms(ms);

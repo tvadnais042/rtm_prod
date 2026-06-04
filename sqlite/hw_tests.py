@@ -27,7 +27,8 @@ def create_schema(db_path):
         board_ID TEXT NOT NULL PRIMARY KEY,
         type TEXT NOT NULL, 
         version INT NOT NULL,
-        num INT NOT NULL
+        num INT NOT NULL,
+        power_draw REAL NOT NULL
     ) WITHOUT ROWID
     ''')
 
@@ -62,7 +63,7 @@ def create_schema(db_path):
         link INT NOT NULL,
         time_start TEXT NOT NULL,
         time_end TEXT NOT NULL,
-        SFP_serial TEXT NOT NULL,
+        SFP_serial TEXT,
         eye_csv BLOB NOT NULL,
         eye_img BLOB,
         PRIMARY KEY(board_ID,link),
@@ -120,11 +121,10 @@ def nuke_database(db_path, mini=False):
 
 def insert_board(db_path, board_ID):
     con, cur = concur(db_path)
-
     TYPE, VERSION, NUM = parse_board_ID(board_ID)
     cur.execute('''
-        INSERT INTO Boards(board_ID, type, version, num)
-        VALUES(?,?,?,?)''',(board_ID,TYPE,VERSION,NUM))
+        INSERT INTO Boards(board_ID, type, version, num, power_draw)
+        VALUES(?,?,?,?,?)''',(board_ID,TYPE,VERSION,NUM,0.5))
     con.commit()
     return
 
@@ -192,28 +192,28 @@ def parse_eye_csv(csv_path): #Deprecated?
 
 def read_board(db_path,board_ID):
     con,cur = concur(db_path)
-    df = cur.execute(f"SELECT board_ID, link, time_start, time_end FROM eye_diagrams WHERE board_ID = '{board_ID}'")
-    print(f"{board_ID}")
-    print("Eyes: ID, Link, Start, End: ")
+    df = cur.execute(f"SELECT * FROM Boards WHERE board_ID = '{board_ID}'") 
+    print(*df.fetchall(),sep='\n')
+    df = cur.execute(f"SELECT board_ID, link, SFP_serial, time_start, time_end FROM eye_diagrams WHERE board_ID = '{board_ID}'")
+    print("Eyes: ID, Link, SFP, Start, End: ")
     print(*df.fetchall(), sep='\n')
     df = cur.execute(f"SELECT * FROM BER_tests WHERE board_ID = '{board_ID}'")
-    print("BER: ID, Mezzanine, Link")
+    print("BER: ID, Link, Mezzanine, tstart, rate, transmitted, errs, BER, Pattern, TXpre, TXpost, RXTERM, TXDiffswing")
     print(*df.fetchall(), sep='\n')
 
     return
 
-def get_SFP_plugs():
-    # TODO connect to actual board
-    # Since I dont think anything changes if I program the PLL,
-    # Start the server and have a dedicated python file for the action.
-    return (("fakeNotReal"),("fakeNotReal"),("fakeNotReal"),("fakeNotReal"))
-
+    
 def populate(db_path, board_ID):
     try:
         insert_board(db_path,board_ID)
     except:
         pass
-    
+
+    # subprocess.run(["./get_SFP.sh"]) # Collect from RTM
+    with open(f"live_tests/EEPROM_readout.csv","r") as file:
+        SFP_plugs = np.genfromtxt(file, delimiter=',',dtype=str)
+
     # subprocess.run(["./get_ber.sh"]) # Collect from lab
     for i in range(4):
         with open(f"live_tests/BER_results_1_{i}.csv", 'r') as file:
@@ -231,28 +231,27 @@ def populate(db_path, board_ID):
         TXPOST = float(csv_data["TXPOST"].split()[0])
         TXDIFFSWING = int(csv_data["TXDIFFSWING"].split()[0])
         RXTERM = int(csv_data["RXTERM"].split()[0])
-        insert_BER("test.db","RTM0300001",link,mezzanine,time_start,rate,bits_transmitted,errors,error_rate,PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM)
-    
+        insert_BER(db_path,board_ID,link,mezzanine,time_start,rate,bits_transmitted,errors,error_rate,PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM)
+   
     # subprocess.run(["./get_gpio.sh"]) # Collect from lab
-    # TODO reset the counter before you start recording
     with open(f"live_tests/vio_out.csv", 'r') as file:
         csv_data = np.genfromtxt(file,delimiter=',', dtype=str)
-        bits_transmitted = int(csv_data[-2][1],base=16)
-        time_start = str(csv_data[-1][1])
-        for line in csv_data[0:-3]:
+        bits_transmitted = int(csv_data[-4][1],base=16)
+        time_start = str(csv_data[-3][1])
+        for line in csv_data[0:12]:
             mezz = line[0][10]
             link = line[0][12]
             err = int(line[1],base=16)
-            insert_BER("test.db","RTM0300001",link,mezz,time_start,0.160,bits_transmitted,err,(1+err) / bits_transmitted,"PRBS 31-bit",None,None,None,None)
+            insert_BER(db_path,board_ID,link,mezz,time_start,0.160,bits_transmitted,err,(1+err) / bits_transmitted,"PRBS 31-bit",None,None,None,None)
+
 
     # subprocess.run(["./get_eyes.sh"]) # Collect from lab
-    SFP_plugs = get_SFP_plugs()
-    
     for i in range(4):
-        insert_eye(db_path,board_ID,i,SFP_plugs[i],f"live_tests/Scan_{i}.csv")
+        assert i==int(SFP_plugs[i][3])
+        SFP_plug = str(SFP_plugs[i][5]).strip() + "," + str(SFP_plugs[i][7]).strip()
+        insert_eye(db_path,board_ID,i,SFP_plug,f"live_tests/Scan_{i}.csv")
 
     return
-
 
 # So you dont gotta worry about duplicate yet
 nuke_database("test.db",mini=False)
