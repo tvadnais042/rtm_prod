@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 HOST="kria"
 
 echo "Copying Data_acq Folder"
@@ -17,7 +15,7 @@ ssh -T $HOST << EOF
     echo "Running get_data_bram"
     sudo xmutil unloadapp
     sudo xmutil loadapp bram
-    sudo nice --20 ./get_data_bram 250
+    sudo nice --20 ./get_data_bram 20
 EOF
 
 rsync -r $HOST:data_acq/data_files .

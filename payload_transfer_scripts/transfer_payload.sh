@@ -1,5 +1,6 @@
-varname="rtm_prod2"
-
+#varname="rtm_prod"
+echo Payload: 
+read varname
 ssh -T kria << EOF
   mkdir -p payload
   sudo mkdir -p /lib/firmware/xilinx/bram/

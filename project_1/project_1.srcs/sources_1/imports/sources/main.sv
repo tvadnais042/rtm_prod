@@ -245,7 +245,12 @@ ibert_ultrascale_gth_0 u_ibert_gth_core(
 //    OBUFDS OBUFDS_CS2B(.I(SPI_SSB1),.O(CS2B_P),.OB(CS2B_N));
 
 wire CLK, clk_ref;
-assign clk_ref = MEZZ4_RX_synced[0];
+
+// MEZZ4_RX into clock buffer instead of through assignment
+BUFG BUFG_clk_ref (
+    .I (MEZZ4_RX[0]),
+    .O (clk_ref)
+);
 
 //=====================================================================
 //    Bundling DDMTD pins
@@ -611,6 +616,7 @@ reg [47:0] count_MEZZ3 [3:0];
 reg [47:0] count_MEZZ4 [3:0];
 reg [47:0] count_total = 1;
 reg [9:0] count_delay = 1;
+reg [3:0] dud_register_vio = 1;
 
 always @(posedge CLK_prbs) begin
     if (prbs_reset) begin
@@ -656,6 +662,7 @@ vio_0 vio_inst(
     .probe_in12(clk_wiz_locked),
     .probe_in13(count_delay),
     .probe_in14(count_total),
+    .probe_in15(dud_register_vio),
     .probe_out0(error_inject),
     .probe_out1(prbs_reset)
 );    
@@ -720,10 +727,19 @@ OBUFDS OBUFDS_MEZZ3_TX2(.I(prbs_data),.O(MEZZ3_TX2_P),.OB(MEZZ3_TX2_N));
 OBUFDS OBUFDS_MEZZ3_TX3(.I(prbs_data),.O(MEZZ3_TX3_P),.OB(MEZZ3_TX3_N)); 
 OBUFDS OBUFDS_MEZZ3_TX4(.I(~prbs_data),.O(MEZZ3_TX4_P),.OB(MEZZ3_TX4_N)); // non-inverted unlike the rest
 
-OBUFDS OBUFDS_MEZZ4_TX1(.I(prbs_data),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
-OBUFDS OBUFDS_MEZZ4_TX2(.I(prbs_data),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
-OBUFDS OBUFDS_MEZZ4_TX3(.I(prbs_data),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
-OBUFDS OBUFDS_MEZZ4_TX4(.I(prbs_data),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
+// Stage 3 - GPIO Tester
+//OBUFDS OBUFDS_MEZZ4_TX1(.I(prbs_data),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
+//OBUFDS OBUFDS_MEZZ4_TX2(.I(prbs_data),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
+//OBUFDS OBUFDS_MEZZ4_TX3(.I(prbs_data),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
+//OBUFDS OBUFDS_MEZZ4_TX4(.I(prbs_data),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
+
+// Stage 4 - DDMTD inputs
+OBUFDS OBUFDS_MEZZ4_TX1(.I(CLK),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
+OBUFDS OBUFDS_MEZZ4_TX2(.I(CLK),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
+OBUFDS OBUFDS_MEZZ4_TX3(.I(CLK),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
+OBUFDS OBUFDS_MEZZ4_TX4(.I(CLK),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
+ 
+
 
 // clk_ref is running at 159.9984 -> "reference clock" or "offset clock"
     

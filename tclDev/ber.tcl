@@ -2,10 +2,10 @@
 open_hw_manager
 connect_hw_server -allow_non_jtag
 open_hw_target
-set_property PROGRAM.FILE {main.bit} [get_hw_devices xck26_0]
-set_property PROBES.FILE {main.ltx} [get_hw_devices xck26_0] 
-set_property FULL_PROBES.FILE {main.ltx} [get_hw_devices xck26_0] 
-program_hw_devices [get_hw_devices xck26_0]
+set_property PROGRAM.FILE {../project_1/project_1.runs/impl_1/main.bit} [get_hw_devices xck26_0]
+set_property PROBES.FILE {../project_1/project_1.runs/impl_1/main.ltx} [get_hw_devices xck26_0] 
+set_property FULL_PROBES.FILE {../project_1/project_1.runs/impl_1/main.ltx} [get_hw_devices xck26_0] 
+#program_hw_devices [get_hw_devices xck26_0]
 refresh_hw_device [get_hw_devices xck26_0]
 
 #Make links
@@ -60,7 +60,10 @@ commit_hw_sio -non_blocking $links
 set_property LOGIC.MGT_ERRCNT_RESET_CTRL 0 $links
 commit_hw_sio -non_blocking $links
 
-after 1000
+#puts "BER: [lindex $argv 0]"
+#puts "Rate: 10Gb/s"
+#puts "Wait: [expr {round(1/([lindex $argv 0]*10000000))}]"
+after [expr {round(1/([lindex $argv 0]*10000000))}]
 
 refresh_hw_sio $links
 foreach i {0 1 2 3} {
@@ -68,6 +71,7 @@ set fp [open "BER_results_1_$i.csv" w]
 puts $fp "link,$i"
 puts $fp "mezzanine,1"
 puts $fp "time_start,$tstart"
+puts $fp "time_wait_ms,[expr {round(1/([lindex $argv 0]*10000000))}]"
 puts $fp "LINE_RATE,10.000"
 puts $fp "RX_RECEIVED_BIT_COUNT,[get_property RX_RECEIVED_BIT_COUNT [lindex [get_hw_sio_links] $i]]"
 puts $fp "LOGIC.ERRBIT_COUNT,[get_property LOGIC.ERRBIT_COUNT [lindex [get_hw_sio_links] $i]]"

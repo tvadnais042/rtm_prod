@@ -1,7 +1,7 @@
 {
    "ActiveEmotionalView":"Default View",
-   "Default View_ScaleFactor":"0.830146",
-   "Default View_TopLeft":"-676,-343",
+   "Default View_ScaleFactor":"0.378929",
+   "Default View_TopLeft":"-678,-523",
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
@@ -10,16 +10,16 @@ preplace port BRAM_PORTB_0 -pg 1 -lvl 0 -x -620 -y -320 -defaultsOSRD
 preplace port BRAM_PORTB_1 -pg 1 -lvl 0 -x -620 -y -300 -defaultsOSRD
 preplace port BRAM_PORTB_2 -pg 1 -lvl 0 -x -620 -y -280 -defaultsOSRD
 preplace port port-id_CLK_OUT -pg 1 -lvl 5 -x 2040 -y 390 -defaultsOSRD
-preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 1 -x -280 -y -10 -defaultsOSRD -resize 408 250
-preplace inst axi_gpio_0 -pg 1 -lvl 3 -x 820 -y 290 -defaultsOSRD
-preplace inst axi_smc -pg 1 -lvl 2 -x 290 -y -30 -defaultsOSRD
-preplace inst rst_ps8_0_99M -pg 1 -lvl 2 -x 290 -y 170 -defaultsOSRD
 preplace inst blk_mem_gen_0 -pg 1 -lvl 4 -x 1260 -y -190 -defaultsOSRD
 preplace inst axi_bram_ctrl_0 -pg 1 -lvl 3 -x 820 -y -200 -defaultsOSRD
 preplace inst axi_bram_ctrl_1 -pg 1 -lvl 3 -x 820 -y -60 -defaultsOSRD
 preplace inst blk_mem_gen_1 -pg 1 -lvl 4 -x 1260 -y -50 -defaultsOSRD
 preplace inst axi_bram_ctrl_2 -pg 1 -lvl 3 -x 820 -y 80 -defaultsOSRD
 preplace inst blk_mem_gen_2 -pg 1 -lvl 4 -x 1260 -y 90 -defaultsOSRD
+preplace inst axi_gpio_0 -pg 1 -lvl 3 -x 820 -y 290 -defaultsOSRD
+preplace inst axi_smc -pg 1 -lvl 2 -x 290 -y -30 -defaultsOSRD
+preplace inst rst_ps8_0_99M -pg 1 -lvl 2 -x 290 -y 170 -defaultsOSRD
+preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 1 -x -280 -y -10 -defaultsOSRD -resize 408 250
 preplace netloc rst_ps8_0_99M_peripheral_aresetn 1 1 2 -30 60 480
 preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 0 5 -600 -160 -40 -120 500 210 N 210 1390
 preplace netloc zynq_ultra_ps_e_0_pl_resetn0 1 1 1 -50 -10n
