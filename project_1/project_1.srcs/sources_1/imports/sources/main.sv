@@ -226,7 +226,7 @@ ibert_ultrascale_gth_0 u_ibert_gth_core(
     .gtsouthrefclk01_i(gth_qsouthrefclk01_i),
     .gtsouthrefclk11_i(gth_qsouthrefclk11_i)
 );
-    
+// 
 // End of IBERT Example
 // 
 
@@ -243,14 +243,6 @@ ibert_ultrascale_gth_0 u_ibert_gth_core(
 //    OBUFDS OBUFDS_SCK (.I(SPI_KOSI),.O(SCK_P),.OB(SCK_N));
 //    OBUFDS OBUFDS_CS1B(.I(SPI_SSB1),.O(CS1B_P),.OB(CS1B_N));
 //    OBUFDS OBUFDS_CS2B(.I(SPI_SSB1),.O(CS2B_P),.OB(CS2B_N));
-
-wire CLK, clk_ref;
-
-// MEZZ4_RX into clock buffer instead of through assignment
-BUFG BUFG_clk_ref (
-    .I (MEZZ4_RX[0]),
-    .O (clk_ref)
-);
 
 //=====================================================================
 //    Bundling DDMTD pins
@@ -317,6 +309,9 @@ always @(posedge clk_ref) begin
     end
 end
 
+
+
+
 // Each bit of this wire will be the clock
 wire [NUM_DDMTD-1:0]  clk_beat;
 
@@ -327,23 +322,11 @@ assign clk_beat =  {
     beat_0_q1,beat_0_q1,beat_0_q1,Q4,Q3,Q2,Q1,Q0 
 };
 
-// assign clk_beat =  { 
-//     beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,
-//     beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,CQ3      ,CQ2      ,CQ1      ,CQ0      ,
-//     BQ3      ,BQ2      ,BQ1      ,BQ0      ,AQ3      ,AQ2      ,AQ1      ,AQ0 
-// };
 
-// assign clk_beat =  { 
-//     beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,
-//     beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,CQ3      ,CQ2      ,CQ1      ,CQ0      ,
-//     BQ3      ,BQ2      ,BQ1      ,BQ0      ,AQ3      ,AQ2      ,BEAT_REF2      ,BEAT_REF1 
-// };
-// assign clk_beat =  { 
-//     beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,
-//     beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,
-//     beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1
-// };
-    
+
+
+
+
 
 wire [31:0]GPIO;
 wire user_reset;
@@ -460,7 +443,7 @@ always @(negedge CLK) begin
         addr_pointer <=0;
         word_counter <=0;
         we_byte <=0;
-        WORDS_TO_SEND <=BRAM_PORTB_0_dout;
+        WORDS_TO_SEND <= BRAM_PORTB_0_dout;
         TREADY<=0; 
         enable_bram1 <= 1;
     end
@@ -499,7 +482,6 @@ reg [NUM_BYTES-1:0] we_byte_sync;
 reg [NUM_BYTES-1:0] we_byte_bram1_sync;
 
 
-
 always @(negedge CLK) begin
 
     if (enable_bram1) begin
@@ -519,6 +501,13 @@ always @(negedge CLK) begin
 end
 
 
+wire CLK, clk_ref;
+// MEZZ4_RX into clock buffer. clk_ref -> 159.9984MHz 
+BUFG BUFG_clk_ref (
+    .I (MEZZ4_RX[0]),
+    .O (clk_ref)
+);
+
 
 design_1_wrapper desing_ins(
     .BRAM_PORTB_0_addr(addr_pointer),
@@ -527,14 +516,14 @@ design_1_wrapper desing_ins(
     .BRAM_PORTB_0_dout(BRAM_PORTB_0_dout),
     .BRAM_PORTB_0_en(1),
     .BRAM_PORTB_0_we(we_byte_sync),
-
+    
     .BRAM_PORTB_1_addr(addr_pointer),
     .BRAM_PORTB_1_clk(CLK),
     .BRAM_PORTB_1_din(BRAM_PORTB_1_data),
     // .BRAM_PORTB_1_dout(BRAM_PORTB_0_dout),
     .BRAM_PORTB_1_en(1),
     .BRAM_PORTB_1_we(we_byte_bram1_sync),
-
+    
     .BRAM_PORTB_2_addr(addr_pointer),
     .BRAM_PORTB_2_clk(CLK),
     .BRAM_PORTB_2_din(BRAM_PORTB_2_data),
@@ -545,12 +534,12 @@ design_1_wrapper desing_ins(
     .CLK_OUT(CLK),
     .gpio_rtl_tri_o(GPIO)
 );
-    
+
+
 //--------------------------------------------		
 // GPIO PRBS GEN/CHECK
 //--------------------------------------------		
-    
-// Get fast clock to avoid AC coupling low frequency cutoff
+
 clk_wiz_0 clk_wiz_inst (
     .clk_in1(CLK),
     .clk_out1(CLK_wiz1),
@@ -583,14 +572,17 @@ wire [3:0] MEZZ4_RX_synced;
 genvar i;
 generate 
     for (i=0; i < 4; i++) begin
-        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE"))
-        iddr_M2RX (.Q1(MEZZ2_RX_synced[i]), .Q2(MEZZ2_RX_synced_Q2[i]), .C(CLK_prbs), .CB(~CLK_prbs), .D(MEZZ2_RX[i]), .R(1'b0));
-        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE"))
-        iddr_M3RX (.Q1(MEZZ3_RX_synced[i]), .Q2(), .C(CLK_prbs), .CB(~CLK_prbs), .D(MEZZ3_RX[i]), .R(1'b0));
-        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE"))
-        iddr_M4RX (.Q1(MEZZ4_RX_synced[i]), .Q2(), .C(CLK_prbs), .CB(~CLK_prbs), .D(MEZZ4_RX[i]), .R(1'b0));
+        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE"),.IS_CB_INVERTED(1'b1))
+        iddr_M2RX (.Q1(MEZZ2_RX_synced[i]), .Q2(MEZZ2_RX_synced_Q2[i]), .C(CLK_prbs), .CB(CLK_prbs), .D(MEZZ2_RX[i]), .R(1'b0));
+        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE"),.IS_CB_INVERTED(1'b1))
+        iddr_M3RX (.Q1(MEZZ3_RX_synced[i]), .Q2(), .C(CLK_prbs), .CB(CLK_prbs), .D(MEZZ3_RX[i]), .R(1'b0));
+        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE"),.IS_CB_INVERTED(1'b1))
+        iddr_M4RX (.Q1(MEZZ4_RX_synced[i]), .Q2(), .C(CLK_prbs), .CB(CLK_prbs), .D(MEZZ4_RX[i]), .R(1'b0));
     end
 endgenerate
+// Change made to IDDRE .IS_CB_INVERTED(1'b1)
+// ~CLK_prbs -> CLK_prbs
+
 
 wire [3:0] check_MEZZ2;
 wire [3:0] check_MEZZ3;
@@ -739,8 +731,5 @@ OBUFDS OBUFDS_MEZZ4_TX2(.I(CLK),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
 OBUFDS OBUFDS_MEZZ4_TX3(.I(CLK),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
 OBUFDS OBUFDS_MEZZ4_TX4(.I(CLK),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
  
-
-
-// clk_ref is running at 159.9984 -> "reference clock" or "offset clock"
     
 endmodule

@@ -1,7 +1,7 @@
 build
 !.vscode/*
 transfer.sh
-
+screenlog.0
 .vscode/*
 !.vscode/tasks.json
 !.vscode/settings.json

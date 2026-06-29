@@ -8,7 +8,7 @@ project_1.runs/
 project_1.sim/
 psu*
 main.xsa
-
+main_backup*
 .Xil/
 vivado*.jou
 vivado*.log
