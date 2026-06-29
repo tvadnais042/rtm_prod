@@ -4,6 +4,7 @@ import numpy as np
 import subprocess
 from datetime import datetime
 
+from schema import create_schema, nuke, mininuke
 '''
 Considerations:
 
@@ -18,72 +19,6 @@ EEPROM is on Mezzanine itself. We can store a full readout in the database
 There can be any number of tests. 
 
 '''
-
-def create_schema(db_path):
-    con, cur = concur(db_path)
-
-    cur.execute('''
-    CREATE TABLE IF NOT EXISTS Boards(
-        board_ID TEXT NOT NULL PRIMARY KEY,
-        type TEXT NOT NULL, 
-        version INT NOT NULL,
-        num INT NOT NULL,
-        power_draw REAL NOT NULL
-    ) WITHOUT ROWID
-    ''')
-
-    cur.execute('''
-    CREATE TABLE IF NOT EXISTS BER_tests(
-        board_ID TEXT NOT NULL,
-        link INT NOT NULL,
-        mezzanine INT NOT NULL,
-        time_start TEXT NOT NULL,
-        rate REAL NOT NULL,
-        bits_transmitted INT NOT NULL,
-        errors INT NOT NULL,
-        error_rate REAL NOT NULL,
-        PATTERN TEXT NOT NULL,
-        TXPRE REAL CHECK(mezzanine != 1 OR TXPRE IS NOT NULL),
-        TXPOST REAL CHECK(mezzanine != 1 OR TXPOST IS NOT NULL),
-        TXDIFFSWING INT CHECK(mezzanine != 1 OR TXDIFFSWING IS NOT NULL),
-        RXTERM INT CHECK(mezzanine != 1 OR RXTERM IS NOT NULL),
-        PRIMARY KEY (board_ID, mezzanine, link),
-        FOREIGN KEY (board_ID)
-            REFERENCES Boards (board_ID)
-                ON UPDATE CASCADE
-                ON DELETE CASCADE
-    ) WITHOUT ROWID
-    ''')
-    #mezzanine for non-RTM indicates testing site.
-    #double meaning dependent on type. Beautiful
-
-    cur.execute('''
-    CREATE TABLE IF NOT EXISTS eye_diagrams(
-        board_ID TEXT NOT NULL,
-        link INT NOT NULL,
-        time_start TEXT NOT NULL,
-        time_end TEXT NOT NULL,
-        SFP_serial TEXT,
-        eye_csv BLOB NOT NULL,
-        eye_img BLOB,
-        PRIMARY KEY(board_ID,link),
-        FOREIGN KEY (board_ID)
-            REFERENCES Boards (board_ID)
-                ON UPDATE CASCADE
-                ON DELETE CASCADE
-    ) WITHOUT ROWID
-    ''')
-    #SFP serial when we could use the DC plugs? What do I say there?
-    #UMN_BALUN2_SFP_TX ? 
-
-    cur.execute('''
-    CREATE TABLE IF NOT EXISTS eeproms(
-        board_ID TEXT NOT NULL PRIMARY KEY,
-        mezzanine INT NOT NULL,
-        testnull INT
-    ) WITHOUT ROWID
-    ''')
-    return
 
 def concur(db_path, foreign_keys=True):
     con = sqlite3.connect(db_path)
@@ -102,22 +37,6 @@ def parse_board_ID(board_ID):
     else:
         raise ValueError(f"Invalid BoardID format.")
     return TYPE, VERSION, NUM
-
-def nuke_database(db_path, mini=False):
-    con, cur = concur(db_path)
-    if mini:
-        cur.execute("DELETE FROM Boards")
-        cur.execute("DELETE FROM BER_tests")
-        cur.execute("DELETE FROM eye_diagrams")
-        cur.execute("DELETE FROM eeproms")
-    else:
-        cur.execute("DROP TABLE IF EXISTS Boards")
-        cur.execute("DROP TABLE IF EXISTS BER_tests")
-        cur.execute("DROP TABLE IF EXISTS eye_diagrams")
-        cur.execute("DROP TABLE IF EXISTS eeproms")
-    con.commit()
-    
-    return
 
 def insert_board(db_path, board_ID):
     con, cur = concur(db_path)
@@ -176,6 +95,11 @@ def insert_eeprom(db_path, board_ID, mezzanine, testnull):
         (board_ID,mezzanine,testnull)
     )
     con.commit()
+    return
+
+def insert_ddmtd(db_path, board_ID):
+    #something to be made here with new table
+
     return
 
 def parse_eye_csv(csv_path): #Deprecated?
@@ -251,10 +175,19 @@ def populate(db_path, board_ID):
         SFP_plug = str(SFP_plugs[i][5]).strip() + "," + str(SFP_plugs[i][7]).strip()
         insert_eye(db_path,board_ID,i,SFP_plug,f"live_tests/Scan_{i}.csv")
 
+    # subprocess.run(["./get_eeprom.sh"]) # Collect from lab
+
+
+
+    # subprocess.run(["./get_ddmtd.sh"]) # Collect from lab
+    # files saved so now lets load it all in.
+
+
     return
 
-# So you dont gotta worry about duplicate yet
-nuke_database("test.db",mini=False)
-create_schema("test.db")
-populate("test.db","RTM0300001")
-read_board("test.db","RTM0300001")
+DB = ".test.db"
+BOARD = "RTM0300001"
+# nuke(DB)
+create_schema(DB)
+populate(DB,BOARD)
+read_board(DB,BOARD)
