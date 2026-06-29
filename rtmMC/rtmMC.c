@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "pico/stdlib.h"
 #include "pico/bootrom.h"
 #include "hardware/i2c.h"
@@ -20,28 +21,29 @@
 // 0x21?
 //#define ADC_ADDR 0x40
 #define SFPA0H 0x50 
-//#define MMC_ADDR 0x51
+#define MMC_ADDR 0x51
 #define PLL_ADDR 0x68 // address of PLL on RTMV2
 #define DATA_BUS_SELECT 0x70
 #define MEZZ_SELECT 0x72
 #define SFP_SELECT 0x73
 
+#define CMD_BUF_SIZE 64 
+#define READY_PROMPT "OK\n"
+#define MAIN_SCREED "MAIN: (R)eboot, (S)hiftLarge, (s)hift_20ms, (c)onfig_pll, (l)os_check, (t)alk, sc(a)n_bus, (E)eprom\n"
 
-#define MAIN_SCREED "MAIN: (R)e(B)oot, (S)hift_1s, (s)hift_20ms, (c)onfig pll, (l)os check, (t)alk, (a)ddress scan, (E)EPROMS\n"
-
+void process_command(const char* cmd);
 void config_pll();
 bool scan_bus();
 void check_los();
 uint32_t step_fs(uint32_t us);
-void inspect_EEPROM(uint8_t mezz, uint8_t link);
-void expose_PLL_path();
+void inspect_SFP(uint8_t mezz, uint8_t link);
+void inspect_EEPROM();
 void flash_LED(uint32_t ms);
 void pulse_LED(uint32_t ms);
 
 void main()
 {
     stdio_init_all(); //init USB serial
-    sleep_ms(3000); // slow to allow for screen connecting in time - debugging
     set_sys_clock_khz(125000,true);
     
     printf("USB Connected\n");
@@ -69,65 +71,80 @@ void main()
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
     
-
-    // bool pllFlag = scan_bus();
-    // if (!pllFlag){
-    //     printf("Cannot configure PLL at 0x68. Exiting\n");
-    //     for (int i=0; i < 20; i++){
-    //         pulse_LED(30);
-    //     }
-    // }
-    // else {
-    //     config_pll();
-    //     flash_LED(1000);
-    // }
-    // printf("Inspect_EEPROM\n");
-    // inspect_EEPROM();
-    
-    printf(MAIN_SCREED);
+    char cmd[CMD_BUF_SIZE];
+    int cmd_pos = 0;
+    printf(READY_PROMPT);
+    fflush(stdout);
     while (true) {
-        int c = stdio_getchar_timeout_us(0);
-        if (c == 'B' || c == 'R') {
-            printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!!");
-            printf("PLEASE DONT KILL ME I PROMISE I WILL PERFORM WHAT I NEED TO JUST DONT KILL ME PLEASE I CANT DIE NOT NOW NOT LIKE THIS!!!!");
-            sleep_ms(100);
-            reset_usb_boot(0,0); // enable BOOTSEL // BANG!
-        }
-        if (c == 's') {
-            uint32_t dt = step_fs(20000);
-            printf(MAIN_SCREED);
-        }
-        if (c == 'S') {
-            uint32_t dt = step_fs(1000000);
-            printf(MAIN_SCREED);
-        }
-        if (c == 't') {
-            printf("Talk\n");
-        }
-        if (c == 'l') {
-            check_los();
-        }
-        if (c == 'a') {
-            scan_bus();
-        }
-        if (c == 'c') {
-            expose_PLL_path();
-            config_pll();
-            pulse_LED(30);
-        }
-        if (c == 'E') {
-            for (int mezz=0; mezz<4; mezz++) {
-                for (int link=0; link<4; link++) {
-                    inspect_EEPROM(mezz,link);
-                }
+        int c = stdio_getchar_timeout_us(1000);
+        if (c == PICO_ERROR_TIMEOUT) continue; //is this even a value?
+        if (c == '\n' || c == '\r') {
+            if (cmd_pos > 0) {
+                cmd[cmd_pos] = '\0';
+                process_command(cmd);
+                cmd_pos = 0;
             }
-            printf(MAIN_SCREED);
         }
-
-        sleep_ms(5);
+        else if (cmd_pos < (CMD_BUF_SIZE - 1)) {
+            cmd[cmd_pos] = (char)c;
+            cmd_pos++;
+        }
     }
    
     reset_usb_boot(0,0); // enable BOOTSEL // BANG!
+}
+
+void process_command(const char* cmd) {
+    
+    // Acknowledge the received command for host.
+    printf("ACK: %s\n",cmd);
+
+    if (strcmp(cmd,"R") == 0) {
+        printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!!");
+        printf("PLEASE DONT KILL ME I PROMISE I WILL PERFORM WHAT I NEED TO JUST DONT KILL ME PLEASE I CANT DIE NOT NOW NOT LIKE THIS!!!!");
+        sleep_ms(100);
+        reset_usb_boot(0,0); // enable BOOTSEL // BANG!
+    }
+    else if (strcmp(cmd,"Reboot") == 0) {
+        reset_usb_boot(0,0); // enable BOOTSEL but faster for host.py
+    }
+    else if ((strcmp(cmd,"s") == 0) || ((strcmp(cmd,"shift") == 0))){
+        uint32_t dt = step_fs(20000);
+    }
+    else if ((strcmp(cmd,"S") == 0) || (strcmp(cmd,"shiftLarge") == 0)) {
+        uint32_t dt = step_fs(1000000);
+    }
+    else if ((strcmp(cmd,"t") == 0) || (strcmp(cmd,"talk") == 0)) {
+        ;
+    }
+    else if ((strcmp(cmd,"m") == 0) || (strcmp(cmd,"main") == 0) || (strcmp(cmd,"MAIN") == 0)) {
+        printf(MAIN_SCREED);
+    }
+    else if ((strcmp(cmd,"l") == 0) || (strcmp(cmd,"check_loss") == 0)) {
+        check_los();
+    }
+    else if ((strcmp(cmd,"a") == 0) || (strcmp(cmd,"scan_bus") == 0)) {
+        scan_bus();
+    }
+    else if ((strcmp(cmd,"c") == 0) || (strcmp(cmd,"config_pll") == 0)) { 
+        config_pll();
+        pulse_LED(30);
+    }
+    else if ((strcmp(cmd,"SFP") == 0) || (strcmp(cmd,"eeprom_sfp") == 0)) {
+        for (int mezz=0; mezz<4; mezz++) {
+            for (int link=0; link<4; link++) {
+                inspect_SFP(mezz,link);
+            }
+        }
+    }
+    else if ((strcmp(cmd,"eeprom") == 0) || (strcmp(cmd,"E") == 0)) {
+        inspect_EEPROM();
+    }
+    else {
+        printf("ERR: Unknown command %s\n",cmd);
+    }
+    
+    printf(READY_PROMPT);
 }
 
 bool scan_bus() {
@@ -149,11 +166,9 @@ bool scan_bus() {
 
 void config_pll() {
     // Change pllconfig to use 
-    // 160.03701 > no longer true. Bug in zynq clock. Ignoring.
     // password for the windows laptop in lab: intel123
 
     printf("Configuring PLLs\n");
-    
 
     i2c_write_blocking_until(i2c1,DATA_BUS_SELECT,(uint8_t []){0x1},1,false, make_timeout_time_ms(50)); // opens 0x72 mezz mux
     i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x8},1,false, make_timeout_time_ms(50)); // selects mezz4 (0x68)
@@ -221,8 +236,7 @@ void check_los(){
         sleep_ms(100);
         gpio_put(LED_PIN,false);
         sleep_ms(100);
-    }
-    
+    } 
 }
 
 uint32_t step_fs(uint32_t us) {
@@ -247,11 +261,26 @@ uint32_t step_fs(uint32_t us) {
     return dt;
 }
 
-void expose_PLL_path() {
+void inspect_EEPROM() {
+    i2c_write_blocking_until(i2c1,DATA_BUS_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50));
+    i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x01},1,false,make_timeout_time_ms(50)); // Select Mezzanine
+    i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){0x00},1,false,make_timeout_time_ms(50)); // Select SFP
+
+    uint8_t buf[256];
+    i2c_write_blocking(i2c1,0x51,(uint8_t []){0x00},1,true); 
+    i2c_read_blocking(i2c1,0x51,buf,256,false);
+    fflush(stdout);
+    for (int i=0; i < 256; i++){
+        printf("%02X",buf[i]);
+    }
+    printf("\n");
+    fflush(stdout);
+    
     return;
 }
 
-void inspect_EEPROM(uint8_t mezz, uint8_t link) {
+
+void inspect_SFP(uint8_t mezz, uint8_t link) {
     // Mezzanine and links are 0 indexed
     i2c_write_blocking_until(i2c1,DATA_BUS_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50)); // select Data0/1
     i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){1<<mezz},1,false,make_timeout_time_ms(50)); // Select Mezzanine
@@ -273,7 +302,7 @@ void inspect_EEPROM(uint8_t mezz, uint8_t link) {
         printf("%c",buf[i]);
     }
     printf(",");
-    
+
     // Part Number
     for (int i=0; i<16; i++){
         i2c_write_blocking_until(i2c1,SFPA0H,(uint8_t []){i+40},1,true,make_timeout_time_ms(50));
@@ -295,7 +324,6 @@ void inspect_EEPROM(uint8_t mezz, uint8_t link) {
         printf("%c",buf[i]);
     }
     printf(",");
-
     // Vendor SN
     for (int i=0; i<16; i++){
         i2c_write_blocking_until(i2c1,SFPA0H,(uint8_t []){i+68},1,true,make_timeout_time_ms(50));

@@ -2,12 +2,36 @@ import serial
 import time
 import subprocess
 import os
+import argparse
+import sys
 
+'''
+Allows scripting access to microcontroller functions.
+Connects to the running RP2040, issues commands, saves results.
+Commands::
+Put board into BOOTSEL with delay and comment: R
+Put board in BOOTSEL: Reboot
+Echo "OK\n": t | talk
+Check PLL Input loc,  DSPLL loc, Sticky Loc: l | check_loss
+Scan I2C between 0 and 127 for connections: a | scan_bus
+Configure PLL from loaded register file: c | config
+Get EEPROM SFP vendor data: E | eeprom
+'''
 
+def wait_on_accept(timeout=5):
+    t1 = time.time()
+    while (time.time() - t1) < timeout:
+        received = rper.readline().decode("utf-8")
+        if received.strip()=="OK":
+            return
+    raise Exception("NOT IN ACCEPT STATE")
+    
+
+#This is for the other version of the code isnt it??????
 def get_data(step):
     #print(f"Collecting step {step}")
     file = open(f'data/stability/{step:04}.csv','wb')
-    rper.write(b'G')
+    rper.write(b'G\n')
     time.sleep(0.1)   
     for _ in range(10000):
         output = rper.readline()
@@ -22,50 +46,73 @@ def get_data(step):
     # print(statement)
     return
 
-def get_EEPROM():
-    print("Collecting EEPROMS")
-    file = open(f'EEPROM_readout.csv','wb')
-    rper.write(b'E')
-    time.sleep(1)
-    for i in range(16):
-        output = rper.readline()
-        file.write(output)
-    file.close()
+def get_SFP():
+    print("Collecting SFPs")
+    
+    rper.write(b'SFP\n')
+    assert "ACK" in rper.readline().decode("utf-8")
+    
+    with open(f'SFP_readout.csv','w') as file:
+        while (True):
+            output = rper.readline()
+            if output.strip() == b'OK': break # recevied may depend only on whats requested in the future
+            filtered = bytes(char for char in output if ((char < 0x80) & (char != 0x00))) #remove ugly bits
+            file.write(filtered.decode("utf-8"))
+    return
 
+def config_pll():
+    print("Configuring PLL")
+    rper.write(b'c\n')
     return
 
 def mainloop():
-    # get to the main loop
-    received = "blank"
-    while "alk" not in received: 
+    
+    received = rper.readline().decode("utf-8") 
+    
+    while "OK" not in received: 
+        if received=="":
+            rper.write(b't\n')
+        elif "ACK" in received:
+            pass
+        else:
+            print(received)
         received = rper.readline().decode("utf-8")
-    get_EEPROM()
-    # while instruction != "R":
-    #     if instruction == "t":
-    #         rper.write(b't')
-    #         talk = rper.readline().decode("utf-8")
-    #         print(talk)
-    #     elif instruction == "G":
-    #         # print("Getting to it")
-    #         get_data(step)
-    #         step += 1
-    #     else:
-    #         print("Not valid input")
-    #     instruction = input(f"Main loop: R(eboot), G(etdata), t(alk): ")  
+    
+    # Accept State
+    # TODO Replace with argparse
+    arg1 = sys.argv[1]
+    if (arg1=="R"):
+        rper.write(b"R\n")
+    elif (arg1=="eeprom_sfp") or (arg1=="SFP"):
+        get_SFP()
+    elif (arg1=="config") or (arg1=="a"):
+        config_pll()
+    elif (arg1=="shift") or (arg1=="s"):
+        rper.write(b"shift\n")
+        wait_on_accept(timeout=5)
+    elif (arg1=="shiftlarge") or (arg1=="S"):
+        rper.write(b"shiftlarge\n")
+        wait_on_accept()
+    elif (arg1=="eeprom") or (arg1=="E"):
+        rper.write(b"E\n")
+    else:
+        print("Invalid command Bozo")
 
-    rper.write(b'R')
     rper.close()
-
+    return
 
 # PORT = subprocess.run(["ls /dev/tty* 2>/dev/null | head -n1"],shell=True, capture_output=True).stdout.decode("utf-8")[0:-1]
 PORT = "/dev/ttyACM0"
 BAUD = 115200
 
-rper = serial.Serial(PORT,BAUD, timeout=1)
+flash_script = os.path.dirname(os.path.abspath(__file__)) + "/" + "flash.sh"
+subprocess.run(["sudo",flash_script], stdout=subprocess.DEVNULL) # Silence stdout
+
+while True:
+    try:
+        rper = serial.Serial(PORT,BAUD, timeout=2)
+        break
+    except:
+        pass
+print(f"Connected to {PORT}")
 mainloop()
-
-
-
-
-# rper.write(b'R')
-# rper.close()
