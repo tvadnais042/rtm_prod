@@ -6,16 +6,23 @@ import argparse
 import sys
 
 '''
-Allows scripting access to microcontroller functions.
-Connects to the running RP2040, issues commands, saves results.
-Commands::
-Put board into BOOTSEL with delay and comment: R
-Put board in BOOTSEL: Reboot
-Echo "OK\n": t | talk
-Check PLL Input loc,  DSPLL loc, Sticky Loc: l | check_loss
-Scan I2C between 0 and 127 for connections: a | scan_bus
-Configure PLL from loaded register file: c | config
-Get EEPROM SFP vendor data: E | eeprom
+Microcontroller function scripting access.
+
+Commands:
+
+    R: Put board into BOOTSEL with delay and comment
+
+    Reboot: Put board in BOOTSEL
+
+    t | talk: Echo "OK\n"
+
+    l | check_loss: Check PLL Input loc,  DSPLL loc, Sticky Loc
+
+    a | scan_bus: Scan I2C between 0 and 127 for connections
+
+    c | config: Configure PLL from loaded register file
+
+    E | eeprom: Get EEPROM SFP vendor data
 '''
 
 def wait_on_accept(timeout=5):
@@ -63,6 +70,7 @@ def get_SFP():
 def config_pll():
     print("Configuring PLL")
     rper.write(b'c\n')
+    wait_on_accept()
     return
 
 def mainloop():
