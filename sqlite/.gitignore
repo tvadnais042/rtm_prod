@@ -1,3 +1,4 @@
 live_tests/*
 test.db
 .test.db
+__pycache__/*

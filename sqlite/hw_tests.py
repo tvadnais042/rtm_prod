@@ -38,12 +38,12 @@ def parse_board_ID(board_ID):
         raise ValueError(f"Invalid BoardID format.")
     return TYPE, VERSION, NUM
 
-def insert_board(db_path, board_ID):
+def insert_board(db_path, board_ID, power_draw):
     con, cur = concur(db_path)
     TYPE, VERSION, NUM = parse_board_ID(board_ID)
     cur.execute('''
         INSERT INTO Boards(board_ID, type, version, num, power_draw)
-        VALUES(?,?,?,?,?)''',(board_ID,TYPE,VERSION,NUM,0.5))
+        VALUES(?,?,?,?,?)''',(board_ID,TYPE,VERSION,NUM,power_draw))
     con.commit()
     return
 
@@ -127,10 +127,15 @@ def read_board(db_path,board_ID):
 
     return
 
+def board_exists(db_path: str, board_ID: str) -> bool:
+    """Returns true if a board for the given ID exists"""
+    con, cur = concur(db_path)
+    df = cur.execute("SELECT 1 FROM Boards WHERE board_ID = ?",(board_ID,))
+    return df.fetchone() is not None
     
 def populate(db_path, board_ID):
     try:
-        insert_board(db_path,board_ID)
+        insert_board(db_path,board_ID,0.5)
     except:
         pass
 
