@@ -22,7 +22,7 @@ Commands:
 
     c | config: Configure PLL from loaded register file
 
-    E | eeprom: Get EEPROM SFP vendor data
+    E | eeprom: Get EEPROM Readout
 '''
 
 def wait_on_accept(timeout=5):
@@ -67,11 +67,30 @@ def get_SFP():
             file.write(filtered.decode("utf-8"))
     return
 
+def get_EEPROM():
+    print("Collecting EEPROMS")
+    target = sys.argv[2]
+    if len(sys.argv) > 3:
+        sfp_num = sys.argv[3] #prob a better way of handling this
+    else:
+        sfp_num = ""
+    rper.write(f"eeprom {target} {sfp_num}\n".encode("utf-8")) #encode to get bytes object.
+    assert "ACK" in rper.readline().decode("utf-8")
+    with open(f"eeprom_{target}{sfp_num}.csv",'w') as file:
+        while (True):
+            output = rper.readline()
+            if output.strip() == b'OK': break
+            file.write(output.decode("utf-8"))
+    return
+
 def config_pll():
     print("Configuring PLL")
     rper.write(b'c\n')
     wait_on_accept()
     return
+
+
+
 
 def mainloop():
     
@@ -91,18 +110,16 @@ def mainloop():
     arg1 = sys.argv[1]
     if (arg1=="R"):
         rper.write(b"R\n")
-    elif (arg1=="eeprom_sfp") or (arg1=="SFP"):
+    elif (arg1=="sfp") or (arg1=="SFP"):
         get_SFP()
     elif (arg1=="config") or (arg1=="a"):
         config_pll()
     elif (arg1=="shift") or (arg1=="s"):
-        rper.write(b"shift\n")
+        val = sys.argv[2]
+        rper.write(f"shift {val}\n".encode("utf-8"))
         wait_on_accept(timeout=5)
-    elif (arg1=="shiftlarge") or (arg1=="S"):
-        rper.write(b"shiftlarge\n")
-        wait_on_accept()
     elif (arg1=="eeprom") or (arg1=="E"):
-        rper.write(b"E\n")
+        get_EEPROM()
     else:
         print("Invalid command Bozo")
 

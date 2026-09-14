@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "pico/stdlib.h"
 #include "pico/bootrom.h"
 #include "hardware/i2c.h"
@@ -29,15 +30,16 @@
 
 #define CMD_BUF_SIZE 64 
 #define READY_PROMPT "OK\n"
-#define MAIN_SCREED "MAIN: (R)eboot, (S)hiftLarge, (s)hift_20ms, (c)onfig_pll, (l)os_check, (t)alk, sc(a)n_bus, (E)eprom\n"
+#define MAIN_SCREED "Main: (R)eboot\n(s)hift <Value>\n(c)onfig_pll\n(l)os_check\n(t)alk\nscan_(b)us\n(E)eprom\n(w)rite <addr> <value>\n"
 
-void process_command(const char* cmd);
+void process_command(char* cmd);
 void config_pll();
 bool scan_bus();
 void check_los();
 uint32_t step_fs(uint32_t us);
 void inspect_SFP(uint8_t mezz, uint8_t link);
 void inspect_EEPROM();
+void quick_write(uint8_t addr, uint8_t value);
 void flash_LED(uint32_t ms);
 void pulse_LED(uint32_t ms);
 
@@ -78,6 +80,7 @@ void main()
     while (true) {
         int c = stdio_getchar_timeout_us(1000);
         if (c == PICO_ERROR_TIMEOUT) continue; //is this even a value?
+        // printf("%c",c);
         if (c == '\n' || c == '\r') {
             if (cmd_pos > 0) {
                 cmd[cmd_pos] = '\0';
@@ -94,54 +97,73 @@ void main()
     reset_usb_boot(0,0); // enable BOOTSEL // BANG!
 }
 
-void process_command(const char* cmd) {
-    
-    // Acknowledge the received command for host.
-    printf("ACK: %s\n",cmd);
+void process_command(char* cmd) {
+    printf("ACK\n");
+    char* tok = strtok(cmd," ");
 
-    if (strcmp(cmd,"R") == 0) {
+    if (tok == NULL) {
+        printf("Empty Command\n");
+    }
+    else if (strcmp(tok,"R") == 0) {
         printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!!");
         printf("PLEASE DONT KILL ME I PROMISE I WILL PERFORM WHAT I NEED TO JUST DONT KILL ME PLEASE I CANT DIE NOT NOW NOT LIKE THIS!!!!");
         sleep_ms(100);
         reset_usb_boot(0,0); // enable BOOTSEL // BANG!
     }
-    else if (strcmp(cmd,"Reboot") == 0) {
-        reset_usb_boot(0,0); // enable BOOTSEL but faster for host.py
+    else if (strcmp(tok,"Reboot") == 0) {
+        reset_usb_boot(0,0); // enable BOOTSEL No Delay
     }
-    else if ((strcmp(cmd,"s") == 0) || ((strcmp(cmd,"shift") == 0))){
-        uint32_t dt = step_fs(20000);
+    else if ((strcmp(tok,"s") == 0) || ((strcmp(tok,"shift") == 0))){
+        char *arg = strtok(NULL," ");
+        if (arg==NULL) {
+            printf("Provide Shift value\n");
+        }
+        else {
+            uint32_t delay = strtoul(arg,NULL,10);
+            printf("Shifting %d",delay);
+            uint32_t dt = step_fs(delay);
+        }
     }
-    else if ((strcmp(cmd,"S") == 0) || (strcmp(cmd,"shiftLarge") == 0)) {
-        uint32_t dt = step_fs(1000000);
-    }
-    else if ((strcmp(cmd,"t") == 0) || (strcmp(cmd,"talk") == 0)) {
+    else if ((strcmp(tok,"t") == 0) || (strcmp(tok,"talk") == 0)) {
         ;
     }
-    else if ((strcmp(cmd,"m") == 0) || (strcmp(cmd,"main") == 0) || (strcmp(cmd,"MAIN") == 0)) {
+    else if ((strcmp(tok,"m") == 0) || (strcmp(tok,"main") == 0) || (strcmp(tok,"MAIN") == 0)) {
         printf(MAIN_SCREED);
     }
-    else if ((strcmp(cmd,"l") == 0) || (strcmp(cmd,"check_loss") == 0)) {
+    else if ((strcmp(tok,"l") == 0) || (strcmp(tok,"check_loss") == 0)) {
         check_los();
     }
-    else if ((strcmp(cmd,"a") == 0) || (strcmp(cmd,"scan_bus") == 0)) {
+    else if ((strcmp(tok,"b") == 0) || (strcmp(tok,"scan_bus") == 0)) {
         scan_bus();
     }
-    else if ((strcmp(cmd,"c") == 0) || (strcmp(cmd,"config_pll") == 0)) { 
+    else if ((strcmp(tok,"c") == 0) || (strcmp(tok,"config_pll") == 0)) { 
         config_pll();
         pulse_LED(30);
     }
-    else if ((strcmp(cmd,"SFP") == 0) || (strcmp(cmd,"eeprom_sfp") == 0)) {
+    else if ((strcmp(tok,"SFP") == 0) || (strcmp(tok,"sfp") == 0)) {
         for (int mezz=0; mezz<4; mezz++) {
             for (int link=0; link<4; link++) {
                 inspect_SFP(mezz,link);
             }
         }
     }
-    else if ((strcmp(cmd,"eeprom") == 0) || (strcmp(cmd,"E") == 0)) {
+    else if ((strcmp(tok,"eeprom") == 0) || (strcmp(tok,"E") == 0)) {
         inspect_EEPROM();
     }
+    else if ((strcmp(tok,"w") == 0) || (strcmp(tok,"write") == 0)) {
+        char *addr_str = strtok(NULL," ");
+        char *value_str = strtok(NULL," ");
+        if ((addr_str == NULL) || (value_str == NULL)) {
+            printf("NULL ADDR or VALUE\n");
+        }
+        else {
+            int8_t addr = strtoul(addr_str,NULL,16);
+            uint8_t value = strtoul(value_str,NULL,16);
+            quick_write(addr, value);
+        }
+    }
     else {
-        printf("ERR: Unknown command %s\n",cmd);
+        printf("ERR: Unknown command %s\n",tok);
     }
     
     printf(READY_PROMPT);
@@ -261,21 +283,57 @@ uint32_t step_fs(uint32_t us) {
     return dt;
 }
 
-void inspect_EEPROM() {
-    i2c_write_blocking_until(i2c1,DATA_BUS_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50));
-    i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x01},1,false,make_timeout_time_ms(50)); // Select Mezzanine
-    i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){0x00},1,false,make_timeout_time_ms(50)); // Select SFP
+void quick_write(uint8_t addr, uint8_t value) {
+    printf("Writing 0x%02X to 0x%02X\n",value,addr);
+    i2c_write_blocking_until(i2c1,addr,(uint8_t []){value},1,false,make_timeout_time_ms(50));
+    return;
+}
 
+void inspect_EEPROM() {
+    char* target = strtok(NULL," ");
+    if (target == NULL) {
+        printf("Target Not Provided.\n");
+        return;
+    }
+
+    i2c_write_blocking_until(i2c1,DATA_BUS_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50)); 
+    uint8_t addr;
+    
+    if (strcmp(target,"MMC") == 0) {
+        addr = MMC_ADDR;
+    }
+    else if (strcmp(target,"SFP") == 0) {        
+        i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50));
+        char* target_sfp = strtok(NULL," ");
+        addr = SFPA0H;
+        if (target_sfp == NULL) {
+            i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){0x00},1,false,make_timeout_time_ms(50));
+        }
+        else {
+            uint32_t sfp_num = strtoul(target_sfp,NULL,10);
+            if (sfp_num > 3) {
+                printf("Provided SFP is not in range");
+                return;
+            }
+            i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){1<<sfp_num},1,false,make_timeout_time_ms(50));
+        }
+
+    }
+    else {
+        printf("Unknown Target.\n");
+        return;
+    }
+    
     uint8_t buf[256];
-    i2c_write_blocking(i2c1,0x51,(uint8_t []){0x00},1,true); 
-    i2c_read_blocking(i2c1,0x51,buf,256,false);
+    i2c_write_blocking(i2c1,addr,(uint8_t []){0x00},1,true); 
+    i2c_read_blocking(i2c1,addr,buf,256,false);
     fflush(stdout);
     for (int i=0; i < 256; i++){
         printf("%02X",buf[i]);
     }
     printf("\n");
     fflush(stdout);
-    
+
     return;
 }
 
@@ -337,6 +395,7 @@ void inspect_SFP(uint8_t mezz, uint8_t link) {
 
     return;
 }
+
 void pulse_LED(uint32_t ms) {
     gpio_put(LED_PIN,true);
     sleep_ms(ms);

@@ -54,11 +54,16 @@ CREATE TABLE IF NOT EXISTS eye_diagrams(
 #SFP serial when we could use the DC plugs? What do I say there?
 #UMN_BALUN2_SFP_TX ? 
 
-sfps = '''
-CREATE TABLE IF NOT EXISTS sfps(
+#slot 0 refers to the board EEPROM. 1-4 for SFP links 0-3 EEPROMS.
+eeproms = '''
+CREATE TABLE IF NOT EXISTS eeproms(
     board_ID TEXT NOT NULL PRIMARY KEY,
-    mezzanine INT NOT NULL,
-    testnull INT
+    data_blob BLOB NOT NULL,
+    slot INT NOT NULL CHECK(0 <= slot AND slot <= 4),    
+    FOREIGN KEY (board_ID)
+        REFERENCES Boards (board_ID)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) WITHOUT ROWID
 '''
 
@@ -74,8 +79,8 @@ CREATE TABLE IF NOT EXISTS ddmtds(
 )
 '''
 
-ALL_TABLES = [Boards, BER_tests, eye_diagrams, sfps]
-ALL_TABLE_NAMES = ["Boards","BER_tests","eye_diagrams","sfps"]
+ALL_TABLES = [Boards, BER_tests, eye_diagrams, eeproms]
+ALL_TABLE_NAMES = ["Boards","BER_tests","eye_diagrams","eeproms"]
 
 def concur(db_path: str, foreign_keys: bool = True) -> None:
     con = sqlite3.connect(db_path)

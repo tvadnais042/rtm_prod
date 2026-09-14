@@ -4,7 +4,6 @@ import numpy as np
 import subprocess
 from datetime import datetime
 
-from schema import create_schema, nuke, mininuke
 '''
 Considerations:
 
@@ -29,13 +28,39 @@ def concur(db_path, foreign_keys=True):
     cur = con.cursor()
     return con, cur
 
+def get_power(message):
+    while True:
+        power = float(input(message))
+        if power < 0:
+            print(f"We Respect Entropy Here! (Power must be >= 0) ")
+            continue
+        else:
+            return power
+
+def get_user_board(DB,board_type):
+    assert board_type.strip().upper() in ["RTM","MMC","DDMTD","SFP","SMA","CDR"], "Not valid board type" # just to make sure I dont mistype in the steps
+    while True:
+        user_board = input(f"{board_type} Board ID: ").strip().upper()
+        try:
+            TYPE,VERSION,NUM = parse_board_ID(user_board) # check if valid Format
+        except ValueError as exception: 
+            print(exception)
+            continue
+
+        if TYPE != board_type:
+            print(f"Board {user_board} isn't of type {board_type}")
+        else: 
+            break
+    return user_board
+
 def parse_board_ID(board_ID):
     assert type(board_ID) == str, "board_ID must be str"
+    board_ID = board_ID.strip().upper()
     matched = re.match(r"([A-Za-z]+)(\d{2})(\d{5})",board_ID)
     if matched:
         TYPE, VERSION, NUM = matched.groups()
     else:
-        raise ValueError(f"Invalid BoardID format.")
+        raise ValueError("Invalid ID Format")
     return TYPE, VERSION, NUM
 
 def insert_board(db_path, board_ID, power_draw):
@@ -51,8 +76,6 @@ def insert_BER(db_path,board_ID,link,mezzanine,time_start,rate,bits_transmitted,
                PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM):
     con, cur = concur(db_path)
     
-    # with open("BER_results_0","r") as file:
-
     cur.execute('''
         INSERT INTO BER_tests(
         board_ID,link,mezzanine,time_start,rate,bits_transmitted,errors,error_rate,PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM)
@@ -86,13 +109,13 @@ def insert_eye(db_path, board_ID, link, SFP_serial, eye_csv, eye_img=None):
     con.commit()
     return
 
-def insert_eeprom(db_path, board_ID, mezzanine, testnull):
+def insert_eeprom(db_path, board_ID, data_blob, slot):
     con,cur = concur(db_path)
     cur.execute('''
         INSERT INTO eeproms(
-        board_ID,mezzanine,testnull)
+        board_ID,data_blob,slot)
         VALUES(?,?,?)''',
-        (board_ID,mezzanine,testnull)
+        (board_ID,data_blob,slot)
     )
     con.commit()
     return
@@ -102,19 +125,20 @@ def insert_ddmtd(db_path, board_ID):
 
     return
 
-def parse_eye_csv(csv_path): #Deprecated?
-    # extracts key value pairs from eye_csv
+def parse_eye_csv(csv_path):
     # NOTE do I want to include the entries as columns? Is this feature creap?
     with open(csv_path, 'r') as file:
-        csv_data = np.genfromtxt(file, delimiter=',', max_rows=19, dtype=None)
+        csv_data = np.genfromtxt(file, delimiter=',', max_rows=19, encoding='UTF-8', dtype=None)
     csv_parsed = dict(csv_data.tolist())
     csv_parsed.pop("Scan Name")
     csv_parsed.pop("Misc Info")
-
+    csv_parsed.pop("SW Version")
+    csv_parsed.pop("Reset RX After Applying Settings")
+    # ATP clean the types of everything you want
     # print(csv_parsed)
     return csv_parsed
 
-def read_board(db_path,board_ID):
+def read_board_status(db_path,board_ID):
     con,cur = concur(db_path)
     df = cur.execute(f"SELECT * FROM Boards WHERE board_ID = '{board_ID}'") 
     print(*df.fetchall(),sep='\n')
@@ -132,18 +156,19 @@ def board_exists(db_path: str, board_ID: str) -> bool:
     con, cur = concur(db_path)
     df = cur.execute("SELECT 1 FROM Boards WHERE board_ID = ?",(board_ID,))
     return df.fetchone() is not None
-    
-def populate(db_path, board_ID):
-    try:
-        insert_board(db_path,board_ID,0.5)
-    except:
-        pass
 
-    # subprocess.run(["./get_SFP.sh"]) # Collect from RTM
-    with open(f"live_tests/EEPROM_readout.csv","r") as file:
+
+def read_eyes(DB,board):
+    with open(f"live_tests/SFP_readout.csv","r") as file:
         SFP_plugs = np.genfromtxt(file, delimiter=',',dtype=str)
 
-    # subprocess.run(["./get_ber.sh"]) # Collect from lab
+    for i in range(4):
+        assert i==int(SFP_plugs[i][3])
+        SFP_plug = str(SFP_plugs[i][5]).strip() + "," + str(SFP_plugs[i][7]).strip()
+        print(i, SFP_plug)
+        insert_eye(DB,board,i,SFP_plug,f"live_tests/Scan_{i}.csv")
+
+def read_BER(DB,board):
     for i in range(4):
         with open(f"live_tests/BER_results_1_{i}.csv", 'r') as file:
             csv_data = np.genfromtxt(file, delimiter=',', dtype=str)
@@ -160,9 +185,9 @@ def populate(db_path, board_ID):
         TXPOST = float(csv_data["TXPOST"].split()[0])
         TXDIFFSWING = int(csv_data["TXDIFFSWING"].split()[0])
         RXTERM = int(csv_data["RXTERM"].split()[0])
-        insert_BER(db_path,board_ID,link,mezzanine,time_start,rate,bits_transmitted,errors,error_rate,PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM)
-   
-    # subprocess.run(["./get_gpio.sh"]) # Collect from lab
+        insert_BER(DB,board,link,mezzanine,time_start,rate,bits_transmitted,errors,error_rate,PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM)
+
+def read_GPIO(DB,board):
     with open(f"live_tests/vio_out.csv", 'r') as file:
         csv_data = np.genfromtxt(file,delimiter=',', dtype=str)
         bits_transmitted = int(csv_data[-4][1],base=16)
@@ -171,28 +196,9 @@ def populate(db_path, board_ID):
             mezz = line[0][10]
             link = line[0][12]
             err = int(line[1],base=16)
-            insert_BER(db_path,board_ID,link,mezz,time_start,0.160,bits_transmitted,err,(1+err) / bits_transmitted,"PRBS 31-bit",None,None,None,None)
+            insert_BER(DB,board,link,mezz,time_start,0.160,bits_transmitted,err,(1+err) / bits_transmitted,"PRBS 31-bit",None,None,None,None)
 
-
-    # subprocess.run(["./get_eyes.sh"]) # Collect from lab
-    for i in range(4):
-        assert i==int(SFP_plugs[i][3])
-        SFP_plug = str(SFP_plugs[i][5]).strip() + "," + str(SFP_plugs[i][7]).strip()
-        insert_eye(db_path,board_ID,i,SFP_plug,f"live_tests/Scan_{i}.csv")
-
-    # subprocess.run(["./get_eeprom.sh"]) # Collect from lab
-
-
-
-    # subprocess.run(["./get_ddmtd.sh"]) # Collect from lab
-    # files saved so now lets load it all in.
-
-
+def read_eeproms(DB,board):
+    
+    # with open(f"")
     return
-
-DB = ".test.db"
-BOARD = "RTM0300001"
-# nuke(DB)
-create_schema(DB)
-populate(DB,BOARD)
-read_board(DB,BOARD)

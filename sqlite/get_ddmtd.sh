@@ -4,14 +4,11 @@
 # activate stage_4
 
 # program PLL
-ssh -T lab <<-'EOF'
-    cd Documents/rtm_prod/rtmMC/
-    sudo ./flash
-    python pll_host.py
-    
-EOF
+cd Documents/rtm_prod/rtmMC/
+sudo ./flash
+python pll_host.py
 
-
+# TODO
 # Compile on Kria
 # Collect from Kria
 # process and store output
