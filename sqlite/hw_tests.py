@@ -198,7 +198,14 @@ def read_GPIO(DB,board):
             err = int(line[1],base=16)
             insert_BER(DB,board,link,mezz,time_start,0.160,bits_transmitted,err,(1+err) / bits_transmitted,"PRBS 31-bit",None,None,None,None)
 
-def read_eeproms(DB,board):
-    
-    # with open(f"")
-    return
+def read_eeproms(DB,board,slot):
+    name,_,_ = parse_board_ID(board)
+
+    if any(word in name for word in ["DDMTD","RTM","MMC","SMA"]):
+        slot = ""
+
+    with open(f"live_tests/eeprom_{name}{slot}.csv") as file:
+        csv_data = np.genfromtxt(file,delimiter=',',dtype=bytes)
+        # print(csv_data)
+        insert_eeprom(DB,board,csv_data,0 if slot == "" else slot)
+

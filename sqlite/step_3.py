@@ -1,28 +1,27 @@
-from hw_tests import get_user_board, insert_BER, board_exists, read_BER, read_eyes, read_eeproms
+from hw_tests import get_user_board, board_exists, read_BER, read_eyes, read_GPIO
 import subprocess, os
 import numpy as np
 
-DB = ".test.db"
-board = get_user_board(DB,"RTM")
+# Config Constants
+from config import *
 
+board = get_user_board(DB,"RTM")
 assert board_exists(DB,board), f"{board} not in database. aborting test"
 
-## Instantiate board
-# transfer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","payload_transfer_scripts")
-# subprocess.run(["bash","transfer_payload.sh","step_3"],cwd=transfer_path)
+# Instantiate tester 
+transfer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","payload_transfer_scripts")
+subprocess.run(["bash","transfer_payload.sh","step_3"],cwd=transfer_path)
 
-## Run tests
-subprocess.run(["./get_SFP.sh"]) # Collect from RTM
-subprocess.run(["./get_eeproms.sh","MMC"])
-subprocess.run(["./get_eyes.sh"])
-subprocess.run(["./get_ber.sh"])
-subprocess.run(["./get_gpio.sh"])
+# Run tests
+subprocess.run(["./get_eyes.sh",EYE_PRECISION_RTM])
+subprocess.run(["./get_ber.sh",BER_PRECISION_RTM])
+subprocess.run(["./get_gpio.sh",GPIO_PRECISION_RTM])
+# TODO Validate GPIO test IN LAB
 
-## Read into database
-# read_eeproms(DB,board)
-# read_eyes(DB,board)
-# read_BER(DB,board)
-# read_GPIO(DB,board)
+# Read into database
+read_eyes(DB,board)
+read_BER(DB,board)
+read_GPIO(DB,board)
 
-## Cleanup intermediates
-# subprocess.run(["rm","live_tests/*"]) 
+# Cleanup intermediates
+subprocess.run(["rm","live_tests/*"]) 

@@ -21,7 +21,7 @@
 // 0x20?
 // 0x21?
 //#define ADC_ADDR 0x40
-#define SFPA0H 0x50 
+#define SFPA0H 0x50
 #define MMC_ADDR 0x51
 #define PLL_ADDR 0x68 // address of PLL on RTMV2
 #define DATA_BUS_SELECT 0x70
@@ -296,28 +296,39 @@ void inspect_EEPROM() {
         return;
     }
 
+    char* target_ID = strtok(NULL," "); // 0-4. 0 is Base. 1-4 for SFP/CDR
     i2c_write_blocking_until(i2c1,DATA_BUS_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50)); 
     uint8_t addr;
     
     if (strcmp(target,"MMC") == 0) {
         addr = MMC_ADDR;
     }
-    else if (strcmp(target,"SFP") == 0) {        
-        i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50));
-        char* target_sfp = strtok(NULL," ");
-        addr = SFPA0H;
-        if (target_sfp == NULL) {
-            i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){0x00},1,false,make_timeout_time_ms(50));
-        }
+    else if (strcmp(target,"DDMTD") == 0) {
+        addr = 0x50;
+        i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x8},1,false,make_timeout_time_ms(50));
+    }
+    else if (strcmp(target,"SMA") == 0) {
+        addr = 0x50;
+        i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x2},1,false,make_timeout_time_ms(50));
+    }
+    else if ((strcmp(target,"SFP") == 0) || (strcmp(target,"CDR"))) {
+        if (strcmp(target,"SFP") == 0) {
+            i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50));
+        }   
         else {
-            uint32_t sfp_num = strtoul(target_sfp,NULL,10);
-            if (sfp_num > 3) {
+            i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x4},1,false,make_timeout_time_ms(50));
+        }     
+        
+        addr = SFPA0H;
+        
+        if (target_ID != NULL) {
+            uint32_t sfp_num = strtoul(target_ID,NULL,10);
+            if (sfp_num > 4) {
                 printf("Provided SFP is not in range");
                 return;
             }
-            i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){1<<sfp_num},1,false,make_timeout_time_ms(50));
+            i2c_write_blocking_until(i2c1,SFP_SELECT,(uint8_t []){sfp_num == 0 ? 0 : 1<<(sfp_num-1)},1,false,make_timeout_time_ms(50));
         }
-
     }
     else {
         printf("Unknown Target.\n");

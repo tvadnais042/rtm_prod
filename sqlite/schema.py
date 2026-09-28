@@ -57,9 +57,10 @@ CREATE TABLE IF NOT EXISTS eye_diagrams(
 #slot 0 refers to the board EEPROM. 1-4 for SFP links 0-3 EEPROMS.
 eeproms = '''
 CREATE TABLE IF NOT EXISTS eeproms(
-    board_ID TEXT NOT NULL PRIMARY KEY,
+    board_ID TEXT NOT NULL,
     data_blob BLOB NOT NULL,
     slot INT NOT NULL CHECK(0 <= slot AND slot <= 4),    
+    PRIMARY KEY(board_ID,slot),
     FOREIGN KEY (board_ID)
         REFERENCES Boards (board_ID)
         ON UPDATE CASCADE

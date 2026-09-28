@@ -1,6 +1,8 @@
 from hw_tests import parse_board_ID, get_power, concur, get_user_board, insert_board
 
-DB = ".test.db"
+# Config Constants
+from config import DB
+
 board = get_user_board(DB,"MMC")
 
 _,_,NUM = parse_board_ID(board)
@@ -21,6 +23,5 @@ while True:
     else:
         break
 
-print(f"Inserting board {board} {power_draw - base_power_draw:.1}W")
-# insert_board(DB,board,power_draw-base_power_draw)
+insert_board(DB,board,power_draw-base_power_draw)
 

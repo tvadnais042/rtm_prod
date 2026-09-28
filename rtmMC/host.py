@@ -70,13 +70,10 @@ def get_SFP():
 def get_EEPROM():
     print("Collecting EEPROMS")
     target = sys.argv[2]
-    if len(sys.argv) > 3:
-        sfp_num = sys.argv[3] #prob a better way of handling this
-    else:
-        sfp_num = ""
-    rper.write(f"eeprom {target} {sfp_num}\n".encode("utf-8")) #encode to get bytes object.
+    target_ID = sys.argv[3]
+    rper.write(f"eeprom {target} {target_ID}\n".encode("utf-8")) #encode to get bytes object.
     assert "ACK" in rper.readline().decode("utf-8")
-    with open(f"eeprom_{target}{sfp_num}.csv",'w') as file:
+    with open(f"eeprom_{target}{target_ID}.csv",'w') as file:
         while (True):
             output = rper.readline()
             if output.strip() == b'OK': break
@@ -88,8 +85,6 @@ def config_pll():
     rper.write(b'c\n')
     wait_on_accept()
     return
-
-
 
 
 def mainloop():
