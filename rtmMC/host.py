@@ -71,14 +71,30 @@ def get_EEPROM():
     print("Collecting EEPROMS")
     target = sys.argv[2]
     target_ID = sys.argv[3]
-    rper.write(f"eeprom {target} {target_ID}\n".encode("utf-8")) #encode to get bytes object.
-    assert "ACK" in rper.readline().decode("utf-8")
-    with open(f"eeprom_{target}{target_ID}.csv",'w') as file:
-        while (True):
-            output = rper.readline()
-            if output.strip() == b'OK': break
-            file.write(output.decode("utf-8"))
-    return
+    if target != "all":
+        rper.write(f"eeprom {target} {target_ID}\n".encode("utf-8")) #encode to get bytes object.
+        assert "ACK" in rper.readline().decode("utf-8")
+        with open(f"eeprom_{target}{target_ID}.csv",'w') as file:
+            while (True):
+                output = rper.readline()
+                if output.strip() == b'OK': break
+                file.write(output.decode("utf-8"))
+        return
+    else: 
+        #God smiles upon all 5 second speedups in software and turns a blind eye on complexity
+        #FIXME Theres got to be a better way to implement this
+        for x in ["SFP","CDR","MMC","DDMTD","SMA"]:
+            for i in range(5):
+                if (x in ["MMC","DDMTD","SMA"]) and (i > 0):
+                    continue
+                rper.write(f"eeprom {x} {i}\n".encode("utf-8")) #encode to get bytes object.
+                assert "ACK" in rper.readline().decode("utf-8")
+                with open(f"eeprom_{x}{i}.csv",'w') as file:
+                    while (True):
+                        output = rper.readline()
+                        if output.strip() == b'OK': break
+                        file.write(output.decode("utf-8"))
+
 
 def config_pll():
     print("Configuring PLL")

@@ -1,4 +1,4 @@
-from hw_tests import get_user_board, get_power, concur, board_exists, insert_board
+from hw_tests import get_user_board, get_power, board_exists, insert_board
 
 # Config Constants
 from config import DB
@@ -19,7 +19,7 @@ board = get_user_board(DB,"RTM")
 assert board_exists(DB,board), f"{board} not in database. aborting test"
 
 BOARD_NUM = board[5:10]
-base_power_draw = board_helper("Power Draw of plain RTM (W): ",0)
+base_power_draw = board_helper("Power Draw of unpopulated RTM (W): ",0)
 
 power_draw = board_helper("Power Draw with DDMTD Added (W): ",base_power_draw)
 insert_board(DB,"DDMTD02"+BOARD_NUM,power_draw-base_power_draw)

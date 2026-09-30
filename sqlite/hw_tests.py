@@ -94,7 +94,7 @@ def insert_eye(db_path, board_ID, link, SFP_serial, eye_csv, eye_img=None):
     else:
         with open(eye_img, "rb") as file:
             eye_img_binary = file.read()
-    
+
     csv_dict = parse_eye_csv(eye_csv)
     fixdate = lambda s: datetime.strptime(s, "%Y-%b-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
     time_start = fixdate(csv_dict["Date and Time Started"])
@@ -190,22 +190,23 @@ def read_BER(DB,board):
 def read_GPIO(DB,board):
     with open(f"live_tests/vio_out.csv", 'r') as file:
         csv_data = np.genfromtxt(file,delimiter=',', dtype=str)
-        bits_transmitted = int(csv_data[-4][1],base=16)
-        time_start = str(csv_data[-3][1])
-        for line in csv_data[0:12]:
-            mezz = line[0][10]
-            link = line[0][12]
-            err = int(line[1],base=16)
-            insert_BER(DB,board,link,mezz,time_start,0.160,bits_transmitted,err,(1+err) / bits_transmitted,"PRBS 31-bit",None,None,None,None)
+        csv_data = dict(csv_data.tolist())
+
+        bits_transmitted = int(csv_data["count_total"],base=16)
+        time_start = csv_data["time_start"]
+        for key in csv_data.keys():
+            if "MEZZ" in key:
+                mezz = key[10] #FIXME potential issue if CDR mezz numbers are not concurrent with test performed
+                link = key[12]
+                err = int(csv_data[key],base=16)
+                print(mezz, link, err)
+                insert_BER(DB,board,link,mezz,time_start,0.160,bits_transmitted,err,(1+err) / bits_transmitted,"PRBS 31-bit",None,None,None,None)
 
 def read_eeproms(DB,board,slot):
     name,_,_ = parse_board_ID(board)
 
-    if any(word in name for word in ["DDMTD","RTM","MMC","SMA"]):
-        slot = ""
-
     with open(f"live_tests/eeprom_{name}{slot}.csv") as file:
         csv_data = np.genfromtxt(file,delimiter=',',dtype=bytes)
         # print(csv_data)
-        insert_eeprom(DB,board,csv_data,0 if slot == "" else slot)
+        insert_eeprom(DB,board,csv_data,slot)
 
