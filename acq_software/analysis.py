@@ -43,22 +43,22 @@ def phase(i, qn):
 
 
 #Compiles get_bram_data.c and loadapp
-# subprocess.run(["./load_data_acq.sh"]) #run once for setup
-# subprocess.run(["python","../rtmMC/host.py","config"])
+subprocess.run(["./load_data_acq.sh"]) #run once for setup
+subprocess.run(["python","../rtmMC/host.py","config"])
 
 
 #Collect some data
 subprocess.run(["./get_data_kria.sh","0"])
 print(phase(0,2))
-subprocess.run(["python","../rtmMC/host.py","shiftlarge"])
-subprocess.run(["./get_data_kria.sh","1"])
-print(phase(1,2))
-subprocess.run(["python","../rtmMC/host.py","shiftlarge"])
-subprocess.run(["./get_data_kria.sh","2"])
-print(phase(2,2))
-subprocess.run(["python","../rtmMC/host.py","shiftlarge"])
-subprocess.run(["./get_data_kria.sh","3"])
-print(phase(3,2))
+# subprocess.run(["python","../rtmMC/host.py","shiftlarge"])
+# subprocess.run(["./get_data_kria.sh","1"])
+# print(phase(1,2))
+# subprocess.run(["python","../rtmMC/host.py","shiftlarge"])
+# subprocess.run(["./get_data_kria.sh","2"])
+# print(phase(2,2))
+# subprocess.run(["python","../rtmMC/host.py","shiftlarge"])
+# subprocess.run(["./get_data_kria.sh","3"])
+# print(phase(3,2))
 
 
 # plt.scatter(range(ddmtd1.TIE_fall.size),ddmtd1.TIE_fall)

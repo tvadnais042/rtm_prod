@@ -5,7 +5,7 @@ from scipy.optimize import curve_fit
 from scipy.stats import norm
 from scipy.fftpack import fft, rfft
 # from pyfftw.interfaces.scipy_fftpack import fft
-from scipy.signal import blackman,gaussian,tukey
+from scipy.signal.windows import blackman,gaussian,tukey
 
 
 

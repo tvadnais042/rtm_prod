@@ -9,7 +9,7 @@ mkdir -p payloads
 mkdir -p ./device-tree-xlnx
 # PWD here requires script be run from directory
 echo $PWD
-#vivado -nojou -nolog -mode batch -source get_xsa.tcl
+vivado -nojou -nolog -mode batch -source get_xsa.tcl
 cp ../project_1/project_1.runs/impl_1/main.bin ./bram.bit.bin
 cp ../project_1/main.xsa .
 xsct get_dtbo.tcl

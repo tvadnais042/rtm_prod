@@ -1,0 +1,28 @@
+[project]
+name = "acq-software"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy (>=1.24.3,<2.0.0)",
+    "pandas (>=1.5.3,<2.0.0)",
+    "matplotlib (>=3.5.3,<4.0.0)",
+    "scipy (>=1.10.1,<2.0.0)",
+    "pyserial (>= 3.5.0,<3.6.0)"
+]
+
+[tool.poetry]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "ipykernel (>=7.4.0,<8.0.0)"
+]

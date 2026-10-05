@@ -643,18 +643,10 @@ vio_0 vio_inst(
     .probe_in1(count_MEZZ2[1]),
     .probe_in2(count_MEZZ2[2]),
     .probe_in3(count_MEZZ2[3]),
-    .probe_in4(count_MEZZ3[0]),
-    .probe_in5(count_MEZZ3[1]),
-    .probe_in6(count_MEZZ3[2]),
-    .probe_in7(count_MEZZ3[3]),
-    .probe_in8(count_MEZZ4[0]),
-    .probe_in9(count_MEZZ4[1]),
-    .probe_in10(count_MEZZ4[2]),
-    .probe_in11(count_MEZZ4[3]),
-    .probe_in12(clk_wiz_locked),
-    .probe_in13(count_delay),
-    .probe_in14(count_total),
-    .probe_in15(dud_register_vio),
+    .probe_in4(clk_wiz_locked),
+    .probe_in5(count_delay),
+    .probe_in6(count_total),
+    .probe_in7(dud_register_vio),
     .probe_out0(error_inject),
     .probe_out1(prbs_reset)
 );    
@@ -719,17 +711,17 @@ OBUFDS OBUFDS_MEZZ3_TX2(.I(prbs_data),.O(MEZZ3_TX2_P),.OB(MEZZ3_TX2_N));
 OBUFDS OBUFDS_MEZZ3_TX3(.I(prbs_data),.O(MEZZ3_TX3_P),.OB(MEZZ3_TX3_N)); 
 OBUFDS OBUFDS_MEZZ3_TX4(.I(~prbs_data),.O(MEZZ3_TX4_P),.OB(MEZZ3_TX4_N)); // non-inverted unlike the rest
 
-// Stage 2/3 - GPIO Tester
-OBUFDS OBUFDS_MEZZ4_TX1(.I(prbs_data),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
-OBUFDS OBUFDS_MEZZ4_TX2(.I(prbs_data),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
-OBUFDS OBUFDS_MEZZ4_TX3(.I(prbs_data),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
-OBUFDS OBUFDS_MEZZ4_TX4(.I(prbs_data),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
+//// Stage 2/3 - GPIO Tester
+//OBUFDS OBUFDS_MEZZ4_TX1(.I(prbs_data),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
+//OBUFDS OBUFDS_MEZZ4_TX2(.I(prbs_data),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
+//OBUFDS OBUFDS_MEZZ4_TX3(.I(prbs_data),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
+//OBUFDS OBUFDS_MEZZ4_TX4(.I(prbs_data),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
 
 // Stage 4 - DDMTD inputs
-//OBUFDS OBUFDS_MEZZ4_TX1(.I(CLK),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
-//OBUFDS OBUFDS_MEZZ4_TX2(.I(CLK),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
-//OBUFDS OBUFDS_MEZZ4_TX3(.I(CLK),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
-//OBUFDS OBUFDS_MEZZ4_TX4(.I(CLK),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
+OBUFDS OBUFDS_MEZZ4_TX1(.I(CLK),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
+OBUFDS OBUFDS_MEZZ4_TX2(.I(CLK),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
+OBUFDS OBUFDS_MEZZ4_TX3(.I(CLK),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
+OBUFDS OBUFDS_MEZZ4_TX4(.I(CLK),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
  
     
 endmodule
