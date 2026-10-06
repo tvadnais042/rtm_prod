@@ -63,6 +63,15 @@ def parse_board_ID(board_ID):
         raise ValueError("Invalid ID Format")
     return TYPE, VERSION, NUM
 
+
+def insert_single():
+    #Heres where I get to have some fun making something generic.
+    # WIll replace insert board, inser BER, insert eye, ......
+
+    
+
+    return
+
 def insert_board(db_path, board_ID, power_draw):
     con, cur = concur(db_path)
     TYPE, VERSION, NUM = parse_board_ID(board_ID)
@@ -120,10 +129,18 @@ def insert_eeprom(db_path, board_ID, data_blob, slot):
     con.commit()
     return
 
-def insert_ddmtd(db_path, board_ID):
-    #something to be made here with new table
-
+def insert_ddmtd(db_path,board_ID,time_start,data_1,data_2,data_3,shift_value):
+    con,cur = concur(db_path)
+    cur.execute('''
+        INSERT INTO ddmtds(
+        board_ID,time_start,data_1,data_2,data_3,shift_value)
+        VALUES(?,?,?,?,?,?)''',
+        (board_ID,time_start,data_1,data_2,data_3,shift_value)
+    )
+    con.commit()
     return
+
+
 
 def parse_eye_csv(csv_path):
     # NOTE do I want to include the entries as columns? Is this feature creap?

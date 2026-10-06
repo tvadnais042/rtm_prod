@@ -32,8 +32,6 @@ CREATE TABLE IF NOT EXISTS BER_tests(
             ON DELETE CASCADE
 ) WITHOUT ROWID
 '''
-# mezzanine for non-RTM indicates testing site.
-# double meaning dependent on type. Beautiful
 
 eye_diagrams = '''
 CREATE TABLE IF NOT EXISTS eye_diagrams(
@@ -44,23 +42,20 @@ CREATE TABLE IF NOT EXISTS eye_diagrams(
     SFP_serial TEXT,
     eye_csv BLOB NOT NULL,
     eye_img BLOB,
-    PRIMARY KEY(board_ID,link),
+    PRIMARY KEY (board_ID,link),
     FOREIGN KEY (board_ID)
         REFERENCES Boards (board_ID)
             ON UPDATE CASCADE
             ON DELETE CASCADE
 ) WITHOUT ROWID
 '''
-#SFP serial when we could use the DC plugs? What do I say there?
-#UMN_BALUN2_SFP_TX ? 
 
-#slot 0 refers to the board EEPROM. 1-4 for SFP links 0-3 EEPROMS.
 eeproms = '''
 CREATE TABLE IF NOT EXISTS eeproms(
     board_ID TEXT NOT NULL,
     data_blob BLOB NOT NULL,
     slot INT NOT NULL CHECK(0 <= slot AND slot <= 4),    
-    PRIMARY KEY(board_ID,slot),
+    PRIMARY KEY (board_ID,slot),
     FOREIGN KEY (board_ID)
         REFERENCES Boards (board_ID)
         ON UPDATE CASCADE
@@ -71,17 +66,21 @@ CREATE TABLE IF NOT EXISTS eeproms(
 ddmtds = '''
 CREATE TABLE IF NOT EXISTS ddmtds(
     board_ID TEXT NOT NULL,
-    time_start text NOT NULL,
-    qflipflop INT NOT NULL,
+    time_start TEXT NOT NULL,
+    data_1 BLOB NOT NULL,
+    data_2 BLOB NOT NULL,
+    data_3 BLOB NOT NULL,
+    shift_value REAL NOT NULL,
+    PRIMARY KEY (board_ID,shift_value),
     FOREIGN KEY (board_ID)
         REFERENCES Boards (board_ID)
             ON UPDATE CASCADE
             ON DELETE CASCADE
-)
+) WITHOUT ROWID
 '''
 
-ALL_TABLES = [Boards, BER_tests, eye_diagrams, eeproms]
-ALL_TABLE_NAMES = ["Boards","BER_tests","eye_diagrams","eeproms"]
+ALL_TABLES = [Boards, BER_tests, eye_diagrams, eeproms, ddmtds]
+ALL_TABLE_NAMES = ["Boards","BER_tests","eye_diagrams","eeproms","ddmtds"]
 
 def concur(db_path: str, foreign_keys: bool = True) -> None:
     con = sqlite3.connect(db_path)
