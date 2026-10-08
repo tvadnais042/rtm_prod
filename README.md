@@ -32,3 +32,7 @@ Build the project after edits. Inside **build/**
 Production testing payloads:
 - ibert - IBERT for MEZZ1 GTH testing
 - rtm_prod -  MEZZ 2,3 GPIO testing, MEZZ4 DDMTD testing
+
+### Testing Documentation
+The testing procedure document is kept at https://docs.google.com/document/d/1iDmmJOaYe3zDgB0eVYUNBEqo59PFrQbFi21UxZ0FUuw/edit?tab=t.adt0rthv4uf8
+
