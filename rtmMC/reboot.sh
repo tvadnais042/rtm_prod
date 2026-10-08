@@ -1,0 +1,1 @@
+sudo picotool reboot -f -u

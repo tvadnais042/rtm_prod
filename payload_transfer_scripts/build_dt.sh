@@ -21,6 +21,9 @@ cp bram_dts/pl.dtbo bram.dtbo
 mkdir -p payloads/$varname
 cp bram.bit.bin bram.dtbo shell.json payloads/$varname/
 # cp ${PWD##*/}.runs/impl_1/debug_nets.ltx payloads/$varname/
+cp ../project_1/project_1.runs/impl_1/main.bit payloads/$varname/
+cp ../project_1/project_1.runs/impl_1/main.ltx payloads/$varname/
+cp ../project_1/project_1.runs/impl_1/main.bin payloads/$varname/
 
 # cleanup intermediates
 rm bram.bit.bin

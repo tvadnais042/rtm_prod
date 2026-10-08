@@ -2,9 +2,9 @@
 open_hw_manager
 connect_hw_server -allow_non_jtag
 open_hw_target
-set_property PROGRAM.FILE {../project_1/project_1.runs/impl_1/main.bit} [get_hw_devices xck26_0]
-set_property PROBES.FILE {../project_1/project_1.runs/impl_1/main.ltx} [get_hw_devices xck26_0] 
-set_property FULL_PROBES.FILE {../project_1/project_1.runs/impl_1/main.ltx} [get_hw_devices xck26_0] 
+# set_property PROGRAM.FILE {../project_1/project_1.runs/impl_1/main.bit} [get_hw_devices xck26_0]
+set_property PROBES.FILE "[lindex $argv 1]main.ltx" [get_hw_devices xck26_0] 
+set_property FULL_PROBES.FILE "[lindex $argv 1]main.ltx" [get_hw_devices xck26_0] 
 #program_hw_devices [get_hw_devices xck26_0]
 refresh_hw_device [get_hw_devices xck26_0]
 
@@ -89,4 +89,8 @@ puts $fp "RXTERM,[get_property RXTERM [lindex [get_hw_sio_links] $i]]"
 puts $fp "RX_BER,[get_property RX_BER [lindex [get_hw_sio_links] $i]]"
 close $fp
 }
+
+close_hw_target
+disconnect_hw_server
+close_hw_manager
 

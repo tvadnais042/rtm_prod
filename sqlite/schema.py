@@ -70,8 +70,9 @@ CREATE TABLE IF NOT EXISTS ddmtds(
     data_1 BLOB NOT NULL,
     data_2 BLOB NOT NULL,
     data_3 BLOB NOT NULL,
-    shift_value REAL NOT NULL,
-    PRIMARY KEY (board_ID,shift_value),
+    shift_hold_us INT NOT NULL,
+    step_size_multiplier INT NOT NULL,
+    PRIMARY KEY (board_ID,shift_hold_us),
     FOREIGN KEY (board_ID)
         REFERENCES Boards (board_ID)
             ON UPDATE CASCADE

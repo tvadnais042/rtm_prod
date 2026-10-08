@@ -1,23 +1,7 @@
 #!/bin/bash
 
-# Flashing code should be fully separate. Handled by the sqlite depending on the step
-# activate stage_4
-
-# program PLL
-cd Documents/rtm_prod/rtmMC/
-sudo ./flash
-python pll_host.py
-
-# TODO
-# Compile on Kria
-# Collect from Kria
-# process and store output
-
-./run_gpio.sh
-
-scp lab:~/Documents/rtm_prod/tclDev/vio_out* live_tests/
-
-ssh -T lab <<-'EOF'
-    cd Documents/rtm_prod/tclDev/
-    rm vio_out*
-EOF
+cd ../acq_software
+eval $(poetry env activate)
+python analysis.py #look at pngs to confirm movement
+mv data_files/0 ../sqlite/live_tests
+mv data_files/1 ../sqlite/live_tests

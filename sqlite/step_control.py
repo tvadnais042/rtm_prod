@@ -1,8 +1,9 @@
 import sqlite3
 from hw_tests import concur
-from schema import nuke, create_schema
+from schema import nuke, create_schema, mininuke
 from config import *
 con,cur = concur(".test.db")
+# mininuke(DB)
 create_schema(DB)
 # a = cur.execute("SELECT board_ID, link,mezzanine FROM BER_tests").fetchall()
 # print(a)

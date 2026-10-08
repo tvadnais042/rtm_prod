@@ -13,7 +13,7 @@ ssh -T $target << EOF
   mkdir -p payload
   sudo mkdir -p /lib/firmware/xilinx/bram/
 EOF
-scp -r -p payloads/$varname/* $target:~/payload/
+scp -r -p payloads/$varname/{bram.bit.bin,bram.dtbo,shell.json} $target:~/payload/
 ssh -T kria << EOF
   pwd
   sudo xmutil unloadapp

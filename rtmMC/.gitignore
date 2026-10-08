@@ -1,5 +1,4 @@
 build
-!.vscode/*
 transfer.sh
 screenlog.0
 .vscode/*

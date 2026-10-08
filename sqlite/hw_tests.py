@@ -1,7 +1,7 @@
 import sqlite3
 import re
 import numpy as np
-import subprocess
+import os
 from datetime import datetime
 
 '''
@@ -129,20 +129,19 @@ def insert_eeprom(db_path, board_ID, data_blob, slot):
     con.commit()
     return
 
-def insert_ddmtd(db_path,board_ID,time_start,data_1,data_2,data_3,shift_value):
+def insert_ddmtd(db_path,board_ID,time_start,data_1,data_2,data_3,shift_hold_us,step_size_multiplier):
     con,cur = concur(db_path)
     cur.execute('''
         INSERT INTO ddmtds(
-        board_ID,time_start,data_1,data_2,data_3,shift_value)
-        VALUES(?,?,?,?,?,?)''',
-        (board_ID,time_start,data_1,data_2,data_3,shift_value)
+        board_ID,time_start,data_1,data_2,data_3,shift_hold_us,step_size_multiplier)
+        VALUES(?,?,?,?,?,?,?)''',
+        (board_ID,time_start,data_1,data_2,data_3,shift_hold_us,step_size_multiplier)
     )
     con.commit()
     return
 
 
-
-def parse_eye_csv(csv_path):
+def parse_eye_csv(csv_path:str):
     # NOTE do I want to include the entries as columns? Is this feature creap?
     with open(csv_path, 'r') as file:
         csv_data = np.genfromtxt(file, delimiter=',', max_rows=19, encoding='UTF-8', dtype=None)
@@ -175,17 +174,16 @@ def board_exists(db_path: str, board_ID: str) -> bool:
     return df.fetchone() is not None
 
 
-def read_eyes(DB,board):
+def read_eyes(DB:str, board:str):
     with open(f"live_tests/SFP_readout.csv","r") as file:
         SFP_plugs = np.genfromtxt(file, delimiter=',',dtype=str)
 
     for i in range(4):
         assert i==int(SFP_plugs[i][3])
         SFP_plug = str(SFP_plugs[i][5]).strip() + "," + str(SFP_plugs[i][7]).strip()
-        print(i, SFP_plug)
         insert_eye(DB,board,i,SFP_plug,f"live_tests/Scan_{i}.csv")
 
-def read_BER(DB,board):
+def read_BER(DB:str, board:str):
     for i in range(4):
         with open(f"live_tests/BER_results_1_{i}.csv", 'r') as file:
             csv_data = np.genfromtxt(file, delimiter=',', dtype=str)
@@ -195,7 +193,7 @@ def read_BER(DB,board):
         time_start = str(csv_data["time_start"])
         rate = float(csv_data["LINE_RATE"])
         bits_transmitted = int(csv_data["RX_RECEIVED_BIT_COUNT"])
-        errors = int(csv_data["LOGIC.ERRBIT_COUNT"])
+        errors = int(csv_data["LOGIC.ERRBIT_COUNT"],base=16)
         error_rate = float(csv_data["RX_BER"])
         PATTERN = csv_data["PATTERN"]
         TXPRE = float(csv_data["TXPRE"].split()[0])
@@ -204,7 +202,7 @@ def read_BER(DB,board):
         RXTERM = int(csv_data["RXTERM"].split()[0])
         insert_BER(DB,board,link,mezzanine,time_start,rate,bits_transmitted,errors,error_rate,PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM)
 
-def read_GPIO(DB,board):
+def read_GPIO(DB:str, board:str):
     with open(f"live_tests/vio_out.csv", 'r') as file:
         csv_data = np.genfromtxt(file,delimiter=',', dtype=str)
         csv_data = dict(csv_data.tolist())
@@ -216,10 +214,9 @@ def read_GPIO(DB,board):
                 mezz = key[10] #FIXME potential issue if CDR mezz numbers are not concurrent with test performed
                 link = key[12]
                 err = int(csv_data[key],base=16)
-                print(mezz, link, err)
                 insert_BER(DB,board,link,mezz,time_start,0.160,bits_transmitted,err,(1+err) / bits_transmitted,"PRBS 31-bit",None,None,None,None)
 
-def read_eeproms(DB,board,slot):
+def read_eeproms(DB:str, board:str, slot:int):
     name,_,_ = parse_board_ID(board)
 
     with open(f"live_tests/eeprom_{name}{slot}.csv") as file:
@@ -227,3 +224,13 @@ def read_eeproms(DB,board,slot):
         # print(csv_data)
         insert_eeprom(DB,board,csv_data,slot)
 
+def read_DDMTD(DB:str, board:str, data_path:str, shift_hold_time:int):
+    with open(f"{data_path}/ddmtd1.txt") as file:
+        data_1 = np.genfromtxt(file,dtype=bytes)
+    with open(f"{data_path}/ddmtd2.txt") as file:
+        data_2 = np.genfromtxt(file,dtype=bytes)
+    with open(f"{data_path}/ddmtd3.txt") as file:
+        data_3 = np.genfromtxt(file,dtype=bytes)
+    time_start = datetime.fromtimestamp(os.path.getctime(f"{data_path}/ddmtd1.txt"))
+    step_size_multiplier = 0xf
+    insert_ddmtd(DB,board,time_start,data_1,data_2,data_3,shift_hold_time,step_size_multiplier)

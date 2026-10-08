@@ -13,9 +13,9 @@ transfer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","pa
 subprocess.run(["bash","transfer_payload.sh","step_3"],cwd=transfer_path)
 
 # Run tests
-subprocess.run(["./get_eyes.sh",EYE_PRECISION_RTM])
-subprocess.run(["./get_ber.sh",BER_PRECISION_RTM])
-subprocess.run(["./get_gpio.sh",GPIO_PRECISION_RTM])
+subprocess.run(["./get_eyes.sh",EYE_PRECISION_RTM,transfer_path+"/payloads/step_3/"])
+subprocess.run(["./get_ber.sh",BER_PRECISION_RTM,transfer_path+"/payloads/step_3/"])
+subprocess.run(["./get_gpio.sh",GPIO_PRECISION_RTM,transfer_path+"/payloads/step_3/"])
 # TODO Validate GPIO test IN LAB
 
 # Read into database

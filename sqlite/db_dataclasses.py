@@ -56,4 +56,5 @@ class ddmtd:
     data_1: bytes
     data_2: bytes
     data_3: bytes
-    shift_value: float
+    shift_hold_us: int
+    step_size_multiplier: int

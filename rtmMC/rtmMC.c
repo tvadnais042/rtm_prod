@@ -36,7 +36,7 @@ void process_command(char* cmd);
 void config_pll();
 bool scan_bus();
 void check_los();
-uint32_t step_fs(uint32_t us);
+uint32_t step_fs(int32_t us);
 void inspect_SFP(uint8_t mezz, uint8_t link);
 void inspect_EEPROM();
 void quick_write(uint8_t addr, uint8_t value);
@@ -119,8 +119,8 @@ void process_command(char* cmd) {
             printf("Provide Shift value\n");
         }
         else {
-            uint32_t delay = strtoul(arg,NULL,10);
-            printf("Shifting %d",delay);
+            int32_t delay = strtoul(arg,NULL,10);
+            printf("Shifting %d\n",delay);
             uint32_t dt = step_fs(delay);
         }
     }
@@ -261,23 +261,32 @@ void check_los(){
     } 
 }
 
-uint32_t step_fs(uint32_t us) {
+uint32_t step_fs(int32_t us) {
+    uint8_t shift_multiplier = 0xf; // Multiple of the minimum step size for a given PLL config. 
     i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x01,0x03},2,false); // write page
-    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x39,0b1011},2,false); // set mask
-
-    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x47,0x64},2,false); // set the change high baby
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x39,0b1001},2,false); // set mask. (1011 for RX0, 1101 for RX1)
+    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x47,shift_multiplier},2,false); // set the change high baby! 
     
     i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x01,0x00},2,false); // write page
+
     uint32_t t0 = time_us_32();
-    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x1D,0b01},2,false); // lets go shifting!!
-    sleep_us(us);
-    i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x1D,0b10},2,false); // lets go shifting!!
+
+    if (us >= 0) {
+        i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x1D,0b01},2,false); // lets go shifting!!
+        sleep_us(us);
+        i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x1D,0b10},2,false); // lets go shifting!!
+    }
+    else {
+        i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x1D,0b10},2,false); // lets go shifting!!
+        sleep_us(-us);
+        i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x1D,0b01},2,false); // lets go shifting!!
+    }
+
     uint32_t dt = time_us_32() - t0;
 
     i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x01,0x03},2,false); // write page2
     i2c_write_blocking(i2c1,PLL_ADDR,(uint8_t[]){0x47,0x00},2,false); // get rid of that change baby
     
-
     printf("STEP Function Time = %li.%.6li s\n", dt/1000000, dt%1000000);
     sleep_ms(2);
     return dt;

@@ -2,9 +2,9 @@
 open_hw_manager
 connect_hw_server -allow_non_jtag
 open_hw_target
-set_property PROGRAM.FILE {../project_1/project_1.runs/impl_1/main.bit} [get_hw_devices xck26_0]
-set_property PROBES.FILE {../project_1/project_1.runs/impl_1/main.ltx} [get_hw_devices xck26_0] 
-set_property FULL_PROBES.FILE {../project_1/project_1.runs/impl_1/main.ltx} [get_hw_devices xck26_0] 
+# set_property PROGRAM.FILE {../project_1/project_1.runs/impl_1/main.bit} [get_hw_devices xck26_0]
+set_property PROBES.FILE "[lindex $argv 1]main.ltx" [get_hw_devices xck26_0] 
+set_property FULL_PROBES.FILE "[lindex $argv 1]main.ltx" [get_hw_devices xck26_0] 
 #program_hw_devices [get_hw_devices xck26_0]
 refresh_hw_device [get_hw_devices xck26_0]
 
@@ -35,4 +35,8 @@ puts $fp "time_start,$tstart"
 puts $fp "BER_expected,[lindex $argv 0]"
 puts $fp "time_wait_ms,[expr {round(1/([lindex $argv 0]*160000))}]"
 close $fp
+
+close_hw_target
+disconnect_hw_server
+close_hw_manager
 
