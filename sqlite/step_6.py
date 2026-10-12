@@ -29,7 +29,6 @@ assert board_exists(DB,"MMC00"+board_NUM), f"MMC not in database."
 # Instantiate tester
 transfer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","payload_transfer_scripts")
 subprocess.run(["bash","transfer_payload.sh","step_6"],cwd=transfer_path)
-# TODO make payload 6 with CDR and DDMTD in mind.
 
 # Collect EEPROMS ===============
 subprocess.run(["./get_eeproms.sh","all","0"])

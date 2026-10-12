@@ -13,8 +13,8 @@ transfer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","pa
 subprocess.run(["bash","transfer_payload.sh","step_3"],cwd=transfer_path)
 
 # Run tests
-subprocess.run(["./get_eyes.sh",EYE_PRECISION_RTM,transfer_path+"/payloads/step_3/"])
-subprocess.run(["./get_ber.sh",BER_PRECISION_RTM,transfer_path+"/payloads/step_3/"])
+subprocess.run(["./get_eyes.sh",EYE_PRECISION_RTM,transfer_path+"/payloads/step_3/"]) #running tcl scripts kills ssh function until power cycling
+subprocess.run(["./get_ber.sh",BER_PRECISION_RTM,transfer_path+"/payloads/step_3/"]) #No clue why. It shouldnt pose a problem but is annoying for development.
 subprocess.run(["./get_gpio.sh",GPIO_PRECISION_RTM,transfer_path+"/payloads/step_3/"])
 # TODO Validate GPIO test IN LAB
 
@@ -24,4 +24,4 @@ read_BER(DB,board)
 read_GPIO(DB,board)
 
 # Cleanup intermediates
-subprocess.run(["rm","live_tests/*"]) 
+subprocess.run(["rm","-rf","live_tests/*"]) 

@@ -135,10 +135,8 @@
 #-----------------------------------------------------------------------
 # MEZZ2_TX1
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ2_TX1_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ2_TX1_N]
-set_property PACKAGE_PIN H9 [get_ports MEZZ2_TX1_P]
-set_property PACKAGE_PIN H8 [get_ports MEZZ2_TX1_N]
+set_property -dict {PACKAGE_PIN H9 IOSTANDARD LVDS} [get_ports {MEZZ2_TX_P[0]}]
+set_property -dict {PACKAGE_PIN H8 IOSTANDARD LVDS} [get_ports {MEZZ2_TX_N[0]}]
 #set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_TX1_P]
 #set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_TX1_P]
 #set_property PACKAGE_PIN H9 [get_ports "som240_2_a26"] ;# Bank  65 VCCO - som240_2_a44 - IO_L24P_T3U_N10_PERSTN1_I2C_SDA_65
@@ -147,10 +145,8 @@ set_property PACKAGE_PIN H8 [get_ports MEZZ2_TX1_N]
 #-----------------------------------------------------------------------
 # MEZZ2_TX2 (inverted on the pcb) (reverted)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ2_TX2_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ2_TX2_N]
-set_property PACKAGE_PIN AB2 [get_ports MEZZ2_TX2_P]
-set_property PACKAGE_PIN AC2 [get_ports MEZZ2_TX2_N]
+set_property -dict {PACKAGE_PIN AB2 IOSTANDARD LVDS} [get_ports {MEZZ2_TX_P[1]}]
+set_property -dict {PACKAGE_PIN AC2 IOSTANDARD LVDS} [get_ports {MEZZ2_TX_N[1]}]
 #set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_TX2_P]
 #set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_TX2_P]
 #set_property PACKAGE_PIN AB2 [get_ports "som240_2_a35"] ;# Bank  64 VCCO - som240_2_c44 - IO_L17P_T2U_N8_AD10P_64
@@ -159,10 +155,8 @@ set_property PACKAGE_PIN AC2 [get_ports MEZZ2_TX2_N]
 #-----------------------------------------------------------------------
 # MEZZ2_TX3
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ2_TX3_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ2_TX3_N]
-set_property PACKAGE_PIN AH8 [get_ports MEZZ2_TX3_P]
-set_property PACKAGE_PIN AH7 [get_ports MEZZ2_TX3_N]
+set_property -dict {PACKAGE_PIN AH8 IOSTANDARD LVDS} [get_ports {MEZZ2_TX_P[2]}]
+set_property -dict {PACKAGE_PIN AH7 IOSTANDARD LVDS} [get_ports {MEZZ2_TX_N[2]}]
 #set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_TX3_P]
 #set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_TX3_P]
 #set_property PACKAGE_PIN AH8 [get_ports "som240_2_b36"] ;# Bank  64 VCCO - som240_2_c44 - IO_L9P_T1L_N4_AD12P_64
@@ -171,10 +165,8 @@ set_property PACKAGE_PIN AH7 [get_ports MEZZ2_TX3_N]
 #-----------------------------------------------------------------------
 # MEZZ2_TX4 (inverted on the pcb) (reverted)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ2_TX4_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ2_TX4_N]
-set_property PACKAGE_PIN AB7 [get_ports MEZZ2_TX4_P]
-set_property PACKAGE_PIN AC7 [get_ports MEZZ2_TX4_N]
+set_property -dict {PACKAGE_PIN AB7 IOSTANDARD LVDS} [get_ports {MEZZ2_TX_P[3]}]
+set_property -dict {PACKAGE_PIN AC7 IOSTANDARD LVDS} [get_ports {MEZZ2_TX_N[3]}]
 #set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_TX4_P]
 #set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_TX4_P]
 #set_property PACKAGE_PIN AB7 [get_ports "som240_2_d39"] ;# Bank  64 VCCO - som240_2_c44 - IO_L5P_T0U_N8_AD14P_64
@@ -183,10 +175,8 @@ set_property PACKAGE_PIN AC7 [get_ports MEZZ2_TX4_N]
 #-----------------------------------------------------------------------
 # MEZZ2_RX1 (inverted on the pcb) (reverted)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ2_RX1_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ2_RX1_N]
-set_property PACKAGE_PIN AD5 [get_ports MEZZ2_RX1_P]
-set_property PACKAGE_PIN AD4 [get_ports MEZZ2_RX1_N]
+set_property -dict {PACKAGE_PIN AD5 IOSTANDARD LVDS} [get_ports {MEZZ2_RX_P[0]}]
+set_property -dict {PACKAGE_PIN AD4 IOSTANDARD LVDS} [get_ports {MEZZ2_RX_N[0]}]
 #set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_RX1_P]
 #set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_RX1_P]
 #set_property PACKAGE_PIN AD5 [get_ports "som240_2_c29"] ;# Bank  64 VCCO - som240_2_c44 - IO_L13P_T2L_N0_GC_QBC_64
@@ -195,10 +185,8 @@ set_property PACKAGE_PIN AD4 [get_ports MEZZ2_RX1_N]
 #-----------------------------------------------------------------------
 # MEZZ2_RX2
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ2_RX2_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ2_RX2_N]
-set_property PACKAGE_PIN AH2 [get_ports MEZZ2_RX2_P]
-set_property PACKAGE_PIN AH1 [get_ports MEZZ2_RX2_N]
+set_property -dict {PACKAGE_PIN AH2 IOSTANDARD LVDS} [get_ports {MEZZ2_RX_P[1]}]
+set_property -dict {PACKAGE_PIN AH1 IOSTANDARD LVDS} [get_ports {MEZZ2_RX_N[1]}]
 #set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_RX2_P]
 #set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_RX2_P]
 #set_property PACKAGE_PIN AH2 [get_ports "som240_2_a32"] ;# Bank  64 VCCO - som240_2_c44 - IO_L23P_T3U_N8_64
@@ -207,10 +195,8 @@ set_property PACKAGE_PIN AH1 [get_ports MEZZ2_RX2_N]
 #-----------------------------------------------------------------------
 # MEZZ2_RX3 (inverted on the pcb) (reverted)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ2_RX3_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ2_RX3_N]
-set_property PACKAGE_PIN AG3 [get_ports MEZZ2_RX3_P]
-set_property PACKAGE_PIN AH3 [get_ports MEZZ2_RX3_N]
+set_property -dict {PACKAGE_PIN AG3 IOSTANDARD LVDS} [get_ports {MEZZ2_RX_P[2]}]
+set_property -dict {PACKAGE_PIN AH3 IOSTANDARD LVDS} [get_ports {MEZZ2_RX_N[2]}]
 #set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_RX3_P]
 #set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_RX3_P]
 #set_property PACKAGE_PIN AG3 [get_ports "som240_2_b33"] ;# Bank  64 VCCO - som240_2_c44 - IO_L20P_T3L_N2_AD1P_64
@@ -219,10 +205,8 @@ set_property PACKAGE_PIN AH3 [get_ports MEZZ2_RX3_N]
 #-----------------------------------------------------------------------
 # MEZZ2_RX4
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ2_RX4_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ2_RX4_N]
-set_property PACKAGE_PIN AD7 [get_ports MEZZ2_RX4_P]
-set_property PACKAGE_PIN AE7 [get_ports MEZZ2_RX4_N]
+set_property -dict {PACKAGE_PIN AD7 IOSTANDARD LVDS} [get_ports {MEZZ2_RX_P[3]}]
+set_property -dict {PACKAGE_PIN AE7 IOSTANDARD LVDS} [get_ports {MEZZ2_RX_N[3]}]
 #set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ2_RX4_P]
 #set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ2_RX4_P]
 #set_property PACKAGE_PIN AD7 [get_ports "som240_2_a41"] ;# Bank  64 VCCO - som240_2_c44 - IO_L4P_T0U_N6_DBC_AD7P_64
@@ -231,10 +215,8 @@ set_property PACKAGE_PIN AE7 [get_ports MEZZ2_RX4_N]
 #-----------------------------------------------------------------------
 # MEZZ3_TX1
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ3_TX1_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ3_TX1_N]
-set_property PACKAGE_PIN AB8 [get_ports MEZZ3_TX1_P]
-set_property PACKAGE_PIN AC8 [get_ports MEZZ3_TX1_N]
+set_property -dict {PACKAGE_PIN AB8 IOSTANDARD LVDS} [get_ports {MEZZ3_TX_P[0]}]
+set_property -dict {PACKAGE_PIN AC8 IOSTANDARD LVDS} [get_ports {MEZZ3_TX_N[0]}]
 #set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_TX1_P]
 #set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_TX1_P]
 #set_property PACKAGE_PIN AB8 [get_ports "som240_2_d36"] ;# Bank  64 VCCO - som240_2_c44 - IO_L3P_T0L_N4_AD15P_64
@@ -243,10 +225,8 @@ set_property PACKAGE_PIN AC8 [get_ports MEZZ3_TX1_N]
 #-----------------------------------------------------------------------
 # MEZZ3_TX2
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ3_TX2_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ3_TX2_N]
-set_property PACKAGE_PIN AD2 [get_ports MEZZ3_TX2_P]
-set_property PACKAGE_PIN AD1 [get_ports MEZZ3_TX2_N]
+set_property -dict {PACKAGE_PIN AD2 IOSTANDARD LVDS} [get_ports {MEZZ3_TX_P[1]}]
+set_property -dict {PACKAGE_PIN AD1 IOSTANDARD LVDS} [get_ports {MEZZ3_TX_N[1]}]
 #set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_TX2_P]
 #set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_TX2_P]
 #set_property PACKAGE_PIN AD2 [get_ports "som240_2_b30"] ;# Bank  64 VCCO - som240_2_c44 - IO_L16P_T2U_N6_QBC_AD3P_64
@@ -255,10 +235,8 @@ set_property PACKAGE_PIN AD1 [get_ports MEZZ3_TX2_N]
 #-----------------------------------------------------------------------
 # MEZZ3_TX3
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ3_TX3_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ3_TX3_N]
-set_property PACKAGE_PIN AF8 [get_ports MEZZ3_TX3_P]
-set_property PACKAGE_PIN AG8 [get_ports MEZZ3_TX3_N]
+set_property -dict {PACKAGE_PIN AF8 IOSTANDARD LVDS} [get_ports {MEZZ3_TX_P[2]}]
+set_property -dict {PACKAGE_PIN AG8 IOSTANDARD LVDS} [get_ports {MEZZ3_TX_N[2]}]
 #set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_TX3_P]
 #set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_TX3_P]
 #set_property PACKAGE_PIN AF8 [get_ports "som240_2_b27"] ;# Bank  64 VCCO - som240_2_c44 - IO_L8P_T1L_N2_AD5P_64
@@ -267,10 +245,8 @@ set_property PACKAGE_PIN AG8 [get_ports MEZZ3_TX3_N]
 #-----------------------------------------------------------------------
 # MEZZ3_TX4 (inverted on the pcb) (reverted)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ3_TX4_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ3_TX4_N]
-set_property PACKAGE_PIN M6 [get_ports MEZZ3_TX4_P]
-set_property PACKAGE_PIN L5 [get_ports MEZZ3_TX4_N]
+set_property -dict {PACKAGE_PIN M6 IOSTANDARD LVDS} [get_ports {MEZZ3_TX_P[3]}]
+set_property -dict {PACKAGE_PIN L5 IOSTANDARD LVDS} [get_ports {MEZZ3_TX_N[3]}]
 #set_output_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_TX4_P]
 #set_output_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_TX4_P]
 #set_property PACKAGE_PIN M6 [get_ports "som240_2_b21"] ;# Bank  65 VCCO - som240_2_a44 - IO_L14P_T2L_N2_GC_65
@@ -279,10 +255,8 @@ set_property PACKAGE_PIN L5 [get_ports MEZZ3_TX4_N]
 #-----------------------------------------------------------------------
 # MEZZ3_RX1
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ3_RX1_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ3_RX1_N]
-set_property PACKAGE_PIN D7 [get_ports MEZZ3_RX1_P]
-set_property PACKAGE_PIN D6 [get_ports MEZZ3_RX1_N]
+set_property -dict {PACKAGE_PIN D7 IOSTANDARD LVDS} [get_ports {MEZZ3_RX_P[0]}]
+set_property -dict {PACKAGE_PIN D6 IOSTANDARD LVDS} [get_ports {MEZZ3_RX_N[0]}]
 #set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_RX1_P]
 #set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_RX1_P]
 #set_property PACKAGE_PIN D7 [get_ports "som240_1_c12"] ;# Bank  66 VCCO - som240_1_d1 - IO_L13P_T2L_N0_GC_QBC_66
@@ -291,10 +265,8 @@ set_property PACKAGE_PIN D6 [get_ports MEZZ3_RX1_N]
 #-----------------------------------------------------------------------
 # MEZZ3_RX2
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ3_RX2_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ3_RX2_N]
-set_property PACKAGE_PIN E5 [get_ports MEZZ3_RX2_P]
-set_property PACKAGE_PIN D5 [get_ports MEZZ3_RX2_N]
+set_property -dict {PACKAGE_PIN E5 IOSTANDARD LVDS} [get_ports {MEZZ3_RX_P[1]}]
+set_property -dict {PACKAGE_PIN D5 IOSTANDARD LVDS} [get_ports {MEZZ3_RX_N[1]}]
 #set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_RX2_P]
 #set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_RX2_P]
 #set_property PACKAGE_PIN E5 [get_ports "som240_1_b10"] ;# Bank  66 VCCO - som240_1_d1 - IO_L14P_T2L_N2_GC_66
@@ -303,10 +275,8 @@ set_property PACKAGE_PIN D5 [get_ports MEZZ3_RX2_N]
 #-----------------------------------------------------------------------
 # MEZZ3_RX3
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ3_RX3_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ3_RX3_N]
-set_property PACKAGE_PIN F8 [get_ports MEZZ3_RX3_P]
-set_property PACKAGE_PIN E8 [get_ports MEZZ3_RX3_N]
+set_property -dict {PACKAGE_PIN F8 IOSTANDARD LVDS} [get_ports {MEZZ3_RX_P[2]}]
+set_property -dict {PACKAGE_PIN E8 IOSTANDARD LVDS} [get_ports {MEZZ3_RX_N[2]}]
 #set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_RX3_P]
 #set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_RX3_P]
 #set_property PACKAGE_PIN F8 [get_ports "som240_1_d13"] ;# Bank  66 VCCO - som240_1_d1 - IO_L17P_T2U_N8_AD10P_66
@@ -315,10 +285,8 @@ set_property PACKAGE_PIN E8 [get_ports MEZZ3_RX3_N]
 #-----------------------------------------------------------------------
 # MEZZ3_RX4
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ3_RX4_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ3_RX4_N]
-set_property PACKAGE_PIN G6 [get_ports MEZZ3_RX4_P]
-set_property PACKAGE_PIN F6 [get_ports MEZZ3_RX4_N]
+set_property -dict {PACKAGE_PIN G6 IOSTANDARD LVDS} [get_ports {MEZZ3_RX_P[3]}]
+set_property -dict {PACKAGE_PIN F6 IOSTANDARD LVDS} [get_ports {MEZZ3_RX_N[3]}]
 #set_input_delay -clock CLK_400 -max 0.5 [get_ports MEZZ3_RX4_P]
 #set_input_delay -clock CLK_400 -min 0.0 [get_ports MEZZ3_RX4_P]
 #set_property PACKAGE_PIN G6 [get_ports "som240_1_a9"] ;# Bank  66 VCCO - som240_1_d1 - IO_L15P_T2L_N4_AD11P_66
@@ -327,50 +295,40 @@ set_property PACKAGE_PIN F6 [get_ports MEZZ3_RX4_N]
 #-----------------------------------------------------------------------
 # MEZZ4_TX1 (PLL_IN1)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ4_TX1_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ4_TX1_N]
-set_property PACKAGE_PIN AE3 [get_ports MEZZ4_TX1_P]
-set_property PACKAGE_PIN AF3 [get_ports MEZZ4_TX1_N]
+set_property -dict {PACKAGE_PIN AE3 IOSTANDARD LVDS} [get_ports {MEZZ4_TX_P[0]}]
+set_property -dict {PACKAGE_PIN AF3 IOSTANDARD LVDS} [get_ports {MEZZ4_TX_N[0]}]
 #set_property PACKAGE_PIN AE3 [get_ports "som240_2_c26"] ;# Bank  64 VCCO - som240_2_c44 - IO_L21P_T3L_N4_AD8P_64
 #set_property PACKAGE_PIN AF3 [get_ports "som240_2_c27"] ;# Bank  64 VCCO - som240_2_c44 - IO_L21N_T3L_N5_AD8N_64
 
 #-----------------------------------------------------------------------
 # MEZZ4_TX2 (PLL_IN2)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ4_TX2_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ4_TX2_N]
-set_property PACKAGE_PIN K9 [get_ports MEZZ4_TX2_P]
-set_property PACKAGE_PIN J9 [get_ports MEZZ4_TX2_N]
+set_property -dict {PACKAGE_PIN K9 IOSTANDARD LVDS} [get_ports {MEZZ4_TX_P[1]}]
+set_property -dict {PACKAGE_PIN J9 IOSTANDARD LVDS} [get_ports {MEZZ4_TX_N[1]}]
 #set_property PACKAGE_PIN K9 [get_ports "som240_2_c23"] ;# Bank  65 VCCO - som240_2_a44 - IO_L23P_T3U_N8_I2C_SCLK_65
 #set_property PACKAGE_PIN J9 [get_ports "som240_2_c24"] ;# Bank  65 VCCO - som240_2_a44 - IO_L23N_T3U_N9_65
 
 #-----------------------------------------------------------------------
 # MEZZ4_TX3 (SGMII_TX)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ4_TX3_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ4_TX3_N]
-set_property PACKAGE_PIN N7 [get_ports MEZZ4_TX3_P]
-set_property PACKAGE_PIN N6 [get_ports MEZZ4_TX3_N]
+set_property -dict {PACKAGE_PIN N7 IOSTANDARD LVDS} [get_ports {MEZZ4_TX_P[2]}]
+set_property -dict {PACKAGE_PIN N6 IOSTANDARD LVDS} [get_ports {MEZZ4_TX_N[2]}]
 #set_property PACKAGE_PIN N7 [get_ports "som240_2_a17"] ;# Bank  65 VCCO - som240_2_a44 - IO_L15P_T2L_N4_AD11P_65
 #set_property PACKAGE_PIN N6 [get_ports "som240_2_a18"] ;# Bank  65 VCCO - som240_2_a44 - IO_L15N_T2L_N5_AD11N_65
 
 #-----------------------------------------------------------------------
 # MEZZ4_TX4
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ4_TX4_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ4_TX4_N]
-set_property PACKAGE_PIN J5 [get_ports MEZZ4_TX4_P]
-set_property PACKAGE_PIN J4 [get_ports MEZZ4_TX4_N]
+set_property -dict {PACKAGE_PIN J5 IOSTANDARD LVDS} [get_ports {MEZZ4_TX_P[3]}]
+set_property -dict {PACKAGE_PIN J4 IOSTANDARD LVDS} [get_ports {MEZZ4_TX_N[3]}]
 #set_property PACKAGE_PIN J5 [get_ports "som240_2_a11"] ;# Bank  65 VCCO - som240_2_a44 - IO_L19P_T3L_N0_DBC_AD9P_65
 #set_property PACKAGE_PIN J4 [get_ports "som240_2_a12"] ;# Bank  65 VCCO - som240_2_a44 - IO_L19N_T3L_N1_DBC_AD9N_65
 
 #-----------------------------------------------------------------------
 # MEZZ4_RX1 (PLLOUT1)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ4_RX1_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ4_RX1_N]
-set_property PACKAGE_PIN AE5 [get_ports MEZZ4_RX1_P]
-set_property PACKAGE_PIN AF5 [get_ports MEZZ4_RX1_N]
+set_property -dict {PACKAGE_PIN AE5 IOSTANDARD LVDS} [get_ports {MEZZ4_RX_P[0]}]
+set_property -dict {PACKAGE_PIN AF5 IOSTANDARD LVDS} [get_ports {MEZZ4_RX_N[0]}]
 #set_property PACKAGE_PIN AE5 [get_ports "som240_2_c41"] ;# Bank  64 VCCO - som240_2_c44 - IO_L12P_T1U_N10_GC_64
 #set_property PACKAGE_PIN AF5 [get_ports "som240_2_c42"] ;# Bank  64 VCCO - som240_2_c44 - IO_L12N_T1U_N11_GC_64
 
@@ -379,120 +337,96 @@ set_property PACKAGE_PIN AF5 [get_ports MEZZ4_RX1_N]
 #-----------------------------------------------------------------------
 # MEZZ4_RX2 (PLLOUT2)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ4_RX2_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ4_RX2_N]
-set_property PACKAGE_PIN AG9 [get_ports MEZZ4_RX2_P]
-set_property PACKAGE_PIN AH9 [get_ports MEZZ4_RX2_N]
+set_property -dict {PACKAGE_PIN AG9 IOSTANDARD LVDS} [get_ports {MEZZ4_RX_P[1]}]
+set_property -dict {PACKAGE_PIN AH9 IOSTANDARD LVDS} [get_ports {MEZZ4_RX_N[1]}]
 #set_property PACKAGE_PIN AG9 [get_ports "som240_2_c38"] ;# Bank  64 VCCO - som240_2_c44 - IO_L7P_T1L_N0_QBC_AD13P_64
 #set_property PACKAGE_PIN AH9 [get_ports "som240_2_c39"] ;# Bank  64 VCCO - som240_2_c44 - IO_L7N_T1L_N1_QBC_AD13N_64
 
 #-----------------------------------------------------------------------
 # MEZZ4_RX3 (SGMII_RX) (inverted on the pcb) (reverted)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ4_RX3_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ4_RX3_N]
-set_property PACKAGE_PIN P7 [get_ports MEZZ4_RX3_P]
-set_property PACKAGE_PIN P6 [get_ports MEZZ4_RX3_N]
+set_property -dict {PACKAGE_PIN P7 IOSTANDARD LVDS} [get_ports {MEZZ4_RX_P[2]}]
+set_property -dict {PACKAGE_PIN P6 IOSTANDARD LVDS} [get_ports {MEZZ4_RX_N[2]}]
 #set_property PACKAGE_PIN P7 [get_ports "som240_2_c20"] ;# Bank  65 VCCO - som240_2_a44 - IO_L16P_T2U_N6_QBC_AD3P_65
 #set_property PACKAGE_PIN P6 [get_ports "som240_2_c21"] ;# Bank  65 VCCO - som240_2_a44 - IO_L16N_T2U_N7_QBC_AD3N_65
 
 #-----------------------------------------------------------------------
 # MEZZ4_RX4 (inverted on the pcb) (reverted)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports MEZZ4_RX4_P]
-set_property IOSTANDARD LVDS [get_ports MEZZ4_RX4_N]
-set_property PACKAGE_PIN L7 [get_ports MEZZ4_RX4_P]
-set_property PACKAGE_PIN L6 [get_ports MEZZ4_RX4_N]
+set_property -dict {PACKAGE_PIN L7 IOSTANDARD LVDS} [get_ports {MEZZ4_RX_P[3]}]
+set_property -dict {PACKAGE_PIN L6 IOSTANDARD LVDS} [get_ports {MEZZ4_RX_N[3]}]
 #set_property PACKAGE_PIN L7 [get_ports "som240_2_b12"] ;# Bank  65 VCCO - som240_2_a44 - IO_L13P_T2L_N0_GC_QBC_65
 #set_property PACKAGE_PIN L6 [get_ports "som240_2_b13"] ;# Bank  65 VCCO - som240_2_a44 - IO_L13N_T2L_N1_GC_QBC_65
 
 #-----------------------------------------------------------------------
 # DDMTD_Q0
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports DDMTD_QP0]
-set_property IOSTANDARD LVDS [get_ports DDMTD_QN0]
-set_property PACKAGE_PIN AG4 [get_ports DDMTD_QP0]
-set_property PACKAGE_PIN AH4 [get_ports DDMTD_QN0]
+set_property -dict {PACKAGE_PIN AG4 IOSTANDARD LVDS} [get_ports {DDMTD_Q_P[0]}]
+set_property -dict {PACKAGE_PIN AH4 IOSTANDARD LVDS} [get_ports {DDMTD_Q_N[0]}]
 #set_property PACKAGE_PIN AG4 [get_ports "som240_2_a38"] ;# Bank  64 VCCO - som240_2_c44 - IO_L19P_T3L_N0_DBC_AD9P_64
 #set_property PACKAGE_PIN AH4 [get_ports "som240_2_a39"] ;# Bank  64 VCCO - som240_2_c44 - IO_L19N_T3L_N1_DBC_AD9N_64
 
 #-----------------------------------------------------------------------
 # DDMTD_Q1 (inverted on the pcb)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports DDMTD_QP1]
-set_property IOSTANDARD LVDS [get_ports DDMTD_QN1]
-set_property PACKAGE_PIN AB4 [get_ports DDMTD_QP1]
-set_property PACKAGE_PIN AB3 [get_ports DDMTD_QN1]
+set_property -dict {PACKAGE_PIN AB4 IOSTANDARD LVDS} [get_ports {DDMTD_Q_P[1]}]
+set_property -dict {PACKAGE_PIN AB3 IOSTANDARD LVDS} [get_ports {DDMTD_Q_N[1]}]
 #set_property PACKAGE_PIN AB4 [get_ports "som240_2_c35"] ;# Bank  64 VCCO - som240_2_c44 - IO_L15P_T2L_N4_AD11P_64
 #set_property PACKAGE_PIN AB3 [get_ports "som240_2_c36"] ;# Bank  64 VCCO - som240_2_c44 - IO_L15N_T2L_N5_AD11N_64
 
 #-----------------------------------------------------------------------
 # DDMTD_Q2 (inverted on the pcb)
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports DDMTD_QP2]
-set_property IOSTANDARD LVDS [get_ports DDMTD_QN2]
-set_property PACKAGE_PIN AC4 [get_ports DDMTD_QP2]
-set_property PACKAGE_PIN AC3 [get_ports DDMTD_QN2]
+set_property -dict {PACKAGE_PIN AC4 IOSTANDARD LVDS} [get_ports {DDMTD_Q_P[2]}]
+set_property -dict {PACKAGE_PIN AC3 IOSTANDARD LVDS} [get_ports {DDMTD_Q_N[2]}]
 #set_property PACKAGE_PIN AC4 [get_ports "som240_2_c32"] ;# Bank  64 VCCO - som240_2_c44 - IO_L14P_T2L_N2_GC_64
 #set_property PACKAGE_PIN AC3 [get_ports "som240_2_c33"] ;# Bank  64 VCCO - som240_2_c44 - IO_L14N_T2L_N3_GC_64
 
 #-----------------------------------------------------------------------
 # DDMTD_Q3
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports DDMTD_QP3]
-set_property IOSTANDARD LVDS [get_ports DDMTD_QN3]
-set_property PACKAGE_PIN AG6 [get_ports DDMTD_QP3]
-set_property PACKAGE_PIN AG5 [get_ports DDMTD_QN3]
+set_property -dict {PACKAGE_PIN AG6 IOSTANDARD LVDS} [get_ports {DDMTD_Q_P[3]}]
+set_property -dict {PACKAGE_PIN AG5 IOSTANDARD LVDS} [get_ports {DDMTD_Q_N[3]}]
 #set_property PACKAGE_PIN AG6 [get_ports "som240_2_a29"] ;# Bank  64 VCCO - som240_2_c44 - IO_L10P_T1U_N6_QBC_AD4P_64
 #set_property PACKAGE_PIN AG5 [get_ports "som240_2_a30"] ;# Bank  64 VCCO - som240_2_c44 - IO_L10N_T1U_N7_QBC_AD4N_64
 
 #-----------------------------------------------------------------------
 # DDMTD_Q4
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports DDMTD_QP4]
-set_property IOSTANDARD LVDS [get_ports DDMTD_QN4]
-set_property PACKAGE_PIN J7 [get_ports DDMTD_QP4]
-set_property PACKAGE_PIN H7 [get_ports DDMTD_QN4]
+set_property -dict {PACKAGE_PIN J7 IOSTANDARD LVDS} [get_ports {DDMTD_Q_P[4]}]
+set_property -dict {PACKAGE_PIN H7 IOSTANDARD LVDS} [get_ports {DDMTD_Q_N[4]}]
 #set_property PACKAGE_PIN J7 [get_ports "som240_2_a23"] ;# Bank  65 VCCO - som240_2_a44 - IO_L21P_T3L_N4_AD8P_65
 #set_property PACKAGE_PIN H7 [get_ports "som240_2_a24"] ;# Bank  65 VCCO - som240_2_a44 - IO_L21N_T3L_N5_AD8N_65
 
 #-----------------------------------------------------------------------
 # DDMTD_D1
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports DDMTD_DP1]
-set_property IOSTANDARD LVDS [get_ports DDMTD_DN1]
-set_property PACKAGE_PIN AC9 [get_ports DDMTD_DP1]
-set_property PACKAGE_PIN AD9 [get_ports DDMTD_DN1]
+set_property -dict {PACKAGE_PIN AC9 IOSTANDARD LVDS} [get_ports {DDMTD_D_P[1]}]
+set_property -dict {PACKAGE_PIN AD9 IOSTANDARD LVDS} [get_ports {DDMTD_D_N[1]}]
 #set_property PACKAGE_PIN AC9 [get_ports "som240_2_d33"] ;# Bank  64 VCCO - som240_2_c44 - IO_L1P_T0L_N0_DBC_64
 #set_property PACKAGE_PIN AD9 [get_ports "som240_2_d34"] ;# Bank  64 VCCO - som240_2_c44 - IO_L1N_T0L_N1_DBC_64
 
 #-----------------------------------------------------------------------
 # DDMTD_D2
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports DDMTD_DP2]
-set_property IOSTANDARD LVDS [get_ports DDMTD_DN2]
-set_property PACKAGE_PIN AE9 [get_ports DDMTD_DP2]
-set_property PACKAGE_PIN AE8 [get_ports DDMTD_DN2]
+set_property -dict {PACKAGE_PIN AE9 IOSTANDARD LVDS} [get_ports {DDMTD_D_P[2]}]
+set_property -dict {PACKAGE_PIN AE8 IOSTANDARD LVDS} [get_ports {DDMTD_D_N[2]}]
 #set_property PACKAGE_PIN AE9 [get_ports "som240_2_d30"] ;# Bank  64 VCCO - som240_2_c44 - IO_L2P_T0L_N2_64
 #set_property PACKAGE_PIN AE8 [get_ports "som240_2_d31"] ;# Bank  64 VCCO - som240_2_c44 - IO_L2N_T0L_N3_64
 
 #-----------------------------------------------------------------------
 # DDMTD_D3
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports DDMTD_DP3]
-set_property IOSTANDARD LVDS [get_ports DDMTD_DN3]
-set_property PACKAGE_PIN AF7 [get_ports DDMTD_DP3]
-set_property PACKAGE_PIN AF6 [get_ports DDMTD_DN3]
+set_property -dict {PACKAGE_PIN AF7 IOSTANDARD LVDS} [get_ports {DDMTD_D_P[3]}]
+set_property -dict {PACKAGE_PIN AF6 IOSTANDARD LVDS} [get_ports {DDMTD_D_N[3]}]
 #set_property PACKAGE_PIN AF7 [get_ports "som240_2_d27"] ;# Bank  64 VCCO - som240_2_c44 - IO_L11P_T1U_N8_GC_64
 #set_property PACKAGE_PIN AF6 [get_ports "som240_2_d28"] ;# Bank  64 VCCO - som240_2_c44 - IO_L11N_T1U_N9_GC_64
 
 #-----------------------------------------------------------------------
 # DDMTD_D4
 #-----------------------------------------------------------------------
-set_property IOSTANDARD LVDS [get_ports DDMTD_DP4]
-set_property IOSTANDARD LVDS [get_ports DDMTD_DN4]
-set_property PACKAGE_PIN K8 [get_ports DDMTD_DP4]
-set_property PACKAGE_PIN K7 [get_ports DDMTD_DN4]
+set_property -dict {PACKAGE_PIN K8 IOSTANDARD LVDS} [get_ports {DDMTD_D_P[4]}]
+set_property -dict {PACKAGE_PIN K7 IOSTANDARD LVDS} [get_ports {DDMTD_D_N[4]}]
 #set_property PACKAGE_PIN K8 [get_ports "som240_2_d24"] ;# Bank  65 VCCO - som240_2_a44 - IO_L22P_T3U_N6_DBC_AD0P_65
 #set_property PACKAGE_PIN K7 [get_ports "som240_2_d25"] ;# Bank  65 VCCO - som240_2_a44 - IO_L22N_T3U_N7_DBC_AD0N_65
 

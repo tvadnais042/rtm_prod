@@ -34,84 +34,29 @@ module main(
     input  [`C_GTH_REFCLKS_USED-1:0]      gth_refclk1n_i,
 
     // RTM ports
-    input wire DDMTD_QP0,
-    input wire DDMTD_QN0,
-
-    input wire DDMTD_QP1,
-    input wire DDMTD_QN1,
-    input wire DDMTD_QP2,
-    input wire DDMTD_QN2,
-    input wire DDMTD_QP3,
-    input wire DDMTD_QN3,
-    input wire DDMTD_QP4,
-    input wire DDMTD_QN4,
-
-    output wire DDMTD_DP1,
-    output wire DDMTD_DN1,
-    output wire DDMTD_DP2,
-    output wire DDMTD_DN2,
-    output wire DDMTD_DP3,
-    output wire DDMTD_DN3,
-    output wire DDMTD_DP4,
-    output wire DDMTD_DN4,
-
-////=====================================
-    output wire MEZZ2_TX1_P,
-    output wire MEZZ2_TX1_N,
-    output wire MEZZ2_TX2_P, //disconnect in intV1
-    output wire MEZZ2_TX2_N, //disconnect in intV1
-    output wire MEZZ2_TX3_P, //disconnect in intV1
-    output wire MEZZ2_TX3_N, //disconnect in intV1
-    output wire MEZZ2_TX4_P, //disconnect in intV1
-    output wire MEZZ2_TX4_N, //disconnect in intV1
-
-    input wire MEZZ2_RX1_P, //disconnect in intV1
-    input wire MEZZ2_RX1_N, //disconnect in intV1
-    input wire MEZZ2_RX2_P, //disconnect in intV1
-    input wire MEZZ2_RX2_N, //disconnect in intV1
-    input wire MEZZ2_RX3_P, //disconnect in intV1
-    input wire MEZZ2_RX3_N, //disconnect in intV1
-    input wire MEZZ2_RX4_P, //disconnect in intV1
-    input wire MEZZ2_RX4_N, //disconnect in intV1
-
-//=====================================
-    output wire MEZZ3_TX1_P,
-    output wire MEZZ3_TX1_N,
-    output wire MEZZ3_TX2_P,
-    output wire MEZZ3_TX2_N,
-    output wire MEZZ3_TX3_P,
-    output wire MEZZ3_TX3_N,
-    output wire MEZZ3_TX4_P,
-    output wire MEZZ3_TX4_N,
+    input wire [4:0] DDMTD_Q_P,
+    input wire [4:0] DDMTD_Q_N,
+        
+    output wire [4:1] DDMTD_D_P,
+    output wire [4:1] DDMTD_D_N,
     
-    input wire MEZZ3_RX1_P,
-    input wire MEZZ3_RX1_N,
-    input wire MEZZ3_RX2_P,
-    input wire MEZZ3_RX2_N,
-    input wire MEZZ3_RX3_P,
-    input wire MEZZ3_RX3_N,
-    input wire MEZZ3_RX4_P,
-    input wire MEZZ3_RX4_N,
-
-//=====================================
-    output wire MEZZ4_TX1_P, //was PLL_IN1_P
-    output wire MEZZ4_TX1_N, //was PLL_IN1_N
-    output wire MEZZ4_TX2_P, //was PLL_IN2_P 
-    output wire MEZZ4_TX2_N, //was PLL_IN2_N 
-    output wire MEZZ4_TX3_P, //not connected on intV1
-    output wire MEZZ4_TX3_N, //not connected on intV1
-    output wire MEZZ4_TX4_P, //not connected on intV1
-    output wire MEZZ4_TX4_N, //not connected on intV1
-
-    input wire MEZZ4_RX1_P, //not connected on intV1
-    input wire MEZZ4_RX1_N, //not connected on intV1
-    input wire MEZZ4_RX2_P, //not connected on intV1
-    input wire MEZZ4_RX2_N, //not connected on intV1
-    input wire MEZZ4_RX3_P, //not connected on intV1
-    input wire MEZZ4_RX3_N, //not connected on intV1
-    input wire MEZZ4_RX4_P, //not connected on intV1
-    input wire MEZZ4_RX4_N  //not connected on intV1
+    output wire [3:0] MEZZ2_TX_P,
+    output wire [3:0] MEZZ2_TX_N,
     
+    input wire [3:0] MEZZ2_RX_P,
+    input wire [3:0] MEZZ2_RX_N,
+    
+    output wire [3:0] MEZZ3_TX_P,
+    output wire [3:0] MEZZ3_TX_N,
+    
+    input wire [3:0] MEZZ3_RX_P,
+    input wire [3:0] MEZZ3_RX_N,
+    
+    output wire [3:0] MEZZ4_TX_P, //[0] PLL_IN1, [1] PLL_IN2
+    output wire [3:0] MEZZ4_TX_N, 
+
+    input wire [3:0] MEZZ4_RX_P, 
+    input wire [3:0] MEZZ4_RX_N
     ); 
     
 reg [7:0] FIRMWARE_VER = 8'd31 ; // divide by 10 to get the firmware version
@@ -228,60 +173,38 @@ ibert_ultrascale_gth_0 u_ibert_gth_core(
 );
 // 
 // End of IBERT Example
-// 
-
-
-//     Bypassing SPI to DCPS
-//    OBUFDS OBUFDS_MEZZ_PAGE0(.I(DAT0),.O(MEZZ_PAGE0_P),.OB(MEZZ_PAGE0_N));
-//    OBUFDS OBUFDS_MEZZ_PAGE1(.I(DAT1),.O(MEZZ_PAGE1_P),.OB(MEZZ_PAGE1_N));
-//    OBUFDS OBUFDS_MEZZ_PAGE2(.I(DAT2),.O(MEZZ_PAGE2_P),.OB(MEZZ_PAGE2_N));
-//    OBUFDS OBUFDS_MEZZ_PAGE3(.I(DAT3),.O(MEZZ_PAGE3_P),.OB(MEZZ_PAGE3_N));
-//    OBUFDS OBUFDS_SDIN(.I(SPI_KOSI),.O(SDIN_P),.OB(SDIN_N));
-//    OBUFDS OBUFDS_SCK (.I(SPI_SCK),.O(SCK_P),.OB(SCK_N));
-//    Swapped
-//    OBUFDS OBUFDS_SDIN(.I(SPI_SCK),.O(SDIN_P),.OB(SDIN_N));
-//    OBUFDS OBUFDS_SCK (.I(SPI_KOSI),.O(SCK_P),.OB(SCK_N));
-//    OBUFDS OBUFDS_CS1B(.I(SPI_SSB1),.O(CS1B_P),.OB(CS1B_N));
-//    OBUFDS OBUFDS_CS2B(.I(SPI_SSB1),.O(CS2B_P),.OB(CS2B_N));
 
 //=====================================================================
 //    Bundling DDMTD pins
 //=====================================================================
 // CLK is what we send to all of the DDMTD flipflops
 //    wire Q0,Q1,Q2,Q3,Q4;
-wire Q0_out,Q1_out,Q2_out,Q3_out,Q4_out;
+//wire Q0_out,Q1_out,Q2_out,Q3_out,Q4_out;
+
+wire CLK, clk_ref;
+// MEZZ4_RX into clock buffer. clk_ref -> 159.9984MHz 
+BUFG BUFG_clk_ref (
+    .I (MEZZ4_RX[0]),
+    .O (clk_ref)
+);
+
+wire [4:0] Q_out; // from DDMTD FFs
+wire [4:0] Q;
+genvar i;
 
 
-IBUFDS IBUFDS_Q0 (.O(Q0_out), .I(DDMTD_QP0), .IB(DDMTD_QN0)); //good
-sync_ddr sync_Q0(.clk(clk_ref),.D(Q0_out),.Q(Q0));
+generate
+  for (i=0; i < 5; i++) begin : g_q
+    IBUFDS IBUFDS_Q(.O(Q_out[i]), .I(DDMTD_Q_P[i]), .IB(DDMTD_Q_N[i]));
+    sync_ddr sync_Q(.clk(clk_ref),.D(Q_out[i]),.Q(Q[i]));
+  end
+endgenerate
 
-IBUFDS IBUFDS_Q1 (.O(Q1_out), .I(DDMTD_QP1), .IB(DDMTD_QN1)); //good
-sync_ddr sync_Q1(.clk(clk_ref),.D(Q1_out),.Q(Q1));
-
-IBUFDS IBUFDS_Q2 (.O(Q2_out), .I(DDMTD_QP2), .IB(DDMTD_QN2)); //good
-sync_ddr sync_Q2(.clk(clk_ref),.D(Q2_out),.Q(Q2));
-
-IBUFDS IBUFDS_Q3 (.O(Q3_out), .I(DDMTD_QP3), .IB(DDMTD_QN3)); //good
-sync_ddr sync_Q3(.clk(clk_ref),.D(Q3_out),.Q(Q3));
-
-IBUFDS IBUFDS_Q4 (.O(Q4_out), .I(DDMTD_QP4), .IB(DDMTD_QN4)); //good
-sync_ddr sync_Q4(.clk(clk_ref),.D(Q4_out),.Q(Q4));
-
-//    wire D1,D2,D3,D4;
-//    wire D1_out,D2_out,D3_out,D4_out;
-
-OBUFDS OBUFDS_D1 (.I(MEZZ4_RX[1]), .O(DDMTD_DP1), .OB(DDMTD_DN1)); //good
-//    sync_ddr sync_D1(.clk(clk_ref),.D(D1_out),.Q(D1));
-
-OBUFDS OBUFDS_D2 (.I(MEZZ4_RX[1]), .O(DDMTD_DP2), .OB(DDMTD_DN2)); //good
-//    sync_ddr sync_D2(.clk(clk_ref),.D(D2_out),.Q(D2));
-
-OBUFDS OBUFDS_D3 (.I(MEZZ4_RX[1]), .O(DDMTD_DP3), .OB(DDMTD_DN3)); //good
-//    sync_ddr sync_D3(.clk(clk_ref),.D(D3_out),.Q(D3));
-
-OBUFDS OBUFDS_D4 (.I(MEZZ4_RX[1]), .O(DDMTD_DP4), .OB(DDMTD_DN4)); //good
-//    sync_ddr sync_D4(.clk(clk_ref),.D(D4_out),.Q(D4));
-
+generate
+  for (i=1; i < 5; i++) begin : g_d
+    OBUFDS OBUFDS_D(.I(MEZZ3_RX[1]), .O(DDMTD_D_P[i]), .OB(DDMTD_D_N[i]));
+  end
+endgenerate
 
 //=====================================================================
 //     Generating a beat clock for DDMTD analysis
@@ -319,13 +242,8 @@ wire [NUM_DDMTD-1:0]  clk_beat;
 assign clk_beat =  { 
     beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,
     beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,beat_0_q1,
-    beat_0_q1,beat_0_q1,beat_0_q1,Q4,Q3,Q2,Q1,Q0 
+    beat_0_q1,beat_0_q1,beat_0_q1,Q[4],Q[3],Q[2],Q[1],Q[0] 
 };
-
-
-
-
-
 
 
 wire [31:0]GPIO;
@@ -501,12 +419,7 @@ always @(negedge CLK) begin
 end
 
 
-wire CLK, clk_ref;
-// MEZZ4_RX into clock buffer. clk_ref -> 159.9984MHz 
-BUFG BUFG_clk_ref (
-    .I (MEZZ4_RX[0]),
-    .O (clk_ref)
-);
+
 
 
 design_1_wrapper desing_ins(
@@ -540,6 +453,7 @@ design_1_wrapper desing_ins(
 // GPIO PRBS GEN/CHECK
 //--------------------------------------------		
 
+// Not block design based.
 clk_wiz_0 clk_wiz_inst (
     .clk_in1(CLK),
     .clk_out1(CLK_wiz1),
@@ -547,7 +461,8 @@ clk_wiz_0 clk_wiz_inst (
 );
     
 wire prbs_reset, error_inject, CLK_wiz1, clk_wiz_locked, CLK_prbs;
-assign CLK_prbs = CLK_wiz1;
+
+assign CLK_prbs = CLK;
 wire [0:0] prbs_data;
 
 PRBS_ANY #(
@@ -566,18 +481,21 @@ prbs_gen (
 wire [3:0] MEZZ2_RX_synced;
 wire [3:0] MEZZ2_RX_synced_Q2;
 wire [3:0] MEZZ3_RX_synced; 
+wire [3:0] MEZZ3_RX_synced_Q2; 
 wire [3:0] MEZZ4_RX_synced; 
+wire [3:0] MEZZ4_RX_synced_Q2; 
+
 
 // Generate at elaboration
-genvar i;
+
 generate 
     for (i=0; i < 4; i++) begin
-        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE"),.IS_CB_INVERTED(1'b1))
+        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE_PIPELINED"),.IS_CB_INVERTED(1'b1))
         iddr_M2RX (.Q1(MEZZ2_RX_synced[i]), .Q2(MEZZ2_RX_synced_Q2[i]), .C(CLK_prbs), .CB(CLK_prbs), .D(MEZZ2_RX[i]), .R(1'b0));
-        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE"),.IS_CB_INVERTED(1'b1))
-        iddr_M3RX (.Q1(MEZZ3_RX_synced[i]), .Q2(), .C(CLK_prbs), .CB(CLK_prbs), .D(MEZZ3_RX[i]), .R(1'b0));
-        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE"),.IS_CB_INVERTED(1'b1))
-        iddr_M4RX (.Q1(MEZZ4_RX_synced[i]), .Q2(), .C(CLK_prbs), .CB(CLK_prbs), .D(MEZZ4_RX[i]), .R(1'b0));
+        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE_PIPELINED"),.IS_CB_INVERTED(1'b1))
+        iddr_M3RX (.Q1(MEZZ3_RX_synced[i]), .Q2(MEZZ3_RX_synced_Q2[i]), .C(CLK_prbs), .CB(CLK_prbs), .D(MEZZ3_RX[i]), .R(1'b0));
+        IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE_PIPELINED"),.IS_CB_INVERTED(1'b1))
+        iddr_M4RX (.Q1(MEZZ4_RX_synced[i]), .Q2(MEZZ4_RX_synced_Q2[i]), .C(CLK_prbs), .CB(CLK_prbs), .D(MEZZ4_RX[i]), .R(1'b0));
     end
 endgenerate
 // Change made to IDDRE .IS_CB_INVERTED(1'b1)
@@ -678,7 +596,15 @@ ila_0 ila_inst0(
     .probe13(MEZZ2_RX_synced_Q2[0]),
     .probe14(MEZZ2_RX_synced_Q2[1]),
     .probe15(MEZZ2_RX_synced_Q2[2]),
-    .probe16(MEZZ2_RX_synced_Q2[3])
+    .probe16(MEZZ2_RX_synced_Q2[3]),
+    .probe17(MEZZ3_RX_synced_Q2[0]),
+    .probe18(MEZZ3_RX_synced_Q2[1]),
+    .probe19(MEZZ3_RX_synced_Q2[2]),
+    .probe20(MEZZ3_RX_synced_Q2[3]),
+    .probe21(MEZZ4_RX_synced_Q2[0]),
+    .probe22(MEZZ4_RX_synced_Q2[1]),
+    .probe23(MEZZ4_RX_synced_Q2[2]),
+    .probe24(MEZZ4_RX_synced_Q2[3])
 );
     
 
@@ -689,41 +615,33 @@ wire [3:0] MEZZ2_RX;
 wire [3:0] MEZZ3_RX;
 wire [3:0] MEZZ4_RX;
 
-IBUFDS IBUFDS_MEZZ2_RX1(.O(MEZZ2_RX[0]), .I(MEZZ2_RX1_P), .IB(MEZZ2_RX1_N)); 
-IBUFDS IBUFDS_MEZZ2_RX2(.O(MEZZ2_RX[1]), .I(MEZZ2_RX2_P), .IB(MEZZ2_RX2_N));   
-IBUFDS IBUFDS_MEZZ2_RX3(.O(MEZZ2_RX[2]), .I(MEZZ2_RX3_P), .IB(MEZZ2_RX3_N));
-IBUFDS IBUFDS_MEZZ2_RX4(.O(MEZZ2_RX[3]), .I(MEZZ2_RX4_P), .IB(MEZZ2_RX4_N));
-
-IBUFDS IBUFDS_MEZZ3_RX1(.O(MEZZ3_RX[0]), .I(MEZZ3_RX1_P), .IB(MEZZ3_RX1_N)); 
-IBUFDS IBUFDS_MEZZ3_RX2(.O(MEZZ3_RX[1]), .I(MEZZ3_RX2_P), .IB(MEZZ3_RX2_N));   
-IBUFDS IBUFDS_MEZZ3_RX3(.O(MEZZ3_RX[2]), .I(MEZZ3_RX3_P), .IB(MEZZ3_RX3_N));
-IBUFDS IBUFDS_MEZZ3_RX4(.O(MEZZ3_RX[3]), .I(MEZZ3_RX4_P), .IB(MEZZ3_RX4_N));
-
-IBUFDS IBUFDS_MEZZ4_RX1(.O(MEZZ4_RX[0]), .I(MEZZ4_RX1_P), .IB(MEZZ4_RX1_N)); // Supposed PLL returns
-IBUFDS IBUFDS_MEZZ4_RX2(.O(MEZZ4_RX[1]), .I(MEZZ4_RX2_P), .IB(MEZZ4_RX2_N)); 
-IBUFDS IBUFDS_MEZZ4_RX3(.O(MEZZ4_RX[2]), .I(MEZZ4_RX3_P), .IB(MEZZ4_RX3_N));
-IBUFDS IBUFDS_MEZZ4_RX4(.O(MEZZ4_RX[3]), .I(MEZZ4_RX4_P), .IB(MEZZ4_RX4_N));
-
+generate
+    for (i=0; i<4; i++) begin
+        IBUFDS IBUFDS_MEZZ2_RX(.O(MEZZ2_RX[i]), .I(MEZZ2_RX_P[i]), .IB(MEZZ2_RX_N[i]));
+        IBUFDS IBUFDS_MEZZ3_RX(.O(MEZZ3_RX[i]), .I(MEZZ3_RX_P[i]), .IB(MEZZ3_RX_N[i])); 
+        IBUFDS IBUFDS_MEZZ4_RX(.O(MEZZ4_RX[i]), .I(MEZZ4_RX_P[i]), .IB(MEZZ4_RX_N[i])); //supposed PLL returns
+    end
+endgenerate 
 
 //=====================================================================
 //  Assigning TX outputs
 //=====================================================================
 
-OBUFDS OBUFDS_MEZZ2_TX1(.I(~prbs_data),.O(MEZZ2_TX1_P),.OB(MEZZ2_TX1_N));
-OBUFDS OBUFDS_MEZZ2_TX2(.I(~prbs_data),.O(MEZZ2_TX2_P),.OB(MEZZ2_TX2_N));
-OBUFDS OBUFDS_MEZZ2_TX3(.I(~prbs_data),.O(MEZZ2_TX3_P),.OB(MEZZ2_TX3_N));
-OBUFDS OBUFDS_MEZZ2_TX4(.I(~prbs_data),.O(MEZZ2_TX4_P),.OB(MEZZ2_TX4_N));
+OBUFDS OBUFDS_MEZZ2_TX1(.I(~prbs_data),.O(MEZZ2_TX_P[0]),.OB(MEZZ2_TX_N[0]));
+OBUFDS OBUFDS_MEZZ2_TX2(.I(~prbs_data),.O(MEZZ2_TX_P[1]),.OB(MEZZ2_TX_N[1]));
+OBUFDS OBUFDS_MEZZ2_TX3(.I(~prbs_data),.O(MEZZ2_TX_P[2]),.OB(MEZZ2_TX_N[2]));
+OBUFDS OBUFDS_MEZZ2_TX4(.I(~prbs_data),.O(MEZZ2_TX_P[3]),.OB(MEZZ2_TX_N[3]));
 
-OBUFDS OBUFDS_MEZZ3_TX1(.I(prbs_data),.O(MEZZ3_TX1_P),.OB(MEZZ3_TX1_N));
-OBUFDS OBUFDS_MEZZ3_TX2(.I(prbs_data),.O(MEZZ3_TX2_P),.OB(MEZZ3_TX2_N));
-OBUFDS OBUFDS_MEZZ3_TX3(.I(prbs_data),.O(MEZZ3_TX3_P),.OB(MEZZ3_TX3_N)); 
-OBUFDS OBUFDS_MEZZ3_TX4(.I(~prbs_data),.O(MEZZ3_TX4_P),.OB(MEZZ3_TX4_N)); // non-inverted unlike the rest
+OBUFDS OBUFDS_MEZZ3_TX1(.I(prbs_data),.O(MEZZ3_TX_P[0]),.OB(MEZZ3_TX_N[0]));
+OBUFDS OBUFDS_MEZZ3_TX2(.I(prbs_data),.O(MEZZ3_TX_P[1]),.OB(MEZZ3_TX_N[1]));
+OBUFDS OBUFDS_MEZZ3_TX3(.I(prbs_data),.O(MEZZ3_TX_P[2]),.OB(MEZZ3_TX_N[2])); 
+OBUFDS OBUFDS_MEZZ3_TX4(.I(~prbs_data),.O(MEZZ3_TX_P[3]),.OB(MEZZ3_TX_N[3])); // non-inverted unlike the rest
 
 // Stage 2/3 - GPIO Tester
-OBUFDS OBUFDS_MEZZ4_TX1(.I(prbs_data),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
-OBUFDS OBUFDS_MEZZ4_TX2(.I(prbs_data),.O(MEZZ4_TX2_P),.OB(MEZZ4_TX2_N));
-OBUFDS OBUFDS_MEZZ4_TX3(.I(prbs_data),.O(MEZZ4_TX3_P),.OB(MEZZ4_TX3_N));
-OBUFDS OBUFDS_MEZZ4_TX4(.I(prbs_data),.O(MEZZ4_TX4_P),.OB(MEZZ4_TX4_N));
+OBUFDS OBUFDS_MEZZ4_TX1(.I(prbs_data),.O(MEZZ4_TX_P[0]),.OB(MEZZ4_TX_N[0])); // inversions determined using ILA
+OBUFDS OBUFDS_MEZZ4_TX2(.I(~prbs_data),.O(MEZZ4_TX_P[1]),.OB(MEZZ4_TX_N[1]));
+OBUFDS OBUFDS_MEZZ4_TX3(.I(~prbs_data),.O(MEZZ4_TX_P[2]),.OB(MEZZ4_TX_N[2]));
+OBUFDS OBUFDS_MEZZ4_TX4(.I(~prbs_data),.O(MEZZ4_TX_P[3]),.OB(MEZZ4_TX_N[3]));
 
 //// Stage 4 - DDMTD inputs
 //OBUFDS OBUFDS_MEZZ4_TX1(.I(CLK),.O(MEZZ4_TX1_P),.OB(MEZZ4_TX1_N));
