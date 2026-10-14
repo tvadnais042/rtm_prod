@@ -453,6 +453,9 @@ design_1_wrapper desing_ins(
 // GPIO PRBS GEN/CHECK
 //--------------------------------------------		
 
+wire prbs_reset, error_inject, CLK_wiz1, clk_wiz_locked, CLK_prbs;
+wire [0:0] prbs_data;
+
 // Not block design based.
 clk_wiz_0 clk_wiz_inst (
     .clk_in1(CLK),
@@ -460,10 +463,9 @@ clk_wiz_0 clk_wiz_inst (
     .locked(clk_wiz_locked)
 );
     
-wire prbs_reset, error_inject, CLK_wiz1, clk_wiz_locked, CLK_prbs;
-
+// CLK_prbs used for everything under here
 assign CLK_prbs = CLK;
-wire [0:0] prbs_data;
+
 
 PRBS_ANY #(
     .CHK_MODE(0),
@@ -485,9 +487,6 @@ wire [3:0] MEZZ3_RX_synced_Q2;
 wire [3:0] MEZZ4_RX_synced; 
 wire [3:0] MEZZ4_RX_synced_Q2; 
 
-
-// Generate at elaboration
-
 generate 
     for (i=0; i < 4; i++) begin
         IDDRE1 #(.DDR_CLK_EDGE("SAME_EDGE_PIPELINED"),.IS_CB_INVERTED(1'b1))
@@ -498,13 +497,14 @@ generate
         iddr_M4RX (.Q1(MEZZ4_RX_synced[i]), .Q2(MEZZ4_RX_synced_Q2[i]), .C(CLK_prbs), .CB(CLK_prbs), .D(MEZZ4_RX[i]), .R(1'b0));
     end
 endgenerate
-// Change made to IDDRE .IS_CB_INVERTED(1'b1)
-// ~CLK_prbs -> CLK_prbs
-
 
 wire [3:0] check_MEZZ2;
 wire [3:0] check_MEZZ3;
 wire [3:0] check_MEZZ4;
+wire [3:0] check_MEZZ2_Q2;
+wire [3:0] check_MEZZ3_Q2;
+wire [3:0] check_MEZZ4_Q2;
+
 parameter [3:0] invMEZZ2 = 4'b1111;
 parameter [3:0] invMEZZ3 = 4'b0001;
 parameter [3:0] invMEZZ4 = 4'b1111;
@@ -518,12 +518,21 @@ generate
         prbs_mezz3 (.RST(prbs_reset),.CLK(CLK_prbs),.DATA_IN(MEZZ3_RX_synced[i]),.EN(1'b1),.DATA_OUT(check_MEZZ3[i]));
         PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(invMEZZ4[i])) 
         prbs_mezz4 (.RST(prbs_reset),.CLK(CLK_prbs),.DATA_IN(MEZZ4_RX_synced[i]),.EN(1'b1),.DATA_OUT(check_MEZZ4[i]));
+        PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(invMEZZ2[i])) 
+        prbs_mezz2_Q2 (.RST(prbs_reset),.CLK(CLK_prbs),.DATA_IN(MEZZ2_RX_synced_Q2[i]),.EN(1'b1),.DATA_OUT(check_MEZZ2_Q2[i]));   
+        PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(invMEZZ3[i])) 
+        prbs_mezz3_Q2 (.RST(prbs_reset),.CLK(CLK_prbs),.DATA_IN(MEZZ3_RX_synced_Q2[i]),.EN(1'b1),.DATA_OUT(check_MEZZ3_Q2[i]));
+        PRBS_ANY #(.CHK_MODE(1), .INV_PATTERN(invMEZZ4[i])) 
+        prbs_mezz4_Q2 (.RST(prbs_reset),.CLK(CLK_prbs),.DATA_IN(MEZZ4_RX_synced_Q2[i]),.EN(1'b1),.DATA_OUT(check_MEZZ4_Q2[i]));
     end
 endgenerate
 
 reg [47:0] count_MEZZ2 [3:0];
 reg [47:0] count_MEZZ3 [3:0];
 reg [47:0] count_MEZZ4 [3:0];
+reg [47:0] count_MEZZ2_Q2 [3:0];
+reg [47:0] count_MEZZ3_Q2 [3:0];
+reg [47:0] count_MEZZ4_Q2 [3:0];
 reg [47:0] count_total = 1;
 reg [9:0] count_delay = 1;
 reg [3:0] dud_register_vio = 1;
@@ -534,6 +543,9 @@ always @(posedge CLK_prbs) begin
             count_MEZZ2[i] <= 48'd0;    
             count_MEZZ3[i] <= 48'd0;
             count_MEZZ4[i] <= 48'd0;
+            count_MEZZ2_Q2[i] <= 48'd0;    
+            count_MEZZ3_Q2[i] <= 48'd0;
+            count_MEZZ4_Q2[i] <= 48'd0;
             count_total <= 48'd1;
 	    count_delay <= 1;
         end
@@ -547,6 +559,9 @@ always @(posedge CLK_prbs) begin
                 if (check_MEZZ2[i]) count_MEZZ2[i] <= count_MEZZ2[i] + 1;
                 if (check_MEZZ3[i]) count_MEZZ3[i] <= count_MEZZ3[i] + 1;
                 if (check_MEZZ4[i]) count_MEZZ4[i] <= count_MEZZ4[i] + 1;
+                if (check_MEZZ2_Q2[i]) count_MEZZ2_Q2[i] <= count_MEZZ2_Q2[i] + 1;
+                if (check_MEZZ3_Q2[i]) count_MEZZ3_Q2[i] <= count_MEZZ3_Q2[i] + 1;
+                if (check_MEZZ4_Q2[i]) count_MEZZ4_Q2[i] <= count_MEZZ4_Q2[i] + 1;
             end
             count_total <= count_total + 1;
         end
@@ -557,22 +572,34 @@ end
 // ila_0 ila_inst ()
 vio_0 vio_inst(
     .clk(CLK_prbs),
-    .probe_in0(count_MEZZ2[0]),
-    .probe_in1(count_MEZZ2[1]),
-    .probe_in2(count_MEZZ2[2]),
-    .probe_in3(count_MEZZ2[3]),
-    .probe_in4(count_MEZZ3[0]),
-    .probe_in5(count_MEZZ3[1]),
-    .probe_in6(count_MEZZ3[2]),
-    .probe_in7(count_MEZZ3[3]),
-    .probe_in8(count_MEZZ4[0]),
-    .probe_in9(count_MEZZ4[1]),
-    .probe_in10(count_MEZZ4[2]),
-    .probe_in11(count_MEZZ4[3]),
-    .probe_in12(clk_wiz_locked),
-    .probe_in13(count_delay),
-    .probe_in14(count_total),
-    .probe_in15(dud_register_vio),
+    .probe_in0(clk_wiz_locked),
+    .probe_in1(count_delay),
+    .probe_in2(count_total),
+    .probe_in3(dud_register_vio),
+    .probe_in4(count_MEZZ2[0]),
+    .probe_in5(count_MEZZ2[1]),
+    .probe_in6(count_MEZZ2[2]),
+    .probe_in7(count_MEZZ2[3]),
+    .probe_in8(count_MEZZ3[0]),
+    .probe_in9(count_MEZZ3[1]),
+    .probe_in10(count_MEZZ3[2]),
+    .probe_in11(count_MEZZ3[3]),
+    .probe_in12(count_MEZZ4[0]),
+    .probe_in13(count_MEZZ4[1]),
+    .probe_in14(count_MEZZ4[2]),
+    .probe_in15(count_MEZZ4[3]),
+    .probe_in16(count_MEZZ2_Q2[0]),
+    .probe_in17(count_MEZZ2_Q2[1]),
+    .probe_in18(count_MEZZ2_Q2[2]),
+    .probe_in19(count_MEZZ2_Q2[3]),
+    .probe_in20(count_MEZZ3_Q2[0]),
+    .probe_in21(count_MEZZ3_Q2[1]),
+    .probe_in22(count_MEZZ3_Q2[2]),
+    .probe_in23(count_MEZZ3_Q2[3]),
+    .probe_in24(count_MEZZ4_Q2[0]),
+    .probe_in25(count_MEZZ4_Q2[1]),
+    .probe_in26(count_MEZZ4_Q2[2]),
+    .probe_in27(count_MEZZ4_Q2[3]),
     .probe_out0(error_inject),
     .probe_out1(prbs_reset)
 );    

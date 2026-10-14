@@ -1,32 +1,10 @@
-import sqlite3
 import re
 import numpy as np
 import os
 from datetime import datetime
+from db_dataclasses import *
+from schema import concur
 
-'''
-Considerations:
-
-PlugManufacturer TEXT
-if type = SMA
-    plugtype=NULL
-if type = SFP
-    plugtype={manufacturer}
-
-board has board info and a number of associated tests and EEPROM
-EEPROM is on Mezzanine itself. We can store a full readout in the database
-There can be any number of tests. 
-
-'''
-
-def concur(db_path, foreign_keys=True):
-    con = sqlite3.connect(db_path)
-    if foreign_keys:
-        con.execute("PRAGMA foreign_keys = ON")
-    else:
-        con.execute("PRAGMA foreign_keys = OFF")
-    cur = con.cursor()
-    return con, cur
 
 def get_power(message):
     while True:
@@ -64,84 +42,7 @@ def parse_board_ID(board_ID):
     return TYPE, VERSION, NUM
 
 
-def insert_single():
-    #Heres where I get to have some fun making something generic.
-    # WIll replace insert board, inser BER, insert eye, ......
-
-    
-
-    return
-
-def insert_board(db_path, board_ID, power_draw):
-    con, cur = concur(db_path)
-    TYPE, VERSION, NUM = parse_board_ID(board_ID)
-    cur.execute('''
-        INSERT INTO Boards(board_ID, type, version, num, power_draw)
-        VALUES(?,?,?,?,?)''',(board_ID,TYPE,VERSION,NUM,power_draw))
-    con.commit()
-    return
-
-def insert_BER(db_path,board_ID,link,mezzanine,time_start,rate,bits_transmitted,errors,error_rate,
-               PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM):
-    con, cur = concur(db_path)
-    
-    cur.execute('''
-        INSERT INTO BER_tests(
-        board_ID,link,mezzanine,time_start,rate,bits_transmitted,errors,error_rate,PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)''',
-        (board_ID,link,mezzanine,time_start,rate,bits_transmitted,errors,error_rate,PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM)
-    )
-    con.commit()
-    return
-
-def insert_eye(db_path, board_ID, link, SFP_serial, eye_csv, eye_img=None):
-    con, cur = concur(db_path)
-    with open(eye_csv, "rb") as file:
-        eye_csv_binary = file.read()
-    if eye_img == None:
-        eye_img_binary = None
-    else:
-        with open(eye_img, "rb") as file:
-            eye_img_binary = file.read()
-
-    csv_dict = parse_eye_csv(eye_csv)
-    fixdate = lambda s: datetime.strptime(s, "%Y-%b-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
-    time_start = fixdate(csv_dict["Date and Time Started"])
-    time_end = fixdate(csv_dict["Date and Time Ended"])
-    
-    cur.execute('''
-        INSERT INTO eye_diagrams(
-        board_ID,link,time_start,time_end,SFP_serial,eye_csv,eye_img)
-        VALUES(?,?,?,?,?,?,?)''',
-        (board_ID,link,time_start,time_end,SFP_serial,eye_csv_binary,eye_img_binary)
-    )
-    con.commit()
-    return
-
-def insert_eeprom(db_path, board_ID, data_blob, slot):
-    con,cur = concur(db_path)
-    cur.execute('''
-        INSERT INTO eeproms(
-        board_ID,data_blob,slot)
-        VALUES(?,?,?)''',
-        (board_ID,data_blob,slot)
-    )
-    con.commit()
-    return
-
-def insert_ddmtd(db_path,board_ID,time_start,data_1,data_2,data_3,shift_hold_us,step_size_multiplier):
-    con,cur = concur(db_path)
-    cur.execute('''
-        INSERT INTO ddmtds(
-        board_ID,time_start,data_1,data_2,data_3,shift_hold_us,step_size_multiplier)
-        VALUES(?,?,?,?,?,?,?)''',
-        (board_ID,time_start,data_1,data_2,data_3,shift_hold_us,step_size_multiplier)
-    )
-    con.commit()
-    return
-
-
-def parse_eye_csv(csv_path:str):
+def parse_eye_csv(csv_path:str) -> dict:
     # NOTE do I want to include the entries as columns? Is this feature creap?
     with open(csv_path, 'r') as file:
         csv_data = np.genfromtxt(file, delimiter=',', max_rows=19, encoding='UTF-8', dtype=None)
@@ -165,7 +66,6 @@ def read_board_status(db_path,board_ID):
     print("BER: ID, Link, Mezzanine, tstart, rate, transmitted, errs, BER, Pattern, TXpre, TXpost, RXTERM, TXDiffswing")
     print(*df.fetchall(), sep='\n')
 
-    return
 
 def board_exists(db_path: str, board_ID: str) -> bool:
     """Returns true if a board for the given ID exists"""
@@ -173,6 +73,11 @@ def board_exists(db_path: str, board_ID: str) -> bool:
     df = cur.execute("SELECT 1 FROM Boards WHERE board_ID = ?",(board_ID,))
     return df.fetchone() is not None
 
+def insert_board(db_path, board_ID, power_draw):
+    con, cur = concur(db_path)
+    TYPE, VERSION, NUM = parse_board_ID(board_ID)
+    record = Board(board_ID,TYPE,VERSION,NUM,power_draw)
+    insert_single(db_path,record)
 
 def read_eyes(DB:str, board:str):
     with open(f"live_tests/SFP_readout.csv","r") as file:
@@ -181,26 +86,47 @@ def read_eyes(DB:str, board:str):
     for i in range(4):
         assert i==int(SFP_plugs[i][3])
         SFP_plug = str(SFP_plugs[i][5]).strip() + "," + str(SFP_plugs[i][7]).strip()
-        insert_eye(DB,board,i,SFP_plug,f"live_tests/Scan_{i}.csv")
+        read_eye(DB,board,i,SFP_plug,f"live_tests/Scan_{i}.csv")
+
+
+def read_eye(db_path, board_ID, link, SFP_serial, eye_csv_path, eye_img_path=None):
+    with open(eye_csv_path, "rb") as file:
+        eye_csv = file.read()
+    if eye_img_path == None:
+        eye_img = None
+    else:
+        with open(eye_img_path, "rb") as file:
+            eye_img = file.read()
+
+    csv_dict = parse_eye_csv(eye_csv_path)
+    fixdate = lambda s: datetime.strptime(s, "%Y-%b-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
+    time_start = fixdate(csv_dict["Date and Time Started"])
+    time_end = fixdate(csv_dict["Date and Time Ended"])
+
+    record = Eye_diagram(board_ID,link,time_start,time_end,eye_csv,eye_img,SFP_serial)
+    insert_single(db_path,record)
+    return
 
 def read_BER(DB:str, board:str):
     for i in range(4):
         with open(f"live_tests/BER_results_1_{i}.csv", 'r') as file:
             csv_data = np.genfromtxt(file, delimiter=',', dtype=str)
         csv_data = dict(csv_data.tolist())
-        link = int(csv_data["link"])
-        mezzanine = int(csv_data["mezzanine"])
-        time_start = str(csv_data["time_start"])
-        rate = float(csv_data["LINE_RATE"])
-        bits_transmitted = int(csv_data["RX_RECEIVED_BIT_COUNT"])
-        errors = int(csv_data["LOGIC.ERRBIT_COUNT"],base=16)
-        error_rate = float(csv_data["RX_BER"])
-        PATTERN = csv_data["PATTERN"]
-        TXPRE = float(csv_data["TXPRE"].split()[0])
-        TXPOST = float(csv_data["TXPOST"].split()[0])
-        TXDIFFSWING = int(csv_data["TXDIFFSWING"].split()[0])
-        RXTERM = int(csv_data["RXTERM"].split()[0])
-        insert_BER(DB,board,link,mezzanine,time_start,rate,bits_transmitted,errors,error_rate,PATTERN,TXPRE,TXPOST,TXDIFFSWING,RXTERM)
+        record = BER_test(
+            board_ID = board,
+            link = int(csv_data["link"]),
+            mezzanine = int(csv_data["mezzanine"]),
+            time_start = str(csv_data["time_start"]),
+            rate = float(csv_data["LINE_RATE"]),
+            bits_transmitted = int(csv_data["RX_RECEIVED_BIT_COUNT"]),
+            errors = int(csv_data["LOGIC.ERRBIT_COUNT"],base=16),
+            error_rate = float(csv_data["RX_BER"]),
+            PATTERN = csv_data["PATTERN"],
+            TXPRE = float(csv_data["TXPRE"].split()[0]),
+            TXPOST = float(csv_data["TXPOST"].split()[0]),
+            TXDIFFSWING = int(csv_data["TXDIFFSWING"].split()[0]),
+            RXTERM = int(csv_data["RXTERM"].split()[0]))
+        insert_single(DB,record)
 
 def read_GPIO(DB:str, board:str):
     with open(f"live_tests/vio_out.csv", 'r') as file:
@@ -211,18 +137,27 @@ def read_GPIO(DB:str, board:str):
         time_start = csv_data["time_start"]
         for key in csv_data.keys():
             if "MEZZ" in key:
-                mezz = key[10] #FIXME potential issue if CDR mezz numbers are not concurrent with test performed
-                link = key[12]
                 err = int(csv_data[key],base=16)
-                insert_BER(DB,board,link,mezz,time_start,0.160,bits_transmitted,err,(1+err) / bits_transmitted,"PRBS 31-bit",None,None,None,None)
+                record = BER_test(
+                    board_ID = board,
+                    link = key[12], # potential issue if CDR mezz labels are not concurrent with test performed
+                    mezz = key[10],
+                    time_start = time_start,
+                    rate = 0.160,
+                    bits_transmitted = bits_transmitted,
+                    errors = err,
+                    error_rate = (1+err)/bits_transmitted,
+                    PATTERN = "PRBS 31_bit",
+                    TXPRE = None, TXPOST = None, TXDIFFSWING = None, RXTERM = None)
+                insert_single(DB,record)
 
 def read_eeproms(DB:str, board:str, slot:int):
     name,_,_ = parse_board_ID(board)
 
     with open(f"live_tests/eeprom_{name}{slot}.csv") as file:
         csv_data = np.genfromtxt(file,delimiter=',',dtype=bytes)
-        # print(csv_data)
-        insert_eeprom(DB,board,csv_data,slot)
+        record = EEPROM(board,csv_data,slot)
+        insert_single(DB,record)
 
 def read_DDMTD(DB:str, board:str, data_path:str, shift_hold_time:int):
     with open(f"{data_path}/ddmtd1.txt") as file:
@@ -232,5 +167,6 @@ def read_DDMTD(DB:str, board:str, data_path:str, shift_hold_time:int):
     with open(f"{data_path}/ddmtd3.txt") as file:
         data_3 = np.genfromtxt(file,dtype=bytes)
     time_start = datetime.fromtimestamp(os.path.getctime(f"{data_path}/ddmtd1.txt"))
-    step_size_multiplier = 0xf
-    insert_ddmtd(DB,board,time_start,data_1,data_2,data_3,shift_hold_time,step_size_multiplier)
+    step_size_multiplier = 0xf #This is from rtmMC/rtmMC.c but I should parametrize it maybe. 
+    record = ddmtd(board,time_start,data_1,data_2,data_3,shift_hold_time,step_size_multiplier)
+    insert_single(DB,record)

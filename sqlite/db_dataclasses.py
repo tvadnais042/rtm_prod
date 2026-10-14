@@ -1,5 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from typing import Optional
+from schema import concur
 
 _TABLE_NAMES = {
     "Board": "Boards",
@@ -8,6 +9,23 @@ _TABLE_NAMES = {
     "EEPROM": "eeproms",
     "ddmtd": "ddmtds",
 }
+
+def insert_single(db_path: str,record) -> None:
+    # Insert record object into database. 
+    con,cur = concur(db_path)
+    class_name = type(record).__name__
+    table = _TABLE_NAMES[class_name] #dict lookup
+    if table is None:
+        ValueError(f"No table mapping for {class_name}.")
+
+    field_names = [f.name for f in fields(record)]
+    placeholders = ",".join("?" * len(field_names))
+    sql_str = f"INSERT INTO {table}({','.join(field_names)}) VALUES({placeholders})"
+    values = tuple(getattr(record,name) for name in field_names)
+
+    cur.execute(sql_str,values)
+    con.commit()
+    return
 
 @dataclass
 class Board:
@@ -21,7 +39,7 @@ class Board:
 class BER_test:
     board_ID: str
     link: int
-    mezzanin: int
+    mezzanine: int
     time_start: str
     rate: float
     bits_transmitted: int
@@ -39,9 +57,9 @@ class Eye_diagram:
     link: int
     time_start: str
     time_end: str
-    SFP_serial: Optional[str] = None
     eye_csv: bytes
     eye_img: Optional[bytes] = None
+    SFP_serial: Optional[str] = None
 
 @dataclass
 class EEPROM:

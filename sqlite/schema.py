@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS eye_diagrams(
     link INT NOT NULL,
     time_start TEXT NOT NULL,
     time_end TEXT NOT NULL,
-    SFP_serial TEXT,
     eye_csv BLOB NOT NULL,
     eye_img BLOB,
+    SFP_serial TEXT,
     PRIMARY KEY (board_ID,link),
     FOREIGN KEY (board_ID)
         REFERENCES Boards (board_ID)
