@@ -5,6 +5,9 @@ DB = ".test.db"
 # Only update this between testing a set of boards. It shouldn't normally change.
 TESTER_BASE_POWER = 0.1
 
+#GPIO rate in GigaHertz. 
+GPIO_RATE = 0.160
+
 # Testing parameters -- NOT NOT CHANGE DURING TESTING! -- 
 BER_PRECISION_RTM = "1e-10"
 EYE_PRECISION_RTM = "1e-8"

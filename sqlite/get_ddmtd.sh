@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo Running DDMTD Shifter Test...
 cd ../acq_software
 eval $(poetry env activate)
 python analysis.py #look at pngs to confirm movement

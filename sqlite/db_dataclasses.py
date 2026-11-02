@@ -8,6 +8,7 @@ _TABLE_NAMES = {
     "Eye_diagram": "eye_diagrams",
     "EEPROM": "eeproms",
     "ddmtd": "ddmtds",
+    "Ila": "Ilas"
 }
 
 def insert_single(db_path: str,record) -> None:
@@ -50,6 +51,7 @@ class BER_test:
     TXPOST: Optional[float] = None
     TXDIFFSWING: Optional[int] = None
     RXTERM: Optional[int] = None
+    GPIO_Q2: Optional[bool] = None
 
 @dataclass
 class Eye_diagram:
@@ -76,3 +78,11 @@ class ddmtd:
     data_3: bytes
     shift_hold_us: int
     step_size_multiplier: int
+
+@dataclass
+class Ila:
+    board_ID: str
+    time_start: str
+    rate: float
+    ila_data: bytes
+

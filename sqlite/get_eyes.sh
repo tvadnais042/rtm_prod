@@ -2,7 +2,8 @@
 cd ../tclDev/
 ber=${1:-1e-8}
 path=$2
-vivado -nojou -nolog -mode batch -source eye.tcl -tclargs $ber $path
+echo Running Eyes...
+vivado -nojou -nolog -mode batch -source eye.tcl -tclargs -quiet $ber $path
 mv Scan_* ../sqlite/live_tests/
 
 cd ../rtmMC/
