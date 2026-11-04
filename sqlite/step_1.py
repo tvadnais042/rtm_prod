@@ -10,7 +10,7 @@ board = get_user_board(DB,"RTM")
 while True:
     with_rtm_power = get_power("Power Draw of RTM in power setup [W]: ")
     if with_rtm_power < TESTER_BASE_POWER:
-        print("Must be less or equal to the base power.")
+        print("Must be greater than the base power.")
         continue
     else:
         break

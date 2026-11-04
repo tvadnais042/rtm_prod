@@ -12,3 +12,4 @@ main_backup*
 .Xil/
 vivado*.jou
 vivado*.log
+project_1.srcs/utils_1/imports/synth_1/main.dcp

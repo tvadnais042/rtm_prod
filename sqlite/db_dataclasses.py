@@ -1,6 +1,6 @@
 from dataclasses import dataclass, fields
 from typing import Optional
-from schema import concur
+from db_helpers import concur
 
 _TABLE_NAMES = {
     "Board": "Boards",

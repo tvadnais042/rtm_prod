@@ -15,7 +15,7 @@ print(f"Base Power Draw {base_power_draw}")
 while True:
     power_draw = get_power("Power Draw with MMC (W): ")
     if power_draw < base_power_draw:
-        print("Must be less or equal to the base RTM power.")
+        print("Must be greater than the base RTM power.")
         continue
     else:
         break

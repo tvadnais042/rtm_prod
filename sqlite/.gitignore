@@ -2,3 +2,5 @@ live_tests/*
 test.db
 .test.db
 __pycache__/*
+step_control.py
+fake_populate.sql

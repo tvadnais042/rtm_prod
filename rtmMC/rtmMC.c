@@ -172,7 +172,7 @@ void process_command(char* cmd) {
 bool scan_bus() {
     printf("Beginning I2C Scan\n");
     bool pllFlag = false;
-    for (uint8_t addr; addr < 128; addr++) {
+    for (uint8_t addr=0; addr < 128; addr++) {
         uint8_t rxdata;
         int ret = i2c_read_blocking_until(i2c1,addr, &rxdata, 1, false, make_timeout_time_ms(10)); //using i2c1 for pin 2,3
         if (ret >= 0) {
@@ -188,7 +188,7 @@ bool scan_bus() {
 
 void config_pll() {
     // Change pllconfig to use 
-    // password for the windows laptop in lab: intel123
+    // Clockbuilderpro intel123
 
     printf("Configuring PLLs\n");
 
@@ -320,7 +320,7 @@ void inspect_EEPROM() {
         addr = 0x50;
         i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x2},1,false,make_timeout_time_ms(50));
     }
-    else if ((strcmp(target,"SFP") == 0) || (strcmp(target,"CDR"))) {
+    else if ((strcmp(target,"SFP") == 0) || (strcmp(target,"CDR") == 0)) {
         if (strcmp(target,"SFP") == 0) {
             i2c_write_blocking_until(i2c1,MEZZ_SELECT,(uint8_t []){0x1},1,false,make_timeout_time_ms(50));
         }   

@@ -1,4 +1,4 @@
-from hw_tests import get_user_board, board_exists, read_eeproms, read_eyes, read_BER, read_GPIO, read_DDMTD
+from hw_tests import get_user_board, board_exists, read_eeproms, read_eyes, read_BER, read_GPIO, read_DDMTD, read_ILA
 import os, subprocess
 
 # Config Constants
@@ -6,8 +6,8 @@ from config import *
 
 # Get Board number and Sanity check
 board = get_user_board(DB,"RTM")
+assert board_exists(DB,board), f"{board} not in database. Aborting test. "
 board_NUM = board[5:10]
-assert board_exists(DB,board), f"{board} not in database. aborting test"
 assert board_exists(DB,"SFP02"+board_NUM), f"SFP not in database."
 assert board_exists(DB,"SMA02"+board_NUM), f"SMA not in database."
 assert board_exists(DB,"CDR02"+board_NUM), f"CDR not in database."
@@ -17,23 +17,24 @@ assert board_exists(DB,"MMC00"+board_NUM), f"MMC not in database."
 #===================
 # TEST FUNCTION Deleter
 #===================
-# from hw_tests import concur
-# con,cur = concur(DB)
-# cur.execute("DELETE FROM ddmtds")
-# cur.execute("DELETE FROM BER_tests")
-# cur.execute("DELETE FROM eye_diagrams")
-# cur.execute("DELETE FROM eeproms")
-# con.commit()
+from hw_tests import concur
+con,cur = concur(DB)
+cur.execute("DELETE FROM ddmtds")
+cur.execute("DELETE FROM BER_tests")
+cur.execute("DELETE FROM eye_diagrams")
+cur.execute("DELETE FROM eeproms")
+cur.execute("DELETE FROM Ilas")
+con.commit()
 #================================
 
-# Instantiate tester
-transfer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","payload_transfer_scripts")
-subprocess.run(["bash","transfer_payload.sh","step_6"],cwd=transfer_path)
+# # Instantiate Firmware
+# transfer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","payload_transfer_scripts")
+# subprocess.run(["bash","transfer_payload.sh","step_6"],cwd=transfer_path)
 
-# Collect EEPROMS ===============
-subprocess.run(["./get_eeproms.sh","all","0"])
+# # Collect EEPROMS ===============
+# subprocess.run(["./get_eeproms.sh","all","0"])
 
-# Read EEPROM data ==============
+# # Read EEPROM data ==============
 for i in range(5):
     read_eeproms(DB,"SFP02"+board_NUM,i)
     read_eeproms(DB,"CDR02"+board_NUM,i)
@@ -41,13 +42,12 @@ read_eeproms(DB,"SMA02"+board_NUM,0)
 read_eeproms(DB,"DDMTD02"+board_NUM,0)
 read_eeproms(DB,"MMC00"+board_NUM,0)
 
-# Run tests =====================
-subprocess.run(["./get_ddmtd.sh"]) 
-subprocess.run(["./get_eyes.sh",EYE_PRECISION_SFP,transfer_path+"/payloads/step_6/"]) #Running a tcl script will require a board power cycle
-subprocess.run(["./get_ber.sh",BER_PRECISION_SFP,transfer_path+"/payloads/step_6/"]) #I dont know why but it is so.
-subprocess.run(["./get_gpio.sh",GPIO_PRECISION_SMA,transfer_path+"/payloads/step_6/"])
-
-# TODO Validate GPIO test IN LAB
+# # Run tests =====================
+# subprocess.run(["./get_ddmtd.sh"]) 
+# subprocess.run(["./get_eyes.sh",EYE_PRECISION_SFP,transfer_path+"/payloads/step_6/"]) #Running a tcl script will require a board power cycle
+# subprocess.run(["./get_ber.sh",BER_PRECISION_SFP,transfer_path+"/payloads/step_6/"]) #I dont know why but it is so.
+# subprocess.run(["./get_gpio.sh",GPIO_PRECISION_SMA,transfer_path+"/payloads/step_6/"])
+# subprocess.run(["./get_ila.sh",transfer_path+"/payloads/step_6/"])
 
 # Read into database ============
 read_eyes(DB,"SFP02"+board_NUM)
@@ -55,7 +55,7 @@ read_BER(DB,"SFP02"+board_NUM)
 read_GPIO(DB,"SMA02"+board_NUM)
 read_DDMTD(DB,"DDMTD02"+board_NUM,"live_tests/0",0)
 read_DDMTD(DB,"DDMTD02"+board_NUM,"live_tests/1",-1000000)
+read_ILA(DB,"CDR02"+board_NUM,["MEZZ3_RX_synced_211","MEZZ3_RX_synced_Q2_211"])
 
 # Cleanup intermediates
-subprocess.run(["rm","-rf","live_tests/*"])
-
+# subprocess.run(["rm","-rf","live_tests/*"], check=True)

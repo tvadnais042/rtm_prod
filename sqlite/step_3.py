@@ -24,4 +24,4 @@ read_BER(DB,board)
 read_GPIO(DB,board)
 
 # Cleanup intermediates
-subprocess.run(["rm","-rf","live_tests/*"]) 
+subprocess.run(["rm","-rf","live_tests/*"], check=True) 

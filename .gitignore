@@ -2,3 +2,4 @@ vivado_logs/
 referenceDocs/
 *.log
 *.jou
+.vscode/

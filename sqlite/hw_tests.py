@@ -3,9 +3,9 @@ import numpy as np
 import os
 from datetime import datetime
 from db_dataclasses import *
-from schema import concur
 from config import *
 import pickle
+from db_helpers import concur
 
 
 def get_power(message):
@@ -142,14 +142,11 @@ def read_GPIO(DB:str, board:str):
                 insert_single(DB,record)
 
 def read_ILA(DB:str, board:str, net_whitelist: list|None):
-    # Number of errors is for the verifier file only
-    # ILA is used for gpio testing.
     with open(f"live_tests/iladata.csv") as file:
         csv_data = np.genfromtxt(file,delimiter=',',names=True,dtype=int)[1:] #[1:] gets rid of Type-specifier line
         if net_whitelist is not None:
             net_whitelist = ["prbs_data"]+net_whitelist
             csv_data = csv_data[net_whitelist]
-
     time_start = str(datetime.now())
     record = Ila(board,time_start,GPIO_RATE,pickle.dumps(csv_data))    
     insert_single(DB,record)

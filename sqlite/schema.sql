@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Boards(
     type TEXT NOT NULL, 
     version INT NOT NULL,
     num INT NOT NULL,
-    power_draw REAL NOT NULL,
+    power_draw REAL NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS BER_tests(

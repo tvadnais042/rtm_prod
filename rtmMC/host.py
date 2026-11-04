@@ -18,7 +18,7 @@ Commands:
 
     l | check_loss: Check PLL Input loc,  DSPLL loc, Sticky Loc
 
-    a | scan_bus: Scan I2C between 0 and 127 for connections
+    b | scan_bus: Scan I2C between 0 and 127 for connections
 
     c | config: Configure PLL from loaded register file
 
